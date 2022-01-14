@@ -1,2 +1,4 @@
 allegro/
 bin/
+*.ddl
+*.log

@@ -54,7 +54,7 @@ private:
     int counter;
     // animation image of current direction
     int sprite_pos;
-    
+
     bool stop;
 
     // set of animation images
