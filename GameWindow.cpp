@@ -267,6 +267,11 @@ GameWindow::game_update()
     /*TODO:*/
     /*Allow towers to detect if monster enters its range*/
     /*Hint: Tower::DetectAttack*/
+    for(auto _tower: towerSet){
+        for(auto _monster: monsterSet){
+            if(_tower->DetectAttack(_monster)) break;
+        }
+    }
 
     // update every monster
     // check if it is destroyed or reaches end point
@@ -279,6 +284,8 @@ GameWindow::game_update()
         /*2. If the monster collide with any attack, reduce the HP of the monster*/
         /*3. Remember to set isDestroyed to "true" if monster is killed*/
         /*Hint: Tower::TriggerAttack*/
+        for(auto _tower: towerSet)
+            isDestroyed = _tower->TriggerAttack(monsterSet[i]);
 
         isReachEnd = monsterSet[i]->Move();
 
@@ -309,6 +316,8 @@ GameWindow::game_update()
     /*TODO:*/
     /*1. Update the attack set of each tower*/
     /*Hint: Tower::UpdateAttack*/
+    for(auto _tower: towerSet)
+        _tower->UpdateAttack();
 
 
     return GAME_CONTINUE;
@@ -383,6 +392,7 @@ GameWindow::process_event()
     al_wait_for_event(event_queue, &event);
     redraw = false;
 
+    int pause = 0;
     if(event.type == ALLEGRO_EVENT_TIMER) {
         if(event.timer.source == timer) {
             redraw = true;
@@ -417,6 +427,22 @@ GameWindow::process_event()
 
             case ALLEGRO_KEY_P:
                 /*TODO: handle pause event here*/
+                if(al_get_timer_started(timer)){
+                    al_stop_timer(timer);
+                    pause = 1;
+                }
+                else{
+                   al_start_timer(timer);
+                   pause = 0;
+                }
+                if(al_get_timer_started(monster_pro)){
+                   al_stop_timer(monster_pro);
+                   pause = 1;
+                }
+                else{
+                    al_start_timer(monster_pro);
+                    pause = 0;
+                }
                 break;
             case ALLEGRO_KEY_M:
                 mute = !mute;
