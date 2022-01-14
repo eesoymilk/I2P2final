@@ -2,3 +2,5 @@ allegro/
 bin/
 *.ddl
 *.log
+*.depend
+*.cbp
