@@ -20,6 +20,10 @@
 #include "Attack.h"
 #include "Slider.h"
 
+// EDITED
+#include "Character.h"
+//
+
 #define GAME_INIT -1
 #define GAME_SETTING 0
 #define GAME_SELECT 1
@@ -69,6 +73,7 @@ public:
 
     Tower* create_tower(int);
     Monster* create_monster();
+    Character* create_character();
 
 public:
     bool initial = true;
@@ -87,6 +92,7 @@ private:
     ALLEGRO_EVENT event;
     ALLEGRO_TIMER *timer = NULL;
     ALLEGRO_TIMER *monster_pro = NULL;
+    ALLEGRO_TIMER *character_pro = NULL;
 
     ALLEGRO_SAMPLE *sample = NULL;
     ALLEGRO_SAMPLE_INSTANCE *startSound = NULL;
@@ -97,6 +103,7 @@ private:
     LEVEL *level = NULL;
     Menu *menu = NULL;
 
+    Character* mainCharacter;
     std::vector<Monster*> monsterSet;
     std::list<Tower*> towerSet;
 

@@ -8,10 +8,15 @@
 #define ORANGE_DARK al_map_rgb(255, 142, 71)
 #define PURPLE al_map_rgb(149, 128, 255)
 #define BLUE al_map_rgb(77, 129, 179)
-
 #define min(a, b) ((a) < (b)? (a) : (b))
 #define max(a, b) ((a) > (b)? (a) : (b))
 
+
+// EDITED
+
+#define MaxLevel 4
+
+//
 
 float Attack::volume = 1.0;
 
@@ -125,6 +130,14 @@ GameWindow::create_tower(int type)
     return t;
 }
 
+Character*
+GameWindow::create_character()
+{
+    Character *mc = NULL;
+    mc = new Character();
+    return mc;
+}
+
 Monster*
 GameWindow::create_monster()
 {
@@ -201,8 +214,12 @@ GameWindow::GameWindow()
 
     timer = al_create_timer(1.0 / FPS);
     monster_pro = al_create_timer(1.0 / FPS);
+    character_pro = al_create_timer(1.0 / FPS);
 
     if(timer == NULL || monster_pro == NULL)
+        show_err_msg(-1);
+
+    if(timer == NULL || character_pro == NULL)
         show_err_msg(-1);
 
     if (display == NULL || event_queue == NULL)
@@ -228,6 +245,7 @@ GameWindow::GameWindow()
 
     al_register_event_source(event_queue, al_get_timer_event_source(timer));
     al_register_event_source(event_queue, al_get_timer_event_source(monster_pro));
+    al_register_event_source(event_queue, al_get_timer_event_source(character_pro));
 
     game_init();
 }
@@ -236,6 +254,9 @@ void
 GameWindow::game_begin()
 {
     printf(">>> Start Level[%d]\n", level->getLevel());
+
+    mainCharacter = create_character();
+
     draw_running_map();
 
     al_play_sample_instance(startSound);
@@ -244,6 +265,7 @@ GameWindow::game_begin()
 
     al_start_timer(timer);
     al_start_timer(monster_pro);
+    al_start_timer(character_pro);
 }
 
 int
@@ -252,7 +274,6 @@ GameWindow::game_run()
     int error = GAME_CONTINUE;
 
     if (!al_is_event_queue_empty(event_queue)) {
-
         error = process_event();
     }
     return error;
@@ -263,6 +284,8 @@ GameWindow::game_update()
 {
     unsigned int i, j;
     std::list<Tower*>::iterator it;
+
+    mainCharacter->Move();
 
     /*TODO:*/
     /*Allow towers to detect if monster enters its range*/
@@ -404,8 +427,13 @@ GameWindow::process_event()
 
             if(monsterSet.size() == 0 && !al_get_timer_started(monster_pro))
             {
-                al_stop_timer(timer);
-                return GAME_EXIT;
+                int Current_Level = level->getLevel();
+                if (Current_Level == MaxLevel) return GAME_EXIT;
+
+                for(auto&& child : towerSet)    delete child;
+                towerSet.clear();
+                level->setLevel(++Current_Level);
+                al_start_timer(monster_pro);
             }
 
         }
@@ -425,32 +453,19 @@ GameWindow::process_event()
     else if(event.type == ALLEGRO_EVENT_KEY_DOWN) {
         switch(event.keyboard.keycode) {
 
-            case ALLEGRO_KEY_P:
-                /*TODO: handle pause event here*/
-                if(al_get_timer_started(timer)){
-                    al_stop_timer(timer);
-                    pause = 1;
-                }
-                else{
-                   al_start_timer(timer);
-                   pause = 0;
-                }
-                if(al_get_timer_started(monster_pro)){
-                   al_stop_timer(monster_pro);
-                   pause = 1;
-                }
-                else{
-                    al_start_timer(monster_pro);
-                    pause = 0;
-                }
+            case ALLEGRO_KEY_W:
+                mainCharacter->Set_Direction(UP);
                 break;
-            case ALLEGRO_KEY_M:
-                mute = !mute;
-                if(mute)
-                    al_stop_sample_instance(backgroundSound);
-                else
-                    al_play_sample_instance(backgroundSound);
+            case ALLEGRO_KEY_A:
+                mainCharacter->Set_Direction(LEFT);
                 break;
+            case ALLEGRO_KEY_S:
+                mainCharacter->Set_Direction(DOWN);
+                break;
+            case ALLEGRO_KEY_D:
+                mainCharacter->Set_Direction(RIGHT);
+                break;
+            default:
         }
     }
     else if(event.type == ALLEGRO_EVENT_MOUSE_BUTTON_DOWN) {
@@ -538,6 +553,7 @@ GameWindow::draw_running_map()
         monsterSet[i]->Draw();
     }
 
+    mainCharacter->Draw();
 
     for(std::list<Tower*>::iterator it = towerSet.begin(); it != towerSet.end(); it++)
         (*it)->Draw();

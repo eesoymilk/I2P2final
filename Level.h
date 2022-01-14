@@ -34,7 +34,7 @@ private:
     int level = 1;
     // maximum number of monster of a level
     int Monster_MAX = 50;
-    // frequency of producing  monster
+    // frequency of producing monster
     int MonsterSpeed = 80;
 };
 

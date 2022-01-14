@@ -1,5 +1,5 @@
-#ifndef MONSTER_H_INCLUDED
-#define MONSTER_H_INCLUDED
+#ifndef CHARACTER_H_INCLUDED
+#define CHARACTER_H_INCLUDED
 
 #include <stdio.h>
 #include <string.h>
@@ -15,10 +15,10 @@
 enum {LEFT=0, RIGHT, UP, DOWN};
 #endif
 
-class Monster: public Object {
+class Character: public Object {
 public:
-    Monster(std::vector<int> path);
-    virtual ~Monster();
+    Character();
+    virtual ~Character();
 
     // Draw image per frame
     // override virtual function "Object::Draw"
@@ -37,6 +37,8 @@ public:
 
     bool Subtract_HP(int);
 
+    void Set_Direction(int);
+
 protected:
     int direction_count[4];
     int HealthPoint = 20;
@@ -45,8 +47,6 @@ protected:
     int score = 100;
     char class_name[20];
 private:
-    // direction and index for "path"
-    unsigned int step;
     int direction;
     // end point
     int end_x, end_y;
@@ -54,13 +54,13 @@ private:
     int counter;
     // animation image of current direction
     int sprite_pos;
+    
+    bool stop;
 
     // set of animation images
     std::vector<ALLEGRO_BITMAP*> moveImg;
-    // path on map
-    std::vector<int> path;
 
 };
 
 
-#endif // MONSTER_H_INCLUDED
+#endif // CHARACTER_H_INCLUDED
