@@ -210,6 +210,8 @@ GameWindow::GameWindow()
     al_register_event_source(event_queue, al_get_timer_event_source(timer));
     al_register_event_source(event_queue, al_get_timer_event_source(character_pro));
 
+    board_x = 0; board_y = 0;
+
     game_init();
 }
 
@@ -217,6 +219,8 @@ void
 GameWindow::game_begin()
 {
     printf(">>> Start Level[%d]\n", level->getLevel());
+
+    draw_startscene();
 
 
 
@@ -250,6 +254,12 @@ GameWindow::game_update()
     // std::list<Tower*>::iterator it;
 
     mainCharacter->Move(hold);
+    board_x = mainCharacter->getCircle()->x - 400;
+    board_y = mainCharacter->getCircle()->y - 300;
+    if(board_x < 0) board_x = 0;
+    if(board_x > 1000) board_x = 1000;
+    if(board_y < 0) board_y = 0;
+    if(board_y > 600) board_y = 600;
 
     // /*TODO:*/
     // /*Allow towers to detect if monster enters its range*/
@@ -507,35 +517,10 @@ GameWindow::draw_running_map()
     al_clear_to_color(al_map_rgb(0, 0, 0));
 
     //al_clear_to_color(al_map_rgb(100, 100, 100));
-    int x_axis = mainCharacter->getCircle()->x; int y_axis = mainCharacter->getCircle()->y;
-    if(x_axis <= 400 && y_axis <= 300){
-        al_draw_bitmap(background, 0, 0, 0);
-    }
-    else if(x_axis <= 400 && y_axis >= 900){
-        al_draw_bitmap_region(background, 0, 600, 1800, 1200, 0, 0, 0);
-    }
-    else if(x_axis >= 1400 && y_axis >= 600){
-        al_draw_bitmap_region(background, 1000, 600, 1800, 1200, 0, 0, 0);
-    }
-    else if(x_axis >= 1400 && y_axis <= 300){
-        al_draw_bitmap_region(background, 1000, 0, 1800, 1200, 0, 0, 0);
-    }
-    else if(x_axis <= 400){
-        al_draw_bitmap_region(background, 0, y_axis - 300, 1800, 1200, 0, 0, 0);
-    }
-    else if(x_axis >= 1400){
-        al_draw_bitmap_region(background, 1000, y_axis - 300, 1800, 1200, 0, 0, 0);
-    }
-    else if(y_axis <= 300){
-        al_draw_bitmap_region(background, x_axis - 400, 0, 1800, 1200, 0, 0, 0);
-    }
-    else if(y_axis >= 900){
-        al_draw_bitmap_region(background, x_axis - 400, 600, 1800, 1200, 0, 0, 0);
-    }
-    else al_draw_bitmap_region(background, x_axis - 400, y_axis - 300, 1800, 1200, 0, 0, 0);
+    al_draw_bitmap(background, -board_x, -board_y, 0);
 
     mainCharacter->Draw();
-    printf("%d %d\n", x_axis, y_axis);
+    //printf("%d %d\n", x_axis, y_axis);
     //al_draw_bitmap_region(background, 0, 0, 1200, 800, 0, 0, 0);
     //al_draw_bitmap_region(background, 60, 400, 1200, 800, mainCharacter->getCircle()->x - 400, mainCharacter->getCircle()->y - 400, 0);
     //al_draw_bitmap(background, mainCharacter->getCircle()->x - 400, mainCharacter->getCircle()->y - 300, 0);

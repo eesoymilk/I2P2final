@@ -122,6 +122,7 @@ private:
     int Coin_Inc_Count = 0;
     int mouse_x, mouse_y;
     int selectedTower = -1, lastClicked = -1;
+    int board_x, board_y;
 
     bool redraw = false;
     bool mute = false;

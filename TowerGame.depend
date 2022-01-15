@@ -441,10 +441,10 @@
 1642168795 source:e:\github\i2p2final\tower.cpp
 	"Tower.h"
 
-1642225244 source:c:\users\user\i2p2final\attack.cpp
+1642236978 source:c:\users\user\i2p2final\attack.cpp
 	"Attack.h"
 
-1642225244 c:\users\user\i2p2final\attack.h
+1642236978 c:\users\user\i2p2final\attack.h
 	<stdio.h>
 	<math.h>
 	<allegro5/allegro.h>
@@ -744,27 +744,27 @@
 1615199857 c:\users\user\i2p2final\allegro\include\allegro5\allegro_audio.h
 	"allegro5/allegro.h"
 
-1642225244 c:\users\user\i2p2final\object.h
+1642236979 c:\users\user\i2p2final\object.h
 	"Circle.h"
 
-1642225244 c:\users\user\i2p2final\circle.h
+1642236979 c:\users\user\i2p2final\circle.h
 
-1642225244 source:c:\users\user\i2p2final\circle.cpp
+1642236979 source:c:\users\user\i2p2final\circle.cpp
 	"Circle.h"
 
-1642225244 source:c:\users\user\i2p2final\global.cpp
+1642236979 source:c:\users\user\i2p2final\global.cpp
 	"global.h"
 
-1642226078 c:\users\user\i2p2final\global.h
+1642236979 c:\users\user\i2p2final\global.h
 	<allegro5/allegro_font.h>
 
 1615199857 c:\users\user\i2p2final\allegro\include\allegro5\allegro_font.h
 	"allegro5/allegro.h"
 
-1642225244 source:c:\users\user\i2p2final\level.cpp
+1642236979 source:c:\users\user\i2p2final\level.cpp
 	"Level.h"
 
-1642225244 c:\users\user\i2p2final\level.h
+1642236979 c:\users\user\i2p2final\level.h
 	<stdio.h>
 	<stdlib.h>
 	<string.h>
@@ -772,10 +772,10 @@
 	<vector>
 	"global.h"
 
-1642225728 source:c:\users\user\i2p2final\main.cpp
+1642237765 source:c:\users\user\i2p2final\main.cpp
 	"GameWindow.h"
 
-1642225244 c:\users\user\i2p2final\gamewindow.h
+1642242088 c:\users\user\i2p2final\gamewindow.h
 	<allegro5/allegro_audio.h>
 	<allegro5/allegro_acodec.h>
 	<vector>
@@ -783,15 +783,6 @@
 	<time.h>
 	"Menu.h"
 	"Level.h"
-	"WolfKnight.h"
-	"CaveMan.h"
-	"Wolf.h"
-	"DemonNijia.h"
-	"Arcane.h"
-	"Archer.h"
-	"Canon.h"
-	"Poison.h"
-	"Storm.h"
 	"Attack.h"
 	"Slider.h"
 	"Character.h"
@@ -800,7 +791,7 @@
 	"allegro5/allegro.h"
 	"allegro5/allegro_audio.h"
 
-1642225244 c:\users\user\i2p2final\menu.h
+1642236979 c:\users\user\i2p2final\menu.h
 	<stdio.h>
 	<stdlib.h>
 	<allegro5/allegro.h>
@@ -819,7 +810,7 @@
 1642225244 c:\users\user\i2p2final\wolfknight.h
 	"Monster.h"
 
-1642225244 c:\users\user\i2p2final\monster.h
+1642236979 c:\users\user\i2p2final\monster.h
 	<stdio.h>
 	<string.h>
 	<allegro5/allegro.h>
@@ -866,20 +857,20 @@
 1642225244 c:\users\user\i2p2final\storm.h
 	"Tower.h"
 
-1642225244 c:\users\user\i2p2final\slider.h
+1642236979 c:\users\user\i2p2final\slider.h
 	<allegro5/allegro.h>
 	<allegro5/allegro_font.h>
 	<allegro5/allegro_ttf.h>
 	<allegro5/allegro_primitives.h>
 	"Object.h"
 
-1642225244 source:c:\users\user\i2p2final\menu.cpp
+1642236979 source:c:\users\user\i2p2final\menu.cpp
 	"Menu.h"
 
-1642225244 source:c:\users\user\i2p2final\monster.cpp
+1642236979 source:c:\users\user\i2p2final\monster.cpp
 	"Monster.h"
 
-1642225244 source:c:\users\user\i2p2final\slider.cpp
+1642236979 source:c:\users\user\i2p2final\slider.cpp
 	<stdio.h>
 	<string.h>
 	"Slider.h"
@@ -904,21 +895,25 @@
 1642235235 source:e:\github\i2p2final\character.cpp
 	"Character.h"
 
-1642225996 source:c:\users\user\i2p2final\gamewindow.cpp
+1642243500 source:c:\users\user\i2p2final\gamewindow.cpp
 	"GameWindow.h"
 	"global.h"
 	<iostream>
 
-1642225244 c:\users\user\i2p2final\character.h
+1642236979 c:\users\user\i2p2final\character.h
 	<stdio.h>
 	<string.h>
-	<allegro5/allegro.h>
-	<allegro5/allegro_primitives.h>
 	<vector>
-	"Object.h"
+	<allegro5/allegro.h>
+	<allegro5/allegro_image.h>
+	<allegro5/allegro_font.h>
+	<allegro5/allegro_ttf.h>
+	<allegro5/allegro_primitives.h>
 	"Circle.h"
+	"Object.h"
+	"Attack.h"
 	"global.h"
 
-1642225815 source:c:\users\user\i2p2final\character.cpp
+1642236979 source:c:\users\user\i2p2final\character.cpp
 	"Character.h"
 
