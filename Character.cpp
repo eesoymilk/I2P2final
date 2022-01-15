@@ -3,6 +3,7 @@
 #define InitX 8
 #define InitY 8
 #define MaxSpeed 3
+#define Acceleration 1
 
 const int axis_x[] = {-1, 1, 0, 0};
 const int axis_y[] = {0, 0, -1, 1};
@@ -102,8 +103,11 @@ Character::Move()
     if(circle->x == end_x && circle->y == end_y)
         return true;
 
-    // circle->x += vx * axis_x[direction];
-    // circle->y += vy * axis_y[direction];
+    if (hold[W_KEY])    SetVy(vy - 1);
+    if (hold[A_KEY])    SetVx(vx + 1);
+    if (hold[S_KEY])    SetVy(vy + 1);
+    if (hold[D_KEY])    SetVx(vx - 1);
+
     circle->x += vx;
     circle->y += vy;
 
