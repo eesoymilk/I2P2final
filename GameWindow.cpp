@@ -286,7 +286,7 @@ GameWindow::game_update()
     unsigned int i, j;
     std::list<Tower*>::iterator it;
 
-    mainCharacter->Move();
+    mainCharacter->Move(hold);
 
     /*TODO:*/
     /*Allow towers to detect if monster enters its range*/
@@ -455,20 +455,19 @@ GameWindow::process_event()
         switch(event.keyboard.keycode) {
             case ALLEGRO_KEY_W:
                 printf("W is pressed!\n");
-                if (!mainCharacter->getHold(W_KEY))
-                    mainCharacter->TuggleHold(W_KEY);
+                if (!hold[W_KEY])    hold[W_KEY] = true;
                 break;
             case ALLEGRO_KEY_A:
-                if (!mainCharacter->getHold(A_KEY))
-                    mainCharacter->TuggleHold(A_KEY);
+                printf("A is pressed!\n");
+                if (!hold[A_KEY])    hold[A_KEY] = true;
                 break;
             case ALLEGRO_KEY_S:
-                if (!mainCharacter->getHold(S_KEY))
-                    mainCharacter->TuggleHold(S_KEY);
+                printf("S is pressed!\n");
+                if (!hold[S_KEY])    hold[S_KEY] = true;
                 break;
             case ALLEGRO_KEY_D:
-                if (!mainCharacter->getHold(D_KEY))
-                    mainCharacter->TuggleHold(D_KEY);
+                printf("D is pressed!\n");
+                if (!hold[D_KEY])    hold[D_KEY] = true;
                 break;
         }
     }
@@ -476,20 +475,19 @@ GameWindow::process_event()
         switch(event.keyboard.keycode) {
             case ALLEGRO_KEY_W:
                 printf("W is released!\n");
-                if (mainCharacter->getHold(W_KEY))
-                    mainCharacter->TuggleHold(W_KEY);
+                if (hold[W_KEY])    hold[W_KEY] = false;
                 break;
             case ALLEGRO_KEY_A:
-                if (mainCharacter->getHold(A_KEY))
-                    mainCharacter->TuggleHold(A_KEY);
+                printf("A is released!\n");
+                if (hold[A_KEY])    hold[A_KEY] = false;
                 break;
             case ALLEGRO_KEY_S:
-                if (mainCharacter->getHold(S_KEY))
-                    mainCharacter->TuggleHold(S_KEY);
+                printf("S is released!\n");
+                if (hold[S_KEY])    hold[S_KEY] = false;
                 break;
             case ALLEGRO_KEY_D:
-                if (mainCharacter->getHold(D_KEY))
-                    mainCharacter->TuggleHold(D_KEY);
+                printf("D is released!\n");
+                if (hold[D_KEY])    hold[D_KEY] = false;
                 break;
         }
     }
@@ -623,4 +621,11 @@ GameWindow::draw_startscene()
         else al_draw_bitmap(startscene, 0, 0, 0);
         al_flip_display();
     }
+}
+
+void
+GameWindow::TuggleHold(int k)
+{
+    if (hold[k] == true)    hold[k] = false;
+    else                    hold[k] = true;
 }

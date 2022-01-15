@@ -1,6 +1,12 @@
 #ifndef MAINWINDOW_H_INCLUDED
 #define MAINWINDOW_H_INCLUDED
 
+#ifndef KEYS
+#define KeysUsed 5
+#define KEYS
+enum {W_KEY=0, A_KEY, S_KEY, D_KEY, E_KEY};
+#endif
+
 #include <allegro5/allegro_audio.h>
 #include <allegro5/allegro_acodec.h>
 #include <vector>
@@ -76,6 +82,8 @@ public:
     Monster* create_monster();
     Character* create_character();
 
+    void TuggleHold(int);
+
 public:
     bool initial = true;
 
@@ -117,6 +125,7 @@ private:
 
     bool redraw = false;
     bool mute = false;
+    bool hold[KeysUsed] = {false};
 };
 
 

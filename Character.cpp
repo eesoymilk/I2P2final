@@ -92,7 +92,7 @@ Character::Draw()
     //al_draw_filled_circle(circle->x, circle->y, circle->r, al_map_rgba(196, 79, 79, 200));
 }
 bool
-Character::Move()
+Character::Move(bool (&hold)[KeysUsed])
 {
     counter = (counter + 1) % draw_frequency;
 
@@ -115,6 +115,7 @@ Character::Move()
     if (hold[D_KEY])                    SetVx(vx + Acceleration);
     else if (!hold[A_KEY] && vx > 0)    SetVx(vx - 1);
 
+    printf("vx: %d, vy: %d\n", vx, vy);
     circle->x += vx;
     circle->y += vy;
 
@@ -135,11 +136,6 @@ Character::Subtract_HP(int harm_point)
     return (HealthPoint <= 0);
 }
 
-void Character::TuggleHold(int k) {
-    if (hold[k] == true)    hold[k] = false;
-    else                    hold[k] = true;
-}
-
 void Character::SetVx(int v){
     if (v > MaxSpeed)       vx = MaxSpeed;
     else if (v < -MaxSpeed) vx = -MaxSpeed;
@@ -151,4 +147,3 @@ void Character::SetVy(int v){
     else if (v < -MaxSpeed) vy = -MaxSpeed;
     else                    vy = v;
 }
-

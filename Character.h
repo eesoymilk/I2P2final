@@ -15,8 +15,9 @@
 enum {LEFT=0, RIGHT, UP, DOWN};
 #endif
 
-#ifndef CHARACTER_KEYS
-#define CHARACTER_KEYS
+#ifndef KEYS
+#define KeysUsed 5
+#define KEYS
 enum {W_KEY=0, A_KEY, S_KEY, D_KEY, E_KEY};
 #endif
 
@@ -34,19 +35,16 @@ public:
 
     // Update monster position per frame
     // And detect if it reaches end point but not destroyed
-    bool Move();
+    bool Move(bool (&hold)[KeysUsed]);
 
     // functions that return informations of monster
     int getDir() { return direction; }
     int getWorth() { return worth; }
     int getScore() { return score; }
-    int getHold(int k) { return hold[k]; }
     int getVx() { return vx; }
     int getVy() { return vy; }
 
     bool Subtract_HP(int);
-
-    void TuggleHold(int);
     void SetVx(int);
     void SetVy(int);
 
@@ -67,10 +65,6 @@ private:
     int sprite_pos;
     // VELOCITY
     int vx = 0, vy = 0;
-    // WASD key flags
-    bool hold[4] = {false};
-
-    bool stop;
 
     // set of animation images
     std::vector<ALLEGRO_BITMAP*> moveImg;
