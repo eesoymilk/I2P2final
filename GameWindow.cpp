@@ -511,7 +511,7 @@ GameWindow::process_event()
         mouse_x = event.mouse.x;
         mouse_y = event.mouse.y;
         // printf("mouse_x = %d, mouse_y = %d\n", mouse_x, mouse_y);
-        jacket->SetDir(mouse_x, mouse_y);
+        jacket->SetRadianCCW(mouse_x, mouse_y);
         menu->MouseIn(mouse_x, mouse_y);
     }
 

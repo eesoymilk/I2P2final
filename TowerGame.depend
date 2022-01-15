@@ -315,7 +315,7 @@
 	"global.h"
 	<iostream>
 
-1642247910 e:\github\i2p2final\gamewindow.h
+1642252464 e:\github\i2p2final\gamewindow.h
 	<allegro5/allegro_audio.h>
 	<allegro5/allegro_acodec.h>
 	<vector>
@@ -325,7 +325,7 @@
 	"Level.h"
 	"Attack.h"
 	"Slider.h"
-	"Character.h"
+	"Jacket.h"
 
 1615199857 e:\github\i2p2final\allegro\include\allegro5\allegro_acodec.h
 	"allegro5/allegro.h"
@@ -878,7 +878,7 @@
 1642225244 source:c:\users\user\i2p2final\tower.cpp
 	"Tower.h"
 
-1642234558 e:\github\i2p2final\character.h
+1642254577 e:\github\i2p2final\character.h
 	<stdio.h>
 	<string.h>
 	<vector>
@@ -892,8 +892,9 @@
 	"Attack.h"
 	"global.h"
 
-1642235235 source:e:\github\i2p2final\character.cpp
+1642254728 source:e:\github\i2p2final\character.cpp
 	"Character.h"
+	<cmath>
 
 1642250521 source:c:\users\user\i2p2final\gamewindow.cpp
 	"GameWindow.h"
@@ -915,5 +916,8 @@
 	"global.h"
 
 1642236979 source:c:\users\user\i2p2final\character.cpp
+	"Character.h"
+
+1642254553 e:\github\i2p2final\jacket.h
 	"Character.h"
 

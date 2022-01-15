@@ -7,7 +7,7 @@
 #define Acceleration 1
 #define PI 3.1415926
 
-const char  state_name[][10] = {"DEFAULT", "HANDGUN", "RIFLE"};
+const char  state_name[][10] = {"UNARMED", "PISTOL", "SMG"};
 
 // set counter frequency of drawing moving animation
 const int draw_frequency = 10;
@@ -49,7 +49,7 @@ Character::Load_Move()
 {
     char buffer[50];
 
-    for (int i = 0; i < 4; i++) {
+    for (int i = 0; i < 1; i++) {
         for(int j = 0; j < 7; j++) {
             ALLEGRO_BITMAP *img;
             sprintf(buffer, "./%s/%s_%d.png", class_name, state_name[i], j);
