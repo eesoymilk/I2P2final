@@ -45,6 +45,7 @@ public:
     int getVy() { return vy; }
 
     bool Subtract_HP(int);
+    void SetDir(int, int);
     void SetVx(int);
     void SetVy(int);
 

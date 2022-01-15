@@ -20,10 +20,10 @@ Character::Character()
     circle->y = InitY * grid_height + grid_height/2;
     circle->r = grid_width/2;
 
-    direction_count[LEFT] = 1;
-    direction_count[RIGHT] = 1;
-    direction_count[UP] = 1;
-    direction_count[DOWN] = 1;
+    direction_count[LEFT] = 5;
+    direction_count[RIGHT] = 5;
+    direction_count[UP] = 4;
+    direction_count[DOWN] = 4;
 
     sprite_pos = 0;
     counter = 0;
@@ -132,6 +132,17 @@ Character::Subtract_HP(int harm_point)
     HealthPoint -= harm_point;
 
     return (HealthPoint <= 0);
+}
+
+void Character::SetDir(int mx, int my){
+    mx -= circle->x;
+    my -= circle->y;
+    if (mx > my) 
+        if (mx > -my)   direction = RIGHT;
+        else            direction = UP;
+    else
+        if (mx > -my)   direction = DOWN;
+        else            direction = LEFT;
 }
 
 void Character::SetVx(int v){

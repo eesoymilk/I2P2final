@@ -479,9 +479,9 @@ GameWindow::process_event()
     else if(event.type == ALLEGRO_EVENT_MOUSE_AXES){
         mouse_x = event.mouse.x;
         mouse_y = event.mouse.y;
-
+        printf("mouse_x = %d, mouse_y = %d\n", mouse_x, mouse_y);
+        mainCharacter->SetDir(mouse_x, mouse_y);
         menu->MouseIn(mouse_x, mouse_y);
-
     }
 
     if(redraw) {
