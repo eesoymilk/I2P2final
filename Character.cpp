@@ -1,7 +1,7 @@
 #include "Character.h"
 
-#define InitX 8
-#define InitY 8
+#define InitX 0
+#define InitY 0
 
 const int axis_x[] = {-1, 1, 0, 0};
 const int axis_y[] = {0, 0, -1, 1};
@@ -79,7 +79,7 @@ Character::Draw()
 
     if(!moveImg[offset + sprite_pos])
         return;
-    
+
     // get height and width of sprite bitmap
     w = al_get_bitmap_width(moveImg[offset + sprite_pos]);
     h = al_get_bitmap_height(moveImg[offset + sprite_pos]);

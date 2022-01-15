@@ -36,7 +36,7 @@ GameWindow::game_init()
     char buffer[50];
 
     icon = al_load_bitmap("./icon.png");
-    background = al_load_bitmap("./StartBackground.jpg");
+    background = al_load_bitmap("./StartBackground1.jpg");
 
     for(int i = 0; i < Num_TowerType; i++)
     {
@@ -465,7 +465,6 @@ GameWindow::process_event()
             case ALLEGRO_KEY_D:
                 mainCharacter->Set_Direction(RIGHT);
                 break;
-            default:
         }
     }
     else if(event.type == ALLEGRO_EVENT_MOUSE_BUTTON_DOWN) {
@@ -533,8 +532,10 @@ GameWindow::draw_running_map()
 {
     unsigned int i, j;
 
-    al_clear_to_color(al_map_rgb(100, 100, 100));
-    al_draw_bitmap(background, 0, 0, 0);
+    //al_clear_to_color(al_map_rgb(100, 100, 100));
+    al_draw_bitmap_region(background, mainCharacter->getCircle()->x - 20, mainCharacter->getCircle()->y - 20, 1200, 800, 0, 0, 0);
+    //al_draw_bitmap_region(background, 60, 400, 1200, 800, mainCharacter->getCircle()->x - 400, mainCharacter->getCircle()->y - 400, 0);
+    //al_draw_bitmap(background, mainCharacter->getCircle()->x - 400, mainCharacter->getCircle()->y - 300, 0);
 
     for(i = 0; i < field_height/40; i++)
     {
@@ -561,9 +562,9 @@ GameWindow::draw_running_map()
     if(selectedTower != -1)
         Tower::SelectedTower(mouse_x, mouse_y, selectedTower);
 
-    al_draw_filled_rectangle(field_width, 0, window_width, window_height, al_map_rgb(100, 100, 100));
+    //al_draw_filled_rectangle(field_width, 0, window_width, window_height, al_map_rgb(100, 100, 100));
 
-    menu->Draw();
+    //menu->Draw();
 
     al_flip_display();
 }
