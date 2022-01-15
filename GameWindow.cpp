@@ -57,8 +57,13 @@ GameWindow::game_init()
 
     sample = al_load_sample("BackgroundMusic.ogg");
     backgroundSound = al_create_sample_instance(sample);
-    al_set_sample_instance_playmode(backgroundSound, ALLEGRO_PLAYMODE_ONCE);
+    al_set_sample_instance_playmode(backgroundSound, ALLEGRO_PLAYMODE_LOOP);
     al_attach_sample_instance_to_mixer(backgroundSound, al_get_default_mixer());
+
+    sample = al_load_sample("Paris.ogg");
+    gameSound = al_create_sample_instance(sample);
+    al_set_sample_instance_playmode(gameSound, ALLEGRO_PLAYMODE_LOOP);
+    al_attach_sample_instance_to_mixer(gameSound, al_get_default_mixer());
 
     level = new LEVEL(1);
     menu = new Menu();
@@ -220,17 +225,17 @@ GameWindow::game_begin()
 {
     printf(">>> Start Level[%d]\n", level->getLevel());
 
+    al_play_sample_instance(backgroundSound);
     draw_startscene();
 
-
+    al_stop_sample_instance(backgroundSound);
 
     mainCharacter = create_character();
-
     draw_running_map();
 
-    al_play_sample_instance(startSound);
-    while(al_get_sample_instance_playing(startSound));
-    al_play_sample_instance(backgroundSound);
+    /*al_play_sample_instance(startSound);
+    while(al_get_sample_instance_playing(startSound));*/
+    al_play_sample_instance(gameSound);
 
     al_start_timer(timer);
     al_start_timer(character_pro);
@@ -579,6 +584,8 @@ GameWindow::draw_startscene()
                 }
             }
         }
+        //if(help_button) printf("1\n");
+        //else printf("0\n");
         if(help_button) al_draw_bitmap(helpscene, -130, 0, 0);
         else al_draw_bitmap(startscene, 0, 0, 0);
         al_flip_display();
