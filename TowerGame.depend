@@ -315,7 +315,7 @@
 	"global.h"
 	<iostream>
 
-1642229548 e:\github\i2p2final\gamewindow.h
+1642230115 e:\github\i2p2final\gamewindow.h
 	<allegro5/allegro_audio.h>
 	<allegro5/allegro_acodec.h>
 	<vector>
@@ -323,11 +323,6 @@
 	<time.h>
 	"Menu.h"
 	"Level.h"
-	"Arcane.h"
-	"Archer.h"
-	"Canon.h"
-	"Poison.h"
-	"Storm.h"
 	"Attack.h"
 	"Slider.h"
 	"Character.h"
@@ -902,7 +897,7 @@
 	"Circle.h"
 	"global.h"
 
-1642228709 source:e:\github\i2p2final\character.cpp
+1642229587 source:e:\github\i2p2final\character.cpp
 	"Character.h"
 
 1642225996 source:c:\users\user\i2p2final\gamewindow.cpp

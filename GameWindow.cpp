@@ -26,10 +26,10 @@ void set_attack_volume(float volume)
     Attack::volume = volume;
 }
 
-bool compare(Tower *t1, Tower *t2)
-{
-    return (t1->getY() <= t2->getY());
-}
+// bool compare(Tower *t1, Tower *t2)
+// {
+//     return (t1->getY() <= t2->getY());
+// }
 
 void
 GameWindow::game_init()
@@ -99,78 +99,45 @@ GameWindow::isOnRoad()
     return false;
 }
 
-Tower*
-GameWindow::create_tower(int type)
-{
-    Tower *t = NULL;
+// Tower*
+// GameWindow::create_tower(int type)
+// {
+//     Tower *t = NULL;
 
-    if(isOnRoad())
-        return t;
+//     if(isOnRoad())
+//         return t;
 
-    switch(type)
-    {
-    case ARCANE:
-        t = new Arcane(mouse_x, mouse_y);
-        break;
-    case ARCHER:
-        t = new Archer(mouse_x, mouse_y);
-        break;
-    case CANON:
-        t = new Canon(mouse_x, mouse_y);
-        break;
-    case POISON:
-        t = new Poison(mouse_x, mouse_y);
-        break;
-    case STORM:
-        t = new Storm(mouse_x, mouse_y);
-        break;
-    default:
-        break;
-    }
+//     switch(type)
+//     {
+//     case ARCANE:
+//         t = new Arcane(mouse_x, mouse_y);
+//         break;
+//     case ARCHER:
+//         t = new Archer(mouse_x, mouse_y);
+//         break;
+//     case CANON:
+//         t = new Canon(mouse_x, mouse_y);
+//         break;
+//     case POISON:
+//         t = new Poison(mouse_x, mouse_y);
+//         break;
+//     case STORM:
+//         t = new Storm(mouse_x, mouse_y);
+//         break;
+//     default:
+//         break;
+//     }
 
-    menu->Change_Coin(menu->getTowerCoin(type));
+//     menu->Change_Coin(menu->getTowerCoin(type));
 
-    return t;
-}
+//     return t;
+// }
 
 Character*
 GameWindow::create_character()
 {
     return new Character();
 }
-
-// Monster*
-// GameWindow::create_monster()
-// {
-//     Monster *m = NULL;
-
-//     if(level->MonsterNum[WOLF])
-//     {
-//         level->MonsterNum[WOLF]--;
-//         m = new Wolf(level->ReturnPath());
-//     }
-//     else if(level->MonsterNum[WOLFKNIGHT])
-//     {
-//         level->MonsterNum[WOLFKNIGHT]--;
-//         m = new WolfKnight(level->ReturnPath());
-//     }
-//     else if(level->MonsterNum[DEMONNIJIA])
-//     {
-//         level->MonsterNum[DEMONNIJIA]--;
-//         m = new DemonNijia(level->ReturnPath());
-//     }
-//     else if(level->MonsterNum[CAVEMAN])
-//     {
-//         level->MonsterNum[CAVEMAN]--;
-//         m = new CaveMan(level->ReturnPath());
-//     }
-//     else
-//     {
-//         al_stop_timer(monster_pro);
-//     }
-
-//     return m;
-// }
 
 void
 GameWindow::game_play()
@@ -214,11 +181,7 @@ GameWindow::GameWindow()
     event_queue = al_create_event_queue();
 
     timer = al_create_timer(1.0 / FPS);
-    // monster_pro = al_create_timer(1.0 / FPS);
     character_pro = al_create_timer(1.0 / FPS);
-
-    // if(timer == NULL || monster_pro == NULL)
-    //     show_err_msg(-1);
 
     if(timer == NULL || character_pro == NULL)
         show_err_msg(-1);
@@ -245,7 +208,6 @@ GameWindow::GameWindow()
     al_register_event_source(event_queue, al_get_mouse_event_source());
 
     al_register_event_source(event_queue, al_get_timer_event_source(timer));
-    // al_register_event_source(event_queue, al_get_timer_event_source(monster_pro));
     al_register_event_source(event_queue, al_get_timer_event_source(character_pro));
 
     game_init();
@@ -265,7 +227,6 @@ GameWindow::game_begin()
     al_play_sample_instance(backgroundSound);
 
     al_start_timer(timer);
-    // al_start_timer(monster_pro);
     al_start_timer(character_pro);
 }
 
@@ -284,7 +245,7 @@ int
 GameWindow::game_update()
 {
     unsigned int i, j;
-    std::list<Tower*>::iterator it;
+    // std::list<Tower*>::iterator it;
 
     mainCharacter->Move(hold);
 
@@ -337,11 +298,11 @@ GameWindow::game_update()
     //     }
     // }
 
-    /*TODO:*/
-    /*1. Update the attack set of each tower*/
-    /*Hint: Tower::UpdateAttack*/
-    for(auto _tower: towerSet)
-        _tower->UpdateAttack();
+    // /*TODO:*/
+    // /*1. Update the attack set of each tower*/
+    // /*Hint: Tower::UpdateAttack*/
+    // for(auto _tower: towerSet)
+    //     _tower->UpdateAttack();
 
 
     return GAME_CONTINUE;
@@ -350,12 +311,11 @@ GameWindow::game_update()
 void
 GameWindow::game_reset()
 {
-    // reset game and begin
-    for(auto&& child : towerSet) {
-        delete child;
-    }
-    towerSet.clear();
-    // monsterSet.clear();
+    // // reset game and begin
+    // for(auto&& child : towerSet) {
+    //     delete child;
+    // }
+    // towerSet.clear();
 
 
     selectedTower = -1;
@@ -428,26 +388,9 @@ GameWindow::process_event()
 
             Coin_Inc_Count = (Coin_Inc_Count + 1) % CoinSpeed;
 
-            // if(monsterSet.size() == 0 && !al_get_timer_started(monster_pro))
-            // {
-            //     int Current_Level = level->getLevel();
-            //     if (Current_Level == MaxLevel) return GAME_EXIT;
-
-            //     for(auto&& child : towerSet)    delete child;
-            //     towerSet.clear();
-            //     level->setLevel(++Current_Level);
-            //     al_start_timer(monster_pro);
-            // }
-
         }
         else {
-            // if(Monster_Pro_Count == 0) {
-            //     Monster *m = create_monster();
 
-            //     if(m != NULL)
-            //         monsterSet.push_back(m);
-            // }
-            // Monster_Pro_Count = (Monster_Pro_Count + 1) % level->getMonsterSpeed();
         }
     }
     else if(event.type == ALLEGRO_EVENT_DISPLAY_CLOSE) {
@@ -495,41 +438,41 @@ GameWindow::process_event()
     }
     else if(event.type == ALLEGRO_EVENT_MOUSE_BUTTON_DOWN) {
         if(event.mouse.button == 1) {
-            if(selectedTower != -1 && mouse_hover(0, 0, field_width, field_height)) {
-                Tower *t = create_tower(selectedTower);
+            // if(selectedTower != -1 && mouse_hover(0, 0, field_width, field_height)) {
+            //     Tower *t = create_tower(selectedTower);
 
-                if(t == NULL)
-                    printf("Wrong place\n");
-                else {
-                    towerSet.push_back(t);
-                    towerSet.sort(compare);
-                }
-            } else if(selectedTower == -1){
-                std::list<Tower*>::iterator it = towerSet.begin();
-                if(lastClicked != -1)
-                {
-                    std::advance(it, lastClicked);
-                    (*it)->ToggleClicked();
-                }
-                for(i=0, it = towerSet.begin(); it != towerSet.end(); it++, i++)
-                {
-                    Circle *circle = (*it)->getCircle();
-                    int t_width = (*it)->getWidth();
+            //     if(t == NULL)
+            //         printf("Wrong place\n");
+            //     else {
+            //         towerSet.push_back(t);
+            //         towerSet.sort(compare);
+            //     }
+            // } else if(selectedTower == -1){
+            //     std::list<Tower*>::iterator it = towerSet.begin();
+            //     if(lastClicked != -1)
+            //     {
+            //         std::advance(it, lastClicked);
+            //         (*it)->ToggleClicked();
+            //     }
+            //     for(i=0, it = towerSet.begin(); it != towerSet.end(); it++, i++)
+            //     {
+            //         Circle *circle = (*it)->getCircle();
+            //         int t_width = (*it)->getWidth();
 
-                    if(mouse_hover(circle->x - t_width/2, circle->y, t_width, t_width/2))
-                    {
-                        (*it)->ToggleClicked();
-                        lastClicked = i;
-                        break;
-                    } else {
-                        lastClicked = -1;
-                    }
-                }
+            //         if(mouse_hover(circle->x - t_width/2, circle->y, t_width, t_width/2))
+            //         {
+            //             (*it)->ToggleClicked();
+            //             lastClicked = i;
+            //             break;
+            //         } else {
+            //             lastClicked = -1;
+            //         }
+            //     }
 
-            }
-            // check if user wants to create some kind of tower
-            // if so, show tower image attached to cursor
-            selectedTower = menu->MouseIn(mouse_x, mouse_y);
+            // }
+            // // check if user wants to create some kind of tower
+            // // if so, show tower image attached to cursor
+            // selectedTower = menu->MouseIn(mouse_x, mouse_y);
 
         }
     }

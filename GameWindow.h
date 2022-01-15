@@ -18,11 +18,11 @@ enum {W_KEY=0, A_KEY, S_KEY, D_KEY, E_KEY};
 // #include "CaveMan.h"
 // #include "Wolf.h"
 // #include "DemonNijia.h"
-#include "Arcane.h"
-#include "Archer.h"
-#include "Canon.h"
-#include "Poison.h"
-#include "Storm.h"
+// #include "Arcane.h"
+// #include "Archer.h"
+// #include "Canon.h"
+// #include "Poison.h"
+// #include "Storm.h"
 #include "Attack.h"
 #include "Slider.h"
 
@@ -78,8 +78,8 @@ public:
     // detect if a tower will be constructed on road
     bool isOnRoad();
 
-    Tower* create_tower(int);
-    Monster* create_monster();
+    // Tower* create_tower(int);
+    // Monster* create_monster();
     Character* create_character();
 
     void TuggleHold(int);
@@ -116,7 +116,7 @@ private:
 
     Character* mainCharacter;
     // std::vector<Monster*> monsterSet;
-    std::list<Tower*> towerSet;
+    // std::list<Tower*> towerSet;
 
     // int Monster_Pro_Count = 0;
     int Coin_Inc_Count = 0;
