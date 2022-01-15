@@ -40,14 +40,14 @@ public:
     void DoAttack(int, int);
 
     // functions that return informations of monster
-    int getDir() { return direction; }
+    double getRaianCCW() { return radian_ccw; }
     int getWorth() { return worth; }
     int getScore() { return score; }
     int getVx() { return vx; }
     int getVy() { return vy; }
 
     bool Subtract_HP(int);
-    void SetDir(int, int);
+    void SetRadianCCW(int, int);
     void SetVx(int);
     void SetVy(int);
 
@@ -56,6 +56,7 @@ protected:
     int speed = 1;
     int worth = 10;
     int score = 100;
+    int state;
     char class_name[20];
     // attck info
     int attack_harm_point = 5;
@@ -64,7 +65,6 @@ protected:
     std::vector<Attack*> attack_set;
     //
 private:
-    int state;
     double radian_ccw;
     // end point
     int end_x, end_y;
@@ -76,7 +76,7 @@ private:
     int vx = 0, vy = 0;
 
     // set of animation images
-    std::vector<std::vector<ALLEGRO_BITMAP*>>   moveImgSet;
+    std::vector<ALLEGRO_BITMAP*>    moveImg;
 };
 
 

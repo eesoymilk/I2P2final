@@ -6,6 +6,7 @@
         "cstdlib": "cpp",
         "*.rh": "cpp",
         "memory": "cpp",
-        "type_traits": "cpp"
+        "type_traits": "cpp",
+        "cmath": "cpp"
     }
 }
