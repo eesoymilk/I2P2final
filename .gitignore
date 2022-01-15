@@ -1,6 +1,6 @@
 allegro/
 bin/
-obj/*
+obj/
 allegro_monolith-5.2.ddl
 allegro_monolith-debug-5.2.ddl
 allegro.log
