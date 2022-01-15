@@ -15,7 +15,7 @@
 class Attack : public Object
 {
 public:
-    Attack(Circle*, Circle*, int, int, ALLEGRO_BITMAP*);
+    Attack(Circle*, int, int, int, int, ALLEGRO_BITMAP*);
     virtual ~Attack();
 
     // override virtual function "Object::Draw"

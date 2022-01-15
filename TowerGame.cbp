@@ -63,7 +63,6 @@
 		<Unit filename="Slider.cpp" />
 		<Unit filename="Slider.h" />
 		<Unit filename="Storm.h" />
-		<Unit filename="Tower.cpp" />
 		<Unit filename="Tower.h" />
 		<Unit filename="Wolf.h" />
 		<Unit filename="WolfKnight.h" />

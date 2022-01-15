@@ -88,6 +88,8 @@ Character::Draw()
     al_draw_bitmap(moveImg[offset + sprite_pos], circle->x - w/2, circle->y - (h - grid_height/2), 0);
 
     //al_draw_filled_circle(circle->x, circle->y, circle->r, al_map_rgba(196, 79, 79, 200));
+    for(unsigned int i=0; i<this->attack_set.size(); i++)
+        this->attack_set[i]->Draw();
 }
 bool
 Character::Move(bool (&hold)[KeysUsed])
@@ -113,7 +115,7 @@ Character::Move(bool (&hold)[KeysUsed])
     if (hold[D_KEY])                    SetVx(vx + Acceleration);
     else if (!hold[A_KEY] && vx > 0)    SetVx(vx - 1);
 
-    printf("vx: %d, vy: %d\n", vx, vy);
+    // printf("vx: %d, vy: %d\n", vx, vy);
     circle->x += vx;
     circle->y += vy;
 
@@ -126,6 +128,20 @@ Character::Move(bool (&hold)[KeysUsed])
     return false;
 }
 
+void
+Character::DoAttack(int mouse_x, int mouse_y)
+{
+    printf("Attack!\n");
+    Attack *attack = new Attack (
+        this->circle,
+        mouse_x, mouse_y,
+        this->attack_harm_point,
+        this->attack_velocity,
+        this->attack_img
+    );
+    this->attack_set.push_back(attack);
+}
+
 bool
 Character::Subtract_HP(int harm_point)
 {
@@ -134,15 +150,15 @@ Character::Subtract_HP(int harm_point)
     return (HealthPoint <= 0);
 }
 
-void Character::SetDir(int mx, int my){
-    mx -= circle->x;
-    my -= circle->y;
-    if (mx > my) 
-        if (mx > -my)   direction = RIGHT;
-        else            direction = UP;
+void Character::SetDir(int mouse_x, int mouse_y){
+    mouse_x -= circle->x;
+    mouse_y -= circle->y;
+    if (mouse_x > mouse_y) 
+        if (mouse_x > -mouse_y) direction = RIGHT;
+        else                    direction = UP;
     else
-        if (mx > -my)   direction = DOWN;
-        else            direction = LEFT;
+        if (mouse_x > -mouse_y) direction = DOWN;
+        else                    direction = LEFT;
 }
 
 void Character::SetVx(int v){

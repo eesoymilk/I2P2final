@@ -3,11 +3,15 @@
 
 #include <stdio.h>
 #include <string.h>
-#include <allegro5/allegro.h>
-#include <allegro5/allegro_primitives.h>
 #include <vector>
-#include "Object.h"
+#include <allegro5/allegro.h>
+#include <allegro5/allegro_image.h>
+#include <allegro5/allegro_font.h>
+#include <allegro5/allegro_ttf.h>
+#include <allegro5/allegro_primitives.h>
 #include "Circle.h"
+#include "Object.h"
+#include "Attack.h"
 #include "global.h"
 
 #ifndef DIRECTION_OBJECT
@@ -16,13 +20,13 @@ enum {LEFT=0, RIGHT, UP, DOWN};
 #endif
 
 #ifndef KEYS
-#define KeysUsed 5
 #define KEYS
+#define KeysUsed 5
 enum {W_KEY=0, A_KEY, S_KEY, D_KEY, E_KEY};
 #endif
 
-
-class Character: public Object {
+class Character : public Object
+{
 public:
     Character();
     virtual ~Character();
@@ -36,6 +40,7 @@ public:
     // Update monster position per frame
     // And detect if it reaches end point but not destroyed
     bool Move(bool (&hold)[KeysUsed]);
+    void DoAttack(int, int);
 
     // functions that return informations of monster
     int getDir() { return direction; }
@@ -56,6 +61,12 @@ protected:
     int worth = 10;
     int score = 100;
     char class_name[20];
+    // attck info
+    int attack_harm_point = 5;
+    int attack_velocity = 10;
+    ALLEGRO_BITMAP *attack_img = al_load_bitmap("./Tower/Storm_Beam.png");
+    std::vector<Attack*> attack_set;
+    //
 private:
     int direction;
     // end point
@@ -69,7 +80,6 @@ private:
 
     // set of animation images
     std::vector<ALLEGRO_BITMAP*> moveImg;
-
 };
 
 

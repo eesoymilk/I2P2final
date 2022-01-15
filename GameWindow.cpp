@@ -218,6 +218,8 @@ GameWindow::game_begin()
 {
     printf(">>> Start Level[%d]\n", level->getLevel());
 
+
+
     mainCharacter = create_character();
 
     draw_running_map();
@@ -258,19 +260,19 @@ GameWindow::game_update()
     //     }
     // }
 
-    // update every monster
-    // check if it is destroyed or reaches end point
+    // // update every monster
+    // // check if it is destroyed or reaches end point
     // for(i=0; i < monsterSet.size(); i++)
     // {
     //     bool isDestroyed = false, isReachEnd = false;
 
-    //     /*TODO:*/
-    //     /*1. For each tower, traverse its attack set*/
-    //     /*2. If the monster collide with any attack, reduce the HP of the monster*/
-    //     /*3. Remember to set isDestroyed to "true" if monster is killed*/
-    //     /*Hint: Tower::TriggerAttack*/
-    //     for(auto _tower: towerSet)
-    //         isDestroyed = _tower->TriggerAttack(monsterSet[i]);
+    // /*TODO:*/
+    // /*1. For each tower, traverse its attack set*/
+    // /*2. If the monster collide with any attack, reduce the HP of the monster*/
+    // /*3. Remember to set isDestroyed to "true" if monster is killed*/
+    // /*Hint: Tower::TriggerAttack*/
+    // for(auto _tower: towerSet)
+    //     isDestroyed = _tower->TriggerAttack(monsterSet[i]);
 
     //     isReachEnd = monsterSet[i]->Move();
 
@@ -305,7 +307,7 @@ GameWindow::game_update()
     //     _tower->UpdateAttack();
 
 
-    return GAME_CONTINUE;
+    // return GAME_CONTINUE;
 }
 
 void
@@ -438,6 +440,7 @@ GameWindow::process_event()
     }
     else if(event.type == ALLEGRO_EVENT_MOUSE_BUTTON_DOWN) {
         if(event.mouse.button == 1) {
+            mainCharacter->DoAttack(mouse_x, mouse_y);
             // if(selectedTower != -1 && mouse_hover(0, 0, field_width, field_height)) {
             //     Tower *t = create_tower(selectedTower);
 
@@ -479,7 +482,7 @@ GameWindow::process_event()
     else if(event.type == ALLEGRO_EVENT_MOUSE_AXES){
         mouse_x = event.mouse.x;
         mouse_y = event.mouse.y;
-        printf("mouse_x = %d, mouse_y = %d\n", mouse_x, mouse_y);
+        // printf("mouse_x = %d, mouse_y = %d\n", mouse_x, mouse_y);
         mainCharacter->SetDir(mouse_x, mouse_y);
         menu->MouseIn(mouse_x, mouse_y);
     }
@@ -499,11 +502,41 @@ GameWindow::process_event()
 void
 GameWindow::draw_running_map()
 {
-    unsigned int i, j;
+    //unsigned int i, j;
+
+    al_clear_to_color(al_map_rgb(0, 0, 0));
 
     //al_clear_to_color(al_map_rgb(100, 100, 100));
-    //al_clear_to_color(al_map_rgb(100, 100, 100));
-    al_draw_bitmap_region(background, mainCharacter->getCircle()->x - 20, mainCharacter->getCircle()->y - 20, 1200, 800, 0, 0, 0);
+    int x_axis = mainCharacter->getCircle()->x; int y_axis = mainCharacter->getCircle()->y;
+    if(x_axis <= 400 && y_axis <= 300){
+        al_draw_bitmap(background, 0, 0, 0);
+    }
+    else if(x_axis <= 400 && y_axis >= 900){
+        al_draw_bitmap_region(background, 0, 600, 1800, 1200, 0, 0, 0);
+    }
+    else if(x_axis >= 1400 && y_axis >= 600){
+        al_draw_bitmap_region(background, 1000, 600, 1800, 1200, 0, 0, 0);
+    }
+    else if(x_axis >= 1400 && y_axis <= 300){
+        al_draw_bitmap_region(background, 1000, 0, 1800, 1200, 0, 0, 0);
+    }
+    else if(x_axis <= 400){
+        al_draw_bitmap_region(background, 0, y_axis - 300, 1800, 1200, 0, 0, 0);
+    }
+    else if(x_axis >= 1400){
+        al_draw_bitmap_region(background, 1000, y_axis - 300, 1800, 1200, 0, 0, 0);
+    }
+    else if(y_axis <= 300){
+        al_draw_bitmap_region(background, x_axis - 400, 0, 1800, 1200, 0, 0, 0);
+    }
+    else if(y_axis >= 900){
+        al_draw_bitmap_region(background, x_axis - 400, 600, 1800, 1200, 0, 0, 0);
+    }
+    else al_draw_bitmap_region(background, x_axis - 400, y_axis - 300, 1800, 1200, 0, 0, 0);
+
+    mainCharacter->Draw();
+    printf("%d %d\n", x_axis, y_axis);
+    //al_draw_bitmap_region(background, 0, 0, 1200, 800, 0, 0, 0);
     //al_draw_bitmap_region(background, 60, 400, 1200, 800, mainCharacter->getCircle()->x - 400, mainCharacter->getCircle()->y - 400, 0);
     //al_draw_bitmap(background, mainCharacter->getCircle()->x - 400, mainCharacter->getCircle()->y - 300, 0);
 
@@ -523,8 +556,6 @@ GameWindow::draw_running_map()
     {
         monsterSet[i]->Draw();
     }*/
-
-    mainCharacter->Draw();
 
     /*for(std::list<Tower*>::iterator it = towerSet.begin(); it != towerSet.end(); it++)
         (*it)->Draw();
@@ -571,6 +602,7 @@ GameWindow::draw_startscene()
 void
 GameWindow::TuggleHold(int k)
 {
-    if (hold[k] == true)    hold[k] = false;
-    else                    hold[k] = true;
+    hold[k] = !hold[k];
+    // if (hold[k] == true)    hold[k] = false;
+    // else                    hold[k] = true;
 }

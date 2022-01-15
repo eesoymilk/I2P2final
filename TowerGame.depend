@@ -1,8 +1,8 @@
 # depslib dependency file v1.0
-1519054600 source:e:\github\i2p2final\attack.cpp
+1642234043 source:e:\github\i2p2final\attack.cpp
 	"Attack.h"
 
-1528195764 e:\github\i2p2final\attack.h
+1642233933 e:\github\i2p2final\attack.h
 	<stdio.h>
 	<math.h>
 	<allegro5/allegro.h>
@@ -310,12 +310,12 @@
 1518073262 source:e:\github\i2p2final\circle.cpp
 	"Circle.h"
 
-1642230620 source:e:\github\i2p2final\gamewindow.cpp
+1642234227 source:e:\github\i2p2final\gamewindow.cpp
 	"GameWindow.h"
 	"global.h"
 	<iostream>
 
-1642230115 e:\github\i2p2final\gamewindow.h
+1642232765 e:\github\i2p2final\gamewindow.h
 	<allegro5/allegro_audio.h>
 	<allegro5/allegro_acodec.h>
 	<vector>
@@ -386,18 +386,18 @@
 1518095862 e:\github\i2p2final\arcane.h
 	"Tower.h"
 
-1520703300 e:\github\i2p2final\tower.h
+1642232647 e:\github\i2p2final\tower.h
 	<stdio.h>
 	<allegro5/allegro.h>
 	<allegro5/allegro_image.h>
 	<allegro5/allegro_font.h>
 	<allegro5/allegro_ttf.h>
 	<allegro5/allegro_primitives.h>
+	"Circle.h"
 	"Object.h"
 	"Attack.h"
-	"Circle.h"
-	"Monster.h"
 	"global.h"
+	"Monster.h"
 
 1518095886 e:\github\i2p2final\archer.h
 	"Tower.h"
@@ -887,17 +887,21 @@
 1642225244 source:c:\users\user\i2p2final\tower.cpp
 	"Tower.h"
 
-1642230639 e:\github\i2p2final\character.h
+1642234558 e:\github\i2p2final\character.h
 	<stdio.h>
 	<string.h>
-	<allegro5/allegro.h>
-	<allegro5/allegro_primitives.h>
 	<vector>
-	"Object.h"
+	<allegro5/allegro.h>
+	<allegro5/allegro_image.h>
+	<allegro5/allegro_font.h>
+	<allegro5/allegro_ttf.h>
+	<allegro5/allegro_primitives.h>
 	"Circle.h"
+	"Object.h"
+	"Attack.h"
 	"global.h"
 
-1642229587 source:e:\github\i2p2final\character.cpp
+1642235235 source:e:\github\i2p2final\character.cpp
 	"Character.h"
 
 1642225996 source:c:\users\user\i2p2final\gamewindow.cpp
