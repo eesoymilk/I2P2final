@@ -566,6 +566,7 @@ GameWindow::draw_startscene()
     //al_draw_bitmap_region(background, 60, 400, 1200, 800, mainCharacter->getCircle()->x - 400, mainCharacter->getCircle()->y - 400, 0);
     while(!start_button){
         if (!al_is_event_queue_empty(event_queue)) {
+            printf("HELLO\n");
             al_wait_for_event(event_queue, &event);
             if(event.type == ALLEGRO_EVENT_KEY_DOWN){
                 switch(event.keyboard.keycode){
@@ -578,7 +579,7 @@ GameWindow::draw_startscene()
                 }
             }
         }
-        if(help_button) al_draw_bitmap(helpscene, 0, 0, 0);
+        if(help_button) al_draw_bitmap(background, -130, 0, 0);
         else al_draw_bitmap(startscene, 0, 0, 0);
         al_flip_display();
     }
