@@ -76,7 +76,24 @@ Character::Draw()
     double cx = w / 2, cy = h / 2;
     double dx = circle->x - w / 2, dy = circle->y - h / 2;
     double angle = 2 * PI -getRaianCCW();
-    al_draw_rotated_bitmap(moveImg[offset + sprite_pos], w / 2, h / 2, circle->x - w / 2, circle->y - h / 2, 2 * PI - getRaianCCW(), 0);
+    if(circle->x < 400 && circle->y < 300)
+        al_draw_rotated_bitmap(curImg, cx, cy, circle->x - cx, circle->y - cy, angle, 0);
+    else if(circle->x < 400 && circle->y > 900)
+        al_draw_rotated_bitmap(curImg, cx, cy, circle->x - cx, 300 + circle->y - 900, angle, 0);
+    else if(circle->x > 1400 && circle->y > 900)
+        al_draw_rotated_bitmap(curImg, cx, cy, 400 + circle->x - 1400, 300 + circle->y - 900, angle, 0);
+    else if(circle->x > 1400 && circle->y < 300)
+        al_draw_rotated_bitmap(curImg, cx, cy, 400 + circle->x - 1400, circle->y - cy, angle, 0);
+    else if(circle->x < 400)
+        al_draw_rotated_bitmap(curImg, cx, cy, circle->x - cx, 300/*circle->y - cy*/, angle, 0);
+    else if(circle->x > 1400)
+        al_draw_rotated_bitmap(curImg, cx, cy, 400 + circle->x - 1400, 300/*circle->y - cy*/, angle, 0);
+    else if(circle->y < 300)
+        al_draw_rotated_bitmap(curImg, cx, cy, 400 , circle->y - cy, angle, 0);
+    else if(circle->y > 900)
+        al_draw_rotated_bitmap(curImg, cx, cy, 400 , 300 + circle->y - 900, angle, 0);
+    else
+        al_draw_rotated_bitmap(curImg, cx, cy, 400/*circle->x - w / 2*/, 300/*circle->y - cy*/, angle, 0);
 
     //al_draw_filled_circle(circle->x, circle->y, circle->r, al_map_rgba(196, 79, 79, 200));
     for (unsigned int i = 0; i < this->attack_set.size(); i++)

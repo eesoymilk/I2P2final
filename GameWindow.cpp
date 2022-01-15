@@ -267,9 +267,14 @@ GameWindow::game_update()
     if (mouse_hold) {
         jacket->DoAttack(mouse_x, mouse_y);
     }
+    board_x = jacket->getCircle()->x - 400;
+    board_y = jacket->getCircle()->y - 300;
+    if(board_x < 0) board_x = 0;
+    if(board_x > 1000) board_x = 1000;
+    if(board_y > 600) board_y = 600;
+    if(board_y < 0) board_y = 0;
 
-
-    WindowMove();
+    //WindowMove();
 
     // /*TODO:*/
     // /*Allow towers to detect if monster enters its range*/
