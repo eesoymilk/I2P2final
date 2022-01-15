@@ -1,5 +1,7 @@
 allegro/
 bin/
+obj/
+*.layout
 *.ddl
 *.log
 *.depend
