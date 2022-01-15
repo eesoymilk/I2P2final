@@ -38,7 +38,8 @@ GameWindow::game_init()
 
     icon = al_load_bitmap("./icon.png");
     background = al_load_bitmap("./StartBackground.jpg");
-    //startscene = al_load_bitmap("./StartScene");
+    startscene = al_load_bitmap("./StartScene.jpg");
+    helpscene = al_load_bitmap("./HelpScene.jpg");
 
     for(int i = 0; i < Num_TowerType; i++)
     {
@@ -455,19 +456,19 @@ GameWindow::process_event()
             case ALLEGRO_KEY_W:
                 printf("W is pressed!\n");
                 if (!mainCharacter->getHold(W_KEY))
-                    mainCharacter->TuggleHold(W_KEY); 
+                    mainCharacter->TuggleHold(W_KEY);
                 break;
             case ALLEGRO_KEY_A:
                 if (!mainCharacter->getHold(A_KEY))
-                    mainCharacter->TuggleHold(A_KEY); 
+                    mainCharacter->TuggleHold(A_KEY);
                 break;
             case ALLEGRO_KEY_S:
                 if (!mainCharacter->getHold(S_KEY))
-                    mainCharacter->TuggleHold(S_KEY); 
+                    mainCharacter->TuggleHold(S_KEY);
                 break;
             case ALLEGRO_KEY_D:
                 if (!mainCharacter->getHold(D_KEY))
-                    mainCharacter->TuggleHold(D_KEY); 
+                    mainCharacter->TuggleHold(D_KEY);
                 break;
         }
     }
@@ -476,19 +477,19 @@ GameWindow::process_event()
             case ALLEGRO_KEY_W:
                 printf("W is released!\n");
                 if (mainCharacter->getHold(W_KEY))
-                    mainCharacter->TuggleHold(W_KEY); 
+                    mainCharacter->TuggleHold(W_KEY);
                 break;
             case ALLEGRO_KEY_A:
                 if (mainCharacter->getHold(A_KEY))
-                    mainCharacter->TuggleHold(A_KEY); 
+                    mainCharacter->TuggleHold(A_KEY);
                 break;
             case ALLEGRO_KEY_S:
                 if (mainCharacter->getHold(S_KEY))
-                    mainCharacter->TuggleHold(S_KEY); 
+                    mainCharacter->TuggleHold(S_KEY);
                 break;
             case ALLEGRO_KEY_D:
                 if (mainCharacter->getHold(D_KEY))
-                    mainCharacter->TuggleHold(D_KEY); 
+                    mainCharacter->TuggleHold(D_KEY);
                 break;
         }
     }
@@ -557,13 +558,13 @@ GameWindow::draw_running_map()
 {
     unsigned int i, j;
 
-    al_clear_to_color(al_map_rgb(100, 100, 100));
+    //al_clear_to_color(al_map_rgb(100, 100, 100));
     //al_clear_to_color(al_map_rgb(100, 100, 100));
     al_draw_bitmap_region(background, mainCharacter->getCircle()->x - 20, mainCharacter->getCircle()->y - 20, 1200, 800, 0, 0, 0);
     //al_draw_bitmap_region(background, 60, 400, 1200, 800, mainCharacter->getCircle()->x - 400, mainCharacter->getCircle()->y - 400, 0);
     //al_draw_bitmap(background, mainCharacter->getCircle()->x - 400, mainCharacter->getCircle()->y - 300, 0);
 
-    for(i = 0; i < field_height/40; i++)
+    /*for(i = 0; i < field_height/40; i++)
     {
         for(j = 0; j < field_width/40; j++)
         {
@@ -578,11 +579,11 @@ GameWindow::draw_running_map()
     for(i=0; i<monsterSet.size(); i++)
     {
         monsterSet[i]->Draw();
-    }
+    }*/
 
     mainCharacter->Draw();
 
-    for(std::list<Tower*>::iterator it = towerSet.begin(); it != towerSet.end(); it++)
+    /*for(std::list<Tower*>::iterator it = towerSet.begin(); it != towerSet.end(); it++)
         (*it)->Draw();
 
     if(selectedTower != -1)
@@ -590,7 +591,7 @@ GameWindow::draw_running_map()
 
     al_draw_filled_rectangle(field_width, 0, window_width, window_height, al_map_rgb(100, 100, 100));
 
-    menu->Draw();
+    menu->Draw();*/
 
     al_flip_display();
 }
