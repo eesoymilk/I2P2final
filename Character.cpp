@@ -8,16 +8,16 @@
 #define PI 3.1415926
 #define SCALE 2
 
-const char  state_name[][10] = {"UNARMED", "PISTOL", "SMG"};
+const char  state_name[][10] = {"UNARMED", "PISTOL", "SMG", "AR"};
 
 // set counter frequency of drawing moving animation
 const int draw_frequency = 10;
 
-Character::Character()
+Character::Character(int spawn_x, int spawn_y)
 {
     circle = new Circle;
-    circle->x = InitX * grid_width + grid_width/2;
-    circle->y = InitY * grid_height + grid_height/2;
+    circle->x = spawn_x * grid_width + grid_width/2;
+    circle->y = spawn_y * grid_height + grid_height/2;
     circle->r = grid_width / 2;
     sprite_pos = 0;
     counter = 0;
@@ -61,8 +61,8 @@ Character::Draw()
     int w, h;
     int offset = 0;
 
-    // calculate the number of pictures before current direction
-    for(int i = 0; i < state; i++)  offset += 7;
+    if (getWeapon())    offset += 7;
+    // for(int i = 0; i < state; i++)  offset += 7;
 
     if(!moveImg[offset + sprite_pos])
         return;
@@ -74,26 +74,13 @@ Character::Draw()
     // draw bitmap align grid edge
     ALLEGRO_BITMAP* curImg = moveImg[offset + sprite_pos];
     double cx = w / 2, cy = h / 2;
-    double dx = circle->x - w / 2, dy = circle->y - h / 2;
-    double angle = 2 * PI -getRaianCCW();
-    if(circle->x < 400 && circle->y < 300)
-        al_draw_rotated_bitmap(curImg, cx, cy, circle->x - cx, circle->y - cy, angle, 0);
-    else if(circle->x < 400 && circle->y > 900)
-        al_draw_rotated_bitmap(curImg, cx, cy, circle->x - cx, 300 + circle->y - 900, angle, 0);
-    else if(circle->x > 1400 && circle->y > 900)
-        al_draw_rotated_bitmap(curImg, cx, cy, 400 + circle->x - 1400, 300 + circle->y - 900, angle, 0);
-    else if(circle->x > 1400 && circle->y < 300)
-        al_draw_rotated_bitmap(curImg, cx, cy, 400 + circle->x - 1400, circle->y - cy, angle, 0);
-    else if(circle->x < 400)
-        al_draw_rotated_bitmap(curImg, cx, cy, circle->x - cx, 300/*circle->y - cy*/, angle, 0);
-    else if(circle->x > 1400)
-        al_draw_rotated_bitmap(curImg, cx, cy, 400 + circle->x - 1400, 300/*circle->y - cy*/, angle, 0);
-    else if(circle->y < 300)
-        al_draw_rotated_bitmap(curImg, cx, cy, 400 , circle->y - cy, angle, 0);
-    else if(circle->y > 900)
-        al_draw_rotated_bitmap(curImg, cx, cy, 400 , 300 + circle->y - 900, angle, 0);
-    else
-        al_draw_rotated_bitmap(curImg, cx, cy, 400/*circle->x - w / 2*/, 300/*circle->y - cy*/, angle, 0);
+    // double dx = circle->x - w / 2, dy = circle->y - h / 2;
+    double angle = 2 * PI - getRadianCCW();
+    auto [dx, dy] = Transform();
+    // std::pair<int, int> cam = Transform();
+    //printf("%d %d\n", cam.first, cam.second);
+    al_draw_scaled_rotated_bitmap(curImg, cx, cy, dx, dy, SCALE, SCALE, angle, 0);
+
 
     //al_draw_filled_circle(circle->x, circle->y, circle->r, al_map_rgba(196, 79, 79, 200));
     for (unsigned int i = 0; i < this->attack_set.size(); i++)
@@ -131,15 +118,27 @@ Character::Move(bool (&hold)[KeysUsed])
 }
 
 void
+Character::PickWeapon(Weapon* w)
+{
+    if (wielding != NULL) {
+        wielding->Drop(circle->x, circle->y);
+    }
+    wielding = w;
+}
+
+void
 Character::DoAttack(int mouse_x, int mouse_y)
 {
     printf("Attack!\n");
+    std::pair<int, int> cam = Transform();
+    Circle* createdCircle = new Circle(cam.first, cam.second, this->circle->r);
+    Weapon* w = this->getWeapon();
     Attack *attack = new Attack (
-        this->circle,
+        createdCircle,
         mouse_x, mouse_y,
-        this->attack_harm_point,
-        this->attack_velocity,
-        this->attack_img
+        w->getDamage(),
+        w->getSpeed(),
+        w->getBulletImg()
     );
     this->attack_set.push_back(attack);
 }
@@ -163,17 +162,6 @@ void Character::setRadianCCW(int mouse_x, int mouse_y){
     // printf("degree = %lf\n", radian * 180 / PI);
     radian_ccw = radian;
 }
-
-// void Character::SetRadianCCW(int mouse_x, int mouse_y){
-//     mouse_x -= circle->x;
-//     mouse_y -= circle->y;
-//     if (mouse_x > mouse_y) 
-//         if (mouse_x > -mouse_y) direction = RIGHT;
-//         else                    direction = UP;
-//     else
-//         if (mouse_x > -mouse_y) direction = DOWN;
-//         else                    direction = LEFT;
-// }
 
 void Character::setVx(int v){
     if (v > MaxSpeed)       vx = MaxSpeed;

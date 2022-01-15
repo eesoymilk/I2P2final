@@ -17,6 +17,8 @@
 #define MaxLevel 4
 #define Acceleration 5
 const int draw_frequency = 10;
+int background_width;
+int background_height;
 
 //
 
@@ -36,6 +38,11 @@ GameWindow::game_init()
     background = al_load_bitmap("./StartBackground.jpg");
     startscene = al_load_bitmap("./StartScene.jpg");
     helpscene = al_load_bitmap("./HelpScene.jpg");
+
+    background_width = al_get_bitmap_width(background);
+    background_height = al_get_bitmap_height(background);
+
+    //printf("%d %d\n", background_width, background_height);
 
     // for(int i = 0; i < Num_TowerType; i++)
     // {
@@ -75,39 +82,12 @@ GameWindow::mouse_hover(int startx, int starty, int width, int height)
     return false;
 }
 
-bool
-GameWindow::isOnRoad()
-{
-    int startx, starty;
-    int widthOfTower;
-
-    widthOfTower = TowerWidth[selectedTower];
-
-    for(int i=0; i < NumOfGrid; i++)
-    {
-        startx = (i % 15) * 40;
-        starty = (i / 15) * 40;
-
-        if(level->isRoad(i)) {
-            if((mouse_x + (widthOfTower/2) < startx) || (mouse_x - (widthOfTower/2) > startx + grid_width))
-                continue;
-            else if((mouse_y + (widthOfTower/2) < starty) || (mouse_y > starty + grid_height))
-                continue;
-            else
-                return true;
-        }
-    }
-    return false;
-}
-
 // Tower*
 // GameWindow::create_tower(int type)
 // {
 //     Tower *t = NULL;
-
 //     if(isOnRoad())
 //         return t;
-
 //     switch(type)
 //     {
 //     case ARCANE:
@@ -128,25 +108,40 @@ GameWindow::isOnRoad()
 //     default:
 //         break;
 //     }
-
 //     menu->Change_Coin(menu->getTowerCoin(type));
-
 //     return t;
 // }
 
 Character*
-GameWindow::spawnCharacter(int type)
+GameWindow::spawnCharacter(int type, int x, int y)
 {
     Character* c = NULL;
     switch (type)
     {
     case 1:
-        c = new Jacket();
+        c = new Jacket(x, y);
         break;
     default:
         break;
     }
     return c;
+}
+
+Weapon*
+GameWindow::spawnWeapon(int type, int x, int y)
+{
+    Weapon* w = NULL;
+    switch (type)
+    {
+    case 1:
+        w = new Pistol();
+        printf("Dropping Pistol...\n");
+        w->Drop(x, y);
+        break;
+    default:
+        break;
+    }
+    return w;
 }
 
 void
@@ -191,9 +186,9 @@ GameWindow::GameWindow()
     event_queue = al_create_event_queue();
 
     timer = al_create_timer(1.0 / FPS);
-    character_pro = al_create_timer(1.0 / FPS);
+    enemy_pro = al_create_timer(1.0 / FPS);
 
-    if(timer == NULL || character_pro == NULL)
+    if(timer == NULL || enemy_pro == NULL)
         show_err_msg(-1);
 
     if (display == NULL || event_queue == NULL)
@@ -218,7 +213,7 @@ GameWindow::GameWindow()
     al_register_event_source(event_queue, al_get_mouse_event_source());
 
     al_register_event_source(event_queue, al_get_timer_event_source(timer));
-    al_register_event_source(event_queue, al_get_timer_event_source(character_pro));
+    al_register_event_source(event_queue, al_get_timer_event_source(enemy_pro));
 
     board_x = 0; board_y = 0;
 
@@ -235,7 +230,13 @@ GameWindow::game_begin()
 
     al_stop_sample_instance(backgroundSound);
 
-    jacket = spawnCharacter(1);
+    // tmp init for debugging
+    jacket = spawnCharacter(1, 0, 0);
+    printf("Spawning pistol...\n");
+    weapons.push_back(spawnWeapon(1, 4, 4));
+    printf("Spawned pistol.\n");
+    //
+    
     draw_running_map();
 
     /*al_play_sample_instance(startSound);
@@ -243,7 +244,7 @@ GameWindow::game_begin()
     al_play_sample_instance(gameSound);
 
     al_start_timer(timer);
-    al_start_timer(character_pro);
+    al_start_timer(enemy_pro);
 }
 
 int
@@ -261,11 +262,29 @@ int
 GameWindow::game_update()
 {
     unsigned int i, j;
-    // std::list<Tower*>::iterator it;
+
+    if (function_key_pressed) {
+        function_key_pressed = false;
+        std::vector<Weapon*> near_weapons;
+        Weapon* pick_target;
+        Circle* jacket_cirle = jacket->getCircle();
+        for (auto weapon : weapons)
+            if (Circle::isOverlap(jacket_cirle, weapon->getCircle()))
+                near_weapons.push_back(weapon);
+        if (!near_weapons.empty()) {
+            if (near_weapons.size() == 1)
+                pick_target = *near_weapons.begin();
+            if (jacket->getWeapon() != NULL) {
+                weapons.push_back(jacket->getWeapon());
+            }
+            jacket->PickWeapon(pick_target);
+        }
+    }
 
     jacket->Move(hold);
     if (mouse_hold) {
-        jacket->DoAttack(mouse_x, mouse_y);
+        if (jacket->getWeapon())
+            jacket->DoAttack(mouse_x, mouse_y);
     }
     board_x = jacket->getCircle()->x - 400;
     board_y = jacket->getCircle()->y - 300;
@@ -327,17 +346,6 @@ GameWindow::game_update()
 void
 GameWindow::game_reset()
 {
-    // // reset game and begin
-    // for(auto&& child : towerSet) {
-    //     delete child;
-    // }
-    // towerSet.clear();
-
-
-    selectedTower = -1;
-    lastClicked = -1;
-    Coin_Inc_Count = 0;
-    // Monster_Pro_Count = 0;
     mute = false;
     redraw = false;
     menu->Reset();
@@ -349,7 +357,7 @@ GameWindow::game_reset()
 
     // stop timer
     al_stop_timer(timer);
-    al_stop_timer(character_pro);
+    al_stop_timer(enemy_pro);
     // al_stop_timer(monster_pro);
 }
 
@@ -365,11 +373,7 @@ GameWindow::game_destroy()
     al_destroy_font(Large_font);
 
     al_destroy_timer(timer);
-    al_destroy_timer(character_pro);
-    // al_destroy_timer(monster_pro);
-
-    // for(int i=0;i<5; i++)
-    //     al_destroy_bitmap(tower[i]);
+    al_destroy_timer(enemy_pro);
 
     al_destroy_bitmap(icon);
     al_destroy_bitmap(background);
@@ -402,15 +406,6 @@ GameWindow::process_event()
     if(event.type == ALLEGRO_EVENT_TIMER) {
         if(event.timer.source == timer) {
             redraw = true;
-
-            if(Coin_Inc_Count == 0)
-                menu->Change_Coin(Coin_Time_Gain);
-
-            Coin_Inc_Count = (Coin_Inc_Count + 1) % CoinSpeed;
-
-        }
-        else {
-
         }
     }
     else if(event.type == ALLEGRO_EVENT_DISPLAY_CLOSE) {
@@ -433,6 +428,10 @@ GameWindow::process_event()
             case ALLEGRO_KEY_D:
                 printf("D is pressed!\n");
                 if (!hold[D_KEY])    hold[D_KEY] = true;
+                break;
+            case ALLEGRO_KEY_E:
+                printf("E is pressed!\n");
+                function_key_pressed = true;
                 break;
         }
     }
@@ -459,39 +458,6 @@ GameWindow::process_event()
     else if (event.type == ALLEGRO_EVENT_MOUSE_BUTTON_DOWN) {
         if(event.mouse.button == 1) {
             if (!mouse_hold)    mouse_hold = true;
-            // jacket->DoAttack(mouse_x, mouse_y);
-            // if(selectedTower != -1 && mouse_hover(0, 0, field_width, field_height)) {
-            //     Tower *t = create_tower(selectedTower);
-            //     if(t == NULL)
-            //         printf("Wrong place\n");
-            //     else {
-            //         towerSet.push_back(t);
-            //         towerSet.sort(compare);
-            //     }
-            // } else if(selectedTower == -1){
-            //     std::list<Tower*>::iterator it = towerSet.begin();
-            //     if(lastClicked != -1)
-            //     {
-            //         std::advance(it, lastClicked);
-            //         (*it)->ToggleClicked();
-            //     }
-            //     for(i=0, it = towerSet.begin(); it != towerSet.end(); it++, i++)
-            //     {
-            //         Circle *circle = (*it)->getCircle();
-            //         int t_width = (*it)->getWidth();
-            //         if(mouse_hover(circle->x - t_width/2, circle->y, t_width, t_width/2))
-            //         {
-            //             (*it)->ToggleClicked();
-            //             lastClicked = i;
-            //             break;
-            //         } else {
-            //             lastClicked = -1;
-            //         }
-            //     }
-            // }
-            // // check if user wants to create some kind of tower
-            // // if so, show tower image attached to cursor
-            // selectedTower = menu->MouseIn(mouse_x, mouse_y);
         }
     } else if (event.type == ALLEGRO_EVENT_MOUSE_BUTTON_UP) {
         if (event.mouse.button == 1) {
@@ -527,6 +493,7 @@ GameWindow::draw_running_map()
     //al_clear_to_color(al_map_rgb(100, 100, 100));
     al_draw_bitmap(background, -board_x, -board_y, 0);
 
+    for (auto weapon : weapons) weapon->Draw();
     jacket->Draw();
     //printf("%d %d\n", x_axis, y_axis);
     //al_draw_bitmap_region(background, 0, 0, 1200, 800, 0, 0, 0);
@@ -563,55 +530,17 @@ GameWindow::draw_running_map()
     al_flip_display();
 }
 
-void
-GameWindow::WindowMove()
-{
-    counter = (counter + 1) % draw_frequency;
+// void GameWindow::SetVx(int v) {
+//     if (v > MaxSpeed)       vx = MaxSpeed;
+//     else if (v < -MaxSpeed) vx = -MaxSpeed;
+//     else                    vx = v;
+// }
 
-    //if(counter == 0)    sprite_pos = (sprite_pos + 1) % 7;
-
-    // when getting to end point, return true
-    //if(circle->x == end_x && circle->y == end_y)    return true;
-
-    if (hold[W_KEY])                    SetVy(vy - Acceleration);
-    else if (!hold[S_KEY] && vy < 0)    SetVy(vy + 1);
-
-    if (hold[A_KEY])                    SetVx(vx - Acceleration);
-    else if (!hold[D_KEY] && vx < 0)    SetVx(vx + 1);
-
-    if (hold[S_KEY])                    SetVy(vy + Acceleration);
-    else if (!hold[W_KEY] && vy > 0)    SetVy(vy - 1);
-
-    if (hold[D_KEY])                    SetVx(vx + Acceleration);
-    else if (!hold[A_KEY] && vx > 0)    SetVx(vx - 1);
-
-    // printf("vx: %d, vy: %d\n", vx, vy);
-    board_x += vx;
-    board_y += vy;
-    if(board_x < 0) board_x = 0;
-    if(board_x > 1000) board_x = 1000;
-    if(board_y < 0) board_y = 0;
-    if(board_y > 600) board_y = 600;
-
-    // if (vx > 0)         vx--;
-    // else if (vx < 0)    vx++;
-    // if (vy > 0)         vy--;
-    // else if (vy < 0)    vy++;
-
-    // if not reaching end point, return false
-}
-
-void GameWindow::SetVx(int v) {
-    if (v > MaxSpeed)       vx = MaxSpeed;
-    else if (v < -MaxSpeed) vx = -MaxSpeed;
-    else                    vx = v;
-}
-
-void GameWindow::SetVy(int v){
-    if (v > MaxSpeed)       vy = MaxSpeed;
-    else if (v < -MaxSpeed) vy = -MaxSpeed;
-    else                    vy = v;
-}
+// void GameWindow::SetVy(int v){
+//     if (v > MaxSpeed)       vy = MaxSpeed;
+//     else if (v < -MaxSpeed) vy = -MaxSpeed;
+//     else                    vy = v;
+// }
 
 void
 GameWindow::draw_startscene()

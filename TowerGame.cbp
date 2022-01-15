@@ -59,11 +59,14 @@
 		<Unit filename="Monster.cpp" />
 		<Unit filename="Monster.h" />
 		<Unit filename="Object.h" />
+		<Unit filename="Pistol.h" />
 		<Unit filename="Poison.h" />
 		<Unit filename="Slider.cpp" />
 		<Unit filename="Slider.h" />
 		<Unit filename="Storm.h" />
 		<Unit filename="Tower.h" />
+		<Unit filename="Weapon.cpp" />
+		<Unit filename="Weapon.h" />
 		<Unit filename="Wolf.h" />
 		<Unit filename="WolfKnight.h" />
 		<Unit filename="global.cpp" />

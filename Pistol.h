@@ -8,13 +8,14 @@ class Pistol : public Weapon
 public:
     Pistol() : Weapon()
     {
-        char* buffer;
+        char buffer[50];
         
         damage = 10;
         fire_rate = 1;
         speed = 10;
-        strncpy(class_name, "Pistol", 20);
-        sprintf(buffer, "./weapon/%s.png", class_name);
+        strncpy(class_name, "PISTOL", 20);
+        sprintf(buffer, "./Weapon/%s.png", class_name);
+        printf("Loading Image...\n");
         weaponImg = al_load_bitmap(buffer);
     }
 };

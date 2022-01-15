@@ -30,13 +30,19 @@ Weapon::~Weapon()
 void
 Weapon::Draw()
 {
+    // printf("Drawing weapon...\n");
     // get height and width of sprite bitmap
     int w = al_get_bitmap_width(weaponImg);
     int h = al_get_bitmap_height(weaponImg);
+    // printf("Image's data gotten.\n");
 
     // draw bitmap align grid edge
     double dx = circle->x - w / 2, dy = circle->y - h / 2;
-    al_draw_bitmap(weaponImg, dx, dy, 0);
+    // printf("Transforming...\n");
+    std::pair<int, int> cam = Transform();
+    // printf("cam_x = %d, cam_y = %d\n", cam.first, cam.second);
+    al_draw_bitmap(weaponImg, cam.first, cam.second, 0);
+    // printf("Drawn weapon.\n");
 }
 
 void
@@ -47,11 +53,11 @@ Weapon::Pick()
 }
 
 void
-Weapon::Drop(int x, int y)
+Weapon::Drop(int drop_x, int drop_y)
 {
     circle = new Circle;
-    circle->x = InitX * grid_width + grid_width/2;
-    circle->y = InitY * grid_height + grid_height/2;
+    circle->x = drop_x * grid_width + grid_width/2;
+    circle->y = drop_y * grid_height + grid_height/2;
     circle->r = 2 * grid_width;
     dropped = false;
 }

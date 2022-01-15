@@ -6,14 +6,14 @@
 class Jacket : public Character
 {
 public:
-    Jacket() : Character()
+    Jacket(int spwan_x, int spwan_y) : Character(spwan_x, spwan_y)
     {
-        state = 0;
         HealthPoint = 20;
 
         strncpy(class_name, "Jacket", 20);
         Load_Img();
     }
+    void PickUpWeapon();
 };
 
 

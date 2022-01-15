@@ -1,5 +1,5 @@
 # depslib dependency file v1.0
-1642234043 source:e:\github\i2p2final\attack.cpp
+1642266022 source:e:\github\i2p2final\attack.cpp
 	"Attack.h"
 
 1642233933 e:\github\i2p2final\attack.h
@@ -302,20 +302,22 @@
 1615199857 e:\github\i2p2final\allegro\include\allegro5\allegro_audio.h
 	"allegro5/allegro.h"
 
-1520703508 e:\github\i2p2final\object.h
+1642271924 e:\github\i2p2final\object.h
+	<utility>
 	"Circle.h"
+	"global.h"
 
 1642261578 e:\github\i2p2final\circle.h
 
 1518073262 source:e:\github\i2p2final\circle.cpp
 	"Circle.h"
 
-1642263384 source:e:\github\i2p2final\gamewindow.cpp
+1642275792 source:e:\github\i2p2final\gamewindow.cpp
 	"GameWindow.h"
 	"global.h"
 	<iostream>
 
-1642263062 e:\github\i2p2final\gamewindow.h
+1642274498 e:\github\i2p2final\gamewindow.h
 	<allegro5/allegro_audio.h>
 	<allegro5/allegro_acodec.h>
 	<vector>
@@ -351,7 +353,7 @@
 	"allegro5/allegro.h"
 	"allegro5/allegro_font.h"
 
-1642226914 e:\github\i2p2final\global.h
+1642271057 e:\github\i2p2final\global.h
 	<allegro5/allegro_font.h>
 
 1642180709 e:\github\i2p2final\level.h
@@ -879,7 +881,7 @@
 1642225244 source:c:\users\user\i2p2final\tower.cpp
 	"Tower.h"
 
-1642260792 e:\github\i2p2final\character.h
+1642275954 e:\github\i2p2final\character.h
 	<stdio.h>
 	<string.h>
 	<vector>
@@ -894,7 +896,7 @@
 	"Attack.h"
 	"global.h"
 
-1642263608 source:e:\github\i2p2final\character.cpp
+1642276520 source:e:\github\i2p2final\character.cpp
 	"Character.h"
 	<cmath>
 
@@ -920,10 +922,10 @@
 1642236979 source:c:\users\user\i2p2final\character.cpp
 	"Character.h"
 
-1642259286 e:\github\i2p2final\jacket.h
+1642276558 e:\github\i2p2final\jacket.h
 	"Character.h"
 
-1642263109 e:\github\i2p2final\weapon.h
+1642276489 e:\github\i2p2final\weapon.h
 	<stdio.h>
 	<string.h>
 	<vector>
@@ -937,6 +939,9 @@
 	"Attack.h"
 	"global.h"
 
-1642263052 e:\github\i2p2final\pistol.h
+1642273673 e:\github\i2p2final\pistol.h
+	"Weapon.h"
+
+1642276293 source:e:\github\i2p2final\weapon.cpp
 	"Weapon.h"
 

@@ -3,16 +3,16 @@
 const int Velocity[] = {8, 8, 6, 10, 20};
 const int Harm[] = {5, 7, 15, 3, 5};
 
-Attack::Attack(Circle *created_circle, int mx, int my, int harm_point, int velocity, ALLEGRO_BITMAP* attack_img)
+Attack::Attack(Circle *attacker, int mx, int my, int harm_point, int velocity, ALLEGRO_BITMAP* attack_img)
 {
-    float vector_x = mx - created_circle->x;
-    float vector_y = my - created_circle->y;
+    float vector_x = mx - attacker->x;
+    float vector_y = my - attacker->y;
     float len = sqrt(vector_x * vector_x + vector_y * vector_y);
 
     // initialize the information of attack
-    this->pos_x = created_circle->x;
-    this->pos_y = created_circle->y;
-    this->circle = new Circle(created_circle->x, created_circle->y, 10);
+    this->pos_x = attacker->x;
+    this->pos_y = attacker->y;
+    this->circle = new Circle(attacker->x, attacker->y, 10);
 
     this->direction_x = vector_x / len;
     this->direction_y = vector_y / len;
