@@ -305,17 +305,17 @@
 1520703508 e:\github\i2p2final\object.h
 	"Circle.h"
 
-1519028628 e:\github\i2p2final\circle.h
+1642261578 e:\github\i2p2final\circle.h
 
 1518073262 source:e:\github\i2p2final\circle.cpp
 	"Circle.h"
 
-1642247910 source:e:\github\i2p2final\gamewindow.cpp
+1642262574 source:e:\github\i2p2final\gamewindow.cpp
 	"GameWindow.h"
 	"global.h"
 	<iostream>
 
-1642252464 e:\github\i2p2final\gamewindow.h
+1642263062 e:\github\i2p2final\gamewindow.h
 	<allegro5/allegro_audio.h>
 	<allegro5/allegro_acodec.h>
 	<vector>
@@ -326,6 +326,7 @@
 	"Attack.h"
 	"Slider.h"
 	"Jacket.h"
+	"Pistol.h"
 
 1615199857 e:\github\i2p2final\allegro\include\allegro5\allegro_acodec.h
 	"allegro5/allegro.h"
@@ -878,7 +879,7 @@
 1642225244 source:c:\users\user\i2p2final\tower.cpp
 	"Tower.h"
 
-1642254577 e:\github\i2p2final\character.h
+1642260792 e:\github\i2p2final\character.h
 	<stdio.h>
 	<string.h>
 	<vector>
@@ -889,10 +890,11 @@
 	<allegro5/allegro_primitives.h>
 	"Circle.h"
 	"Object.h"
+	"Weapon.h"
 	"Attack.h"
 	"global.h"
 
-1642254728 source:e:\github\i2p2final\character.cpp
+1642260809 source:e:\github\i2p2final\character.cpp
 	"Character.h"
 	<cmath>
 
@@ -918,6 +920,23 @@
 1642236979 source:c:\users\user\i2p2final\character.cpp
 	"Character.h"
 
-1642254553 e:\github\i2p2final\jacket.h
+1642259286 e:\github\i2p2final\jacket.h
 	"Character.h"
+
+1642263109 e:\github\i2p2final\weapon.h
+	<stdio.h>
+	<string.h>
+	<vector>
+	<allegro5/allegro.h>
+	<allegro5/allegro_image.h>
+	<allegro5/allegro_font.h>
+	<allegro5/allegro_ttf.h>
+	<allegro5/allegro_primitives.h>
+	"Circle.h"
+	"Object.h"
+	"Attack.h"
+	"global.h"
+
+1642263052 e:\github\i2p2final\pistol.h
+	"Weapon.h"
 

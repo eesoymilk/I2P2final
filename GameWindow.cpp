@@ -16,6 +16,7 @@
 
 #define MaxLevel 4
 #define Acceleration 5
+const int draw_frequency = 10;
 
 //
 
@@ -25,11 +26,6 @@ void set_attack_volume(float volume)
 {
     Attack::volume = volume;
 }
-
-// bool compare(Tower *t1, Tower *t2)
-// {
-//     return (t1->getY() <= t2->getY());
-// }
 
 void
 GameWindow::game_init()
@@ -41,11 +37,11 @@ GameWindow::game_init()
     startscene = al_load_bitmap("./StartScene.jpg");
     helpscene = al_load_bitmap("./HelpScene.jpg");
 
-    for(int i = 0; i < Num_TowerType; i++)
-    {
-        sprintf(buffer, "./Tower/%s.png", TowerClass[i]);
-        tower[i] = al_load_bitmap(buffer);
-    }
+    // for(int i = 0; i < Num_TowerType; i++)
+    // {
+    //     sprintf(buffer, "./Tower/%s.png", TowerClass[i]);
+    //     tower[i] = al_load_bitmap(buffer);
+    // }
 
     al_set_display_icon(display, icon);
     al_reserve_samples(3);
@@ -139,7 +135,7 @@ GameWindow::isOnRoad()
 // }
 
 Character*
-GameWindow::create_character(int type)
+GameWindow::spawnCharacter(int type)
 {
     Character* c = NULL;
     switch (type)
@@ -239,7 +235,7 @@ GameWindow::game_begin()
 
     al_stop_sample_instance(backgroundSound);
 
-    jacket = create_character(1);
+    jacket = spawnCharacter(1);
     draw_running_map();
 
     /*al_play_sample_instance(startSound);
@@ -268,12 +264,12 @@ GameWindow::game_update()
     // std::list<Tower*>::iterator it;
 
     jacket->Move(hold);
-    board_x = jacket->getCircle()->x - 400;
-    board_y = jacket->getCircle()->y - 300;
-    if(board_x < 0) board_x = 0;
-    if(board_x > 1000) board_x = 1000;
-    if(board_y < 0) board_y = 0;
-    if(board_y > 600) board_y = 600;
+    if (mouse_hold) {
+        jacket->DoAttack(mouse_x, mouse_y);
+    }
+
+
+    WindowMove();
 
     // /*TODO:*/
     // /*Allow towers to detect if monster enters its range*/
@@ -283,13 +279,11 @@ GameWindow::game_update()
     //         if(_tower->DetectAttack(_monster)) break;
     //     }
     // }
-
     // // update every monster
     // // check if it is destroyed or reaches end point
     // for(i=0; i < monsterSet.size(); i++)
     // {
     //     bool isDestroyed = false, isReachEnd = false;
-
     // /*TODO:*/
     // /*1. For each tower, traverse its attack set*/
     // /*2. If the monster collide with any attack, reduce the HP of the monster*/
@@ -297,40 +291,31 @@ GameWindow::game_update()
     // /*Hint: Tower::TriggerAttack*/
     // for(auto _tower: towerSet)
     //     isDestroyed = _tower->TriggerAttack(monsterSet[i]);
-
     //     isReachEnd = monsterSet[i]->Move();
-
     //     if(isDestroyed)
     //     {
     //         Monster *m = monsterSet[i];
-
     //         menu->Change_Coin(m->getWorth());
     //         menu->Gain_Score(m->getScore());
     //         monsterSet.erase(monsterSet.begin() + i);
     //         i--;
     //         delete m;
-
     //     }
     //     else if(isReachEnd)
     //     {
     //         Monster *m = monsterSet[i];
-
     //         if(menu->Subtract_HP())
     //             return GAME_EXIT;
-
     //         monsterSet.erase(monsterSet.begin() + i);
     //         i--;
     //         delete m;
     //     }
     // }
-
     // /*TODO:*/
     // /*1. Update the attack set of each tower*/
     // /*Hint: Tower::UpdateAttack*/
     // for(auto _tower: towerSet)
     //     _tower->UpdateAttack();
-
-
     // return GAME_CONTINUE;
 }
 
@@ -378,8 +363,8 @@ GameWindow::game_destroy()
     al_destroy_timer(character_pro);
     // al_destroy_timer(monster_pro);
 
-    for(int i=0;i<5; i++)
-        al_destroy_bitmap(tower[i]);
+    // for(int i=0;i<5; i++)
+    //     al_destroy_bitmap(tower[i]);
 
     al_destroy_bitmap(icon);
     al_destroy_bitmap(background);
@@ -466,12 +451,12 @@ GameWindow::process_event()
                 break;
         }
     }
-    else if(event.type == ALLEGRO_EVENT_MOUSE_BUTTON_DOWN) {
+    else if (event.type == ALLEGRO_EVENT_MOUSE_BUTTON_DOWN) {
         if(event.mouse.button == 1) {
-            jacket->DoAttack(mouse_x, mouse_y);
+            if (!mouse_hold)    mouse_hold = true;
+            // jacket->DoAttack(mouse_x, mouse_y);
             // if(selectedTower != -1 && mouse_hover(0, 0, field_width, field_height)) {
             //     Tower *t = create_tower(selectedTower);
-
             //     if(t == NULL)
             //         printf("Wrong place\n");
             //     else {
@@ -489,7 +474,6 @@ GameWindow::process_event()
             //     {
             //         Circle *circle = (*it)->getCircle();
             //         int t_width = (*it)->getWidth();
-
             //         if(mouse_hover(circle->x - t_width/2, circle->y, t_width, t_width/2))
             //         {
             //             (*it)->ToggleClicked();
@@ -499,19 +483,20 @@ GameWindow::process_event()
             //             lastClicked = -1;
             //         }
             //     }
-
             // }
             // // check if user wants to create some kind of tower
             // // if so, show tower image attached to cursor
             // selectedTower = menu->MouseIn(mouse_x, mouse_y);
-
         }
-    }
-    else if(event.type == ALLEGRO_EVENT_MOUSE_AXES){
+    } else if (event.type == ALLEGRO_EVENT_MOUSE_BUTTON_UP) {
+        if (event.mouse.button == 1) {
+            if (mouse_hold)     mouse_hold = false;
+        }
+    } else if (event.type == ALLEGRO_EVENT_MOUSE_AXES){
         mouse_x = event.mouse.x;
         mouse_y = event.mouse.y;
         // printf("mouse_x = %d, mouse_y = %d\n", mouse_x, mouse_y);
-        jacket->SetRadianCCW(mouse_x, mouse_y);
+        jacket->setRadianCCW(mouse_x, mouse_y);
         menu->MouseIn(mouse_x, mouse_y);
     }
 
@@ -574,6 +559,56 @@ GameWindow::draw_running_map()
 }
 
 void
+GameWindow::WindowMove()
+{
+    counter = (counter + 1) % draw_frequency;
+
+    //if(counter == 0)    sprite_pos = (sprite_pos + 1) % 7;
+
+    // when getting to end point, return true
+    //if(circle->x == end_x && circle->y == end_y)    return true;
+
+    if (hold[W_KEY])                    SetVy(vy - Acceleration);
+    else if (!hold[S_KEY] && vy < 0)    SetVy(vy + 1);
+
+    if (hold[A_KEY])                    SetVx(vx - Acceleration);
+    else if (!hold[D_KEY] && vx < 0)    SetVx(vx + 1);
+
+    if (hold[S_KEY])                    SetVy(vy + Acceleration);
+    else if (!hold[W_KEY] && vy > 0)    SetVy(vy - 1);
+
+    if (hold[D_KEY])                    SetVx(vx + Acceleration);
+    else if (!hold[A_KEY] && vx > 0)    SetVx(vx - 1);
+
+    // printf("vx: %d, vy: %d\n", vx, vy);
+    board_x += vx;
+    board_y += vy;
+    if(board_x < 0) board_x = 0;
+    if(board_x > 1000) board_x = 1000;
+    if(board_y < 0) board_y = 0;
+    if(board_y > 600) board_y = 600;
+
+    // if (vx > 0)         vx--;
+    // else if (vx < 0)    vx++;
+    // if (vy > 0)         vy--;
+    // else if (vy < 0)    vy++;
+
+    // if not reaching end point, return false
+}
+
+void GameWindow::SetVx(int v) {
+    if (v > MaxSpeed)       vx = MaxSpeed;
+    else if (v < -MaxSpeed) vx = -MaxSpeed;
+    else                    vx = v;
+}
+
+void GameWindow::SetVy(int v){
+    if (v > MaxSpeed)       vy = MaxSpeed;
+    else if (v < -MaxSpeed) vy = -MaxSpeed;
+    else                    vy = v;
+}
+
+void
 GameWindow::draw_startscene()
 {
     bool start_button = false;
@@ -607,5 +642,3 @@ GameWindow::draw_startscene()
         al_flip_display();
     }
 }
-
-void GameWindow::TuggleHold(int k) { hold[k] = !hold[k]; }

@@ -6,6 +6,7 @@
 #define MaxSpeed 3
 #define Acceleration 1
 #define PI 3.1415926
+#define SCALE 2
 
 const char  state_name[][10] = {"UNARMED", "PISTOL", "SMG"};
 
@@ -17,17 +18,11 @@ Character::Character()
     circle = new Circle;
     circle->x = InitX * grid_width + grid_width/2;
     circle->y = InitY * grid_height + grid_height/2;
-    circle->r = grid_width/2;
-
-    // direction_count[] = 5;
-    // direction_count[RIGHT] = 5;
-    // direction_count[UP] = 4;
-    // direction_count[DOWN] = 4;
-
+    circle->r = grid_width / 2;
     sprite_pos = 0;
     counter = 0;
-    strncpy(class_name, "Character", 20);
-    Load_Move();
+    strncpy(class_name, "Jacket", 20);
+    Load_Img();
 }
 
 
@@ -45,7 +40,7 @@ Character::~Character()
 }
 
 void
-Character::Load_Move()
+Character::Load_Img()
 {
     char buffer[50];
 
@@ -77,12 +72,17 @@ Character::Draw()
     h = al_get_bitmap_height(moveImg[offset + sprite_pos]);
 
     // draw bitmap align grid edge
+    ALLEGRO_BITMAP* curImg = moveImg[offset + sprite_pos];
+    double cx = w / 2, cy = h / 2;
+    double dx = circle->x - w / 2, dy = circle->y - h / 2;
+    double angle = 2 * PI -getRaianCCW();
     al_draw_rotated_bitmap(moveImg[offset + sprite_pos], w / 2, h / 2, circle->x - w / 2, circle->y - h / 2, 2 * PI - getRaianCCW(), 0);
 
     //al_draw_filled_circle(circle->x, circle->y, circle->r, al_map_rgba(196, 79, 79, 200));
-    for (unsigned int i=0; i < this->attack_set.size(); i++)
+    for (unsigned int i = 0; i < this->attack_set.size(); i++)
         this->attack_set[i]->Draw();
 }
+
 bool
 Character::Move(bool (&hold)[KeysUsed])
 {
@@ -93,26 +93,21 @@ Character::Move(bool (&hold)[KeysUsed])
     // when getting to end point, return true
     if(circle->x == end_x && circle->y == end_y)    return true;
 
-    if (hold[W_KEY])                    SetVy(vy - Acceleration);
-    else if (!hold[S_KEY] && vy < 0)    SetVy(vy + 1);
+    if (hold[W_KEY])                    setVy(vy - Acceleration);
+    else if (!hold[S_KEY] && vy < 0)    setVy(vy + 1);
 
-    if (hold[A_KEY])                    SetVx(vx - Acceleration);
-    else if (!hold[D_KEY] && vx < 0)    SetVx(vx + 1);
+    if (hold[A_KEY])                    setVx(vx - Acceleration);
+    else if (!hold[D_KEY] && vx < 0)    setVx(vx + 1);
 
-    if (hold[S_KEY])                    SetVy(vy + Acceleration);
-    else if (!hold[W_KEY] && vy > 0)    SetVy(vy - 1);
+    if (hold[S_KEY])                    setVy(vy + Acceleration);
+    else if (!hold[W_KEY] && vy > 0)    setVy(vy - 1);
 
-    if (hold[D_KEY])                    SetVx(vx + Acceleration);
-    else if (!hold[A_KEY] && vx > 0)    SetVx(vx - 1);
+    if (hold[D_KEY])                    setVx(vx + Acceleration);
+    else if (!hold[A_KEY] && vx > 0)    setVx(vx - 1);
 
     // printf("vx: %d, vy: %d\n", vx, vy);
     circle->x += vx;
     circle->y += vy;
-
-    // if (vx > 0)         vx--;
-    // else if (vx < 0)    vx++;
-    // if (vy > 0)         vy--;
-    // else if (vy < 0)    vy++;
 
     // if not reaching end point, return false
     return false;
@@ -140,14 +135,15 @@ Character::Subtract_HP(int harm_point)
     return (HealthPoint <= 0);
 }
 
-void Character::SetRadianCCW(int mouse_x, int mouse_y){
+void Character::setRadianCCW(int mouse_x, int mouse_y){
     double vector_x = mouse_x - circle->x;
-    double vector_y = mouse_y - circle->y;
-    double radian = atan(vector_x / vector_y);
+    double vector_y = -(mouse_y - circle->y);
+    double radian = atan(vector_y / vector_x);
 
     if (vector_x > 0 && vector_y < 0)   radian += 2 * PI;
     if (vector_x < 0)                   radian += PI;
-
+    // printf("vector_x = %lf, vector_y = %lf\n", vector_x, vector_y);
+    // printf("degree = %lf\n", radian * 180 / PI);
     radian_ccw = radian;
 }
 
@@ -162,13 +158,13 @@ void Character::SetRadianCCW(int mouse_x, int mouse_y){
 //         else                    direction = LEFT;
 // }
 
-void Character::SetVx(int v){
+void Character::setVx(int v){
     if (v > MaxSpeed)       vx = MaxSpeed;
     else if (v < -MaxSpeed) vx = -MaxSpeed;
     else                    vx = v;
 }
 
-void Character::SetVy(int v){
+void Character::setVy(int v){
     if (v > MaxSpeed)       vy = MaxSpeed;
     else if (v < -MaxSpeed) vy = -MaxSpeed;
     else                    vy = v;

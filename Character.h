@@ -11,10 +11,11 @@
 #include <allegro5/allegro_primitives.h>
 #include "Circle.h"
 #include "Object.h"
+#include "Weapon.h"
 #include "Attack.h"
 #include "global.h"
 
-enum {UNARMED = 0, PISTOL, SMG, AR};
+// enum {UNARMED = 0, PISTOL, SMG, AR};
 
 #ifndef KEYS
 #define KEYS
@@ -32,30 +33,26 @@ public:
     // override virtual function "Object::Draw"
     void Draw();
     // Load bitmaps of animation image into container "moveImg"
-    void Load_Move();
+    void Load_Img();
 
     // Update monster position per frame
     // And detect if it reaches end point but not destroyed
     bool Move(bool (&hold)[KeysUsed]);
+    void PickWeapon();
     void DoAttack(int, int);
 
     // functions that return informations of monster
     double getRaianCCW() { return radian_ccw; }
-    int getWorth() { return worth; }
-    int getScore() { return score; }
     int getVx() { return vx; }
     int getVy() { return vy; }
 
     bool Subtract_HP(int);
-    void SetRadianCCW(int, int);
-    void SetVx(int);
-    void SetVy(int);
+    void setRadianCCW(int, int);
+    void setVx(int);
+    void setVy(int);
 
 protected:
     int HealthPoint = 20;
-    int speed = 1;
-    int worth = 10;
-    int score = 100;
     int state;
     char class_name[20];
     // attck info
@@ -77,6 +74,8 @@ private:
 
     // set of animation images
     std::vector<ALLEGRO_BITMAP*>    moveImg;
+    std::vector<ALLEGRO_BITMAP*>    attackImg;
+    Weapon *weapon;
 };
 
 

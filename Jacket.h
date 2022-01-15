@@ -10,13 +10,9 @@ public:
     {
         state = 0;
         HealthPoint = 20;
-        speed = 1;
-        worth = 5;
-        score = 50;
 
         strncpy(class_name, "Jacket", 20);
-
-        Load_Move();
+        Load_Img();
     }
 };
 

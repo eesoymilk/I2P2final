@@ -28,6 +28,7 @@ enum {W_KEY=0, A_KEY, S_KEY, D_KEY, E_KEY};
 
 // EDITED
 #include "Jacket.h"
+#include "Pistol.h"
 //
 
 #define GAME_INIT -1
@@ -39,6 +40,8 @@ enum {W_KEY=0, A_KEY, S_KEY, D_KEY, E_KEY};
 #define GAME_TERMINATE 5
 #define GAME_NEXT_LEVEL 6
 #define GAME_EXIT 7
+#define MaxSpeed 3
+#define Acceleration 1
 
 // clock rate
 const float FPS = 60;
@@ -80,9 +83,12 @@ public:
 
     // Tower* create_tower(int);
     // Monster* create_monster();
-    Character* create_character(int);
+    Character* spawnCharacter(int);
+    Weapon* spawnWeapon(int);
 
-    void TuggleHold(int);
+    void SetVx(int);
+    void SetVy(int);
+    void WindowMove();
 
 public:
     bool initial = true;
@@ -117,6 +123,7 @@ private:
 
     Character* jacket;
     std::vector<Character*> enemySet;
+    std::vector<Weapon*> weaponSet;
     // std::vector<Monster*> monsterSet;
     // std::list<Tower*> towerSet;
 
@@ -124,11 +131,13 @@ private:
     int Coin_Inc_Count = 0;
     int mouse_x, mouse_y;
     int selectedTower = -1, lastClicked = -1;
-    int board_x, board_y;
+    int board_x = 0, board_y = 0;
+    int counter; int vx = 0, vy = 0;
 
     bool redraw = false;
     bool mute = false;
     bool hold[KeysUsed] = {false};
+    bool mouse_hold = false;
 };
 
 
