@@ -573,12 +573,13 @@ GameWindow::draw_startscene()
                         start_button = true;
                         break;
                     case ALLEGRO_KEY_H:
-                        help_button = ~help_button;
+                        if(help_button) help_button = false;
+                        else help_button = true;
                         break;
                 }
             }
         }
-        if(help_button) al_draw_bitmap(helpscene, 0, 0, 0);
+        if(help_button) al_draw_bitmap(helpscene, -130, 0, 0);
         else al_draw_bitmap(startscene, 0, 0, 0);
         al_flip_display();
     }
