@@ -44,6 +44,8 @@
 		<Unit filename="Attack.h" />
 		<Unit filename="Canon.h" />
 		<Unit filename="CaveMan.h" />
+		<Unit filename="Character.cpp" />
+		<Unit filename="Character.h" />
 		<Unit filename="Circle.cpp" />
 		<Unit filename="Circle.h" />
 		<Unit filename="DemonNijia.h" />
