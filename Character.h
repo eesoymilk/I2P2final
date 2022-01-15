@@ -14,10 +14,7 @@
 #include "Attack.h"
 #include "global.h"
 
-#ifndef DIRECTION_OBJECT
-#define DIRECTION_OBJECT
-enum {LEFT=0, RIGHT, UP, DOWN};
-#endif
+enum {UNARMED = 0, PISTOL, SMG, AR};
 
 #ifndef KEYS
 #define KEYS
@@ -55,7 +52,6 @@ public:
     void SetVy(int);
 
 protected:
-    int direction_count[4];
     int HealthPoint = 20;
     int speed = 1;
     int worth = 10;
@@ -68,7 +64,8 @@ protected:
     std::vector<Attack*> attack_set;
     //
 private:
-    int direction;
+    int state;
+    double radian_ccw;
     // end point
     int end_x, end_y;
     // animation counter
@@ -79,7 +76,7 @@ private:
     int vx = 0, vy = 0;
 
     // set of animation images
-    std::vector<ALLEGRO_BITMAP*> moveImg;
+    std::vector<std::vector<ALLEGRO_BITMAP*>>   moveImgSet;
 };
 
 

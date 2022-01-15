@@ -5,22 +5,19 @@
 #define MaxSpeed 3
 #define Acceleration 1
 
-const char direction_name[][10] = {"LEFT", "RIGHT", "UP", "DOWN"};
+const char  state_name[][10] = {"DEFAULT", "HANDGUN", "RIFLE"};
 
 // set counter frequency of drawing moving animation
 const int draw_frequency = 10;
 
 Character::Character()
 {
-    // default direction is right
-    direction = RIGHT;
-
     circle = new Circle;
     circle->x = InitX * grid_width + grid_width/2;
     circle->y = InitY * grid_height + grid_height/2;
     circle->r = grid_width/2;
 
-    direction_count[LEFT] = 5;
+    direction_count[] = 5;
     direction_count[RIGHT] = 5;
     direction_count[UP] = 4;
     direction_count[DOWN] = 4;
@@ -34,16 +31,16 @@ Character::Character()
 
 Character::~Character()
 {
-    for(unsigned int i=0; i<moveImg.size(); i++)
-    {
-        ALLEGRO_BITMAP *img = moveImg[i];
-
-        moveImg.erase(moveImg.begin() + i);
-
-        i--;
-        al_destroy_bitmap(img);
+    for (auto moveImg : moveImgSet) {
+        for(unsigned int i = 0; i < moveImg.size(); i++) {
+            ALLEGRO_BITMAP *img = moveImg[i];
+            moveImg.erase(moveImg.begin() + i);
+            i--;
+            al_destroy_bitmap(img);
+        }
+        moveImg.clear();
     }
-    moveImg.clear();
+    moveImgSet.clear();
 
     delete circle;
 }
@@ -53,17 +50,18 @@ Character::Load_Move()
 {
     char buffer[50];
 
-    for(int i=0; i < 4; i++)
-    {
-        for(int j=0; j<direction_count[i]; j++)
-        {
-            ALLEGRO_BITMAP *img;
-            sprintf(buffer, "./%s/%s_%d.png", class_name, direction_name[i], j);
-
-            img = al_load_bitmap(buffer);
-            if(img)
-                moveImg.push_back(img);
+    for (int i = 0; i < state_count; i++) {
+        std::vector<ALLEGRO_BITMAP*> moveImg;
+        for (int j = 0; j < 4; j++) {
+            for(int k = 0; k < direction_count[j]; k++) {
+                ALLEGRO_BITMAP *img;
+                sprintf(buffer, "./%s/%s_%s_%d.png", class_name, state_name[i], direction_name[j], k);
+                img = al_load_bitmap(buffer);
+                if(img)
+                    moveImg.push_back(img);
+            }
         }
+        moveImgSet.push_back(moveImg);
     }
 }
 
@@ -77,15 +75,15 @@ Character::Draw()
     for(int i=0; i<direction; i++)
         offset += direction_count[i];
 
-    if(!moveImg[offset + sprite_pos])
+    if(!moveImgSet[state][offset + sprite_pos])
         return;
 
     // get height and width of sprite bitmap
-    w = al_get_bitmap_width(moveImg[offset + sprite_pos]);
-    h = al_get_bitmap_height(moveImg[offset + sprite_pos]);
+    w = al_get_bitmap_width(moveImgSet[state][offset + sprite_pos]);
+    h = al_get_bitmap_height(moveImgSet[state][offset + sprite_pos]);
 
     // draw bitmap align grid edge
-    al_draw_bitmap(moveImg[offset + sprite_pos], circle->x - w/2, circle->y - (h - grid_height/2), 0);
+    al_draw_bitmap(moveImgSet[state][offset + sprite_pos], circle->x - w/2, circle->y - (h - grid_height/2), 0);
 
     //al_draw_filled_circle(circle->x, circle->y, circle->r, al_map_rgba(196, 79, 79, 200));
     for(unsigned int i=0; i<this->attack_set.size(); i++)

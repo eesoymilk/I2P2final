@@ -50,10 +50,10 @@ GameWindow::game_init()
     al_set_display_icon(display, icon);
     al_reserve_samples(3);
 
-    sample = al_load_sample("growl.wav");
-    startSound = al_create_sample_instance(sample);
-    al_set_sample_instance_playmode(startSound, ALLEGRO_PLAYMODE_ONCE);
-    al_attach_sample_instance_to_mixer(startSound, al_get_default_mixer());
+    sample = al_load_sample("ClickSound.wav");
+    clickSound = al_create_sample_instance(sample);
+    al_set_sample_instance_playmode(clickSound, ALLEGRO_PLAYMODE_ONCE);
+    al_attach_sample_instance_to_mixer(clickSound, al_get_default_mixer());
 
     sample = al_load_sample("BackgroundMusic.ogg");
     backgroundSound = al_create_sample_instance(sample);
@@ -139,9 +139,18 @@ GameWindow::isOnRoad()
 // }
 
 Character*
-GameWindow::create_character()
+GameWindow::create_character(int type)
 {
-    return new Character();
+    Character* c = NULL;
+    switch (type)
+    {
+    case 1:
+        c = new Jacket();
+        break;
+    default:
+        break;
+    }
+    return c;
 }
 
 void
@@ -230,7 +239,7 @@ GameWindow::game_begin()
 
     al_stop_sample_instance(backgroundSound);
 
-    mainCharacter = create_character();
+    jacket = create_character(1);
     draw_running_map();
 
     /*al_play_sample_instance(startSound);
@@ -258,9 +267,9 @@ GameWindow::game_update()
     unsigned int i, j;
     // std::list<Tower*>::iterator it;
 
-    mainCharacter->Move(hold);
-    board_x = mainCharacter->getCircle()->x - 400;
-    board_y = mainCharacter->getCircle()->y - 300;
+    jacket->Move(hold);
+    board_x = jacket->getCircle()->x - 400;
+    board_y = jacket->getCircle()->y - 300;
     if(board_x < 0) board_x = 0;
     if(board_x > 1000) board_x = 1000;
     if(board_y < 0) board_y = 0;
@@ -345,7 +354,8 @@ GameWindow::game_reset()
 
     // stop sample instance
     al_stop_sample_instance(backgroundSound);
-    al_stop_sample_instance(startSound);
+    al_stop_sample_instance(gameSound);
+    al_stop_sample_instance(clickSound);
 
     // stop timer
     al_stop_timer(timer);
@@ -373,9 +383,12 @@ GameWindow::game_destroy()
 
     al_destroy_bitmap(icon);
     al_destroy_bitmap(background);
+    al_destroy_bitmap(helpscene);
+    al_destroy_bitmap(startscene);
 
     al_destroy_sample(sample);
-    al_destroy_sample_instance(startSound);
+    al_destroy_sample_instance(clickSound);
+    al_destroy_sample_instance(gameSound);
     al_destroy_sample_instance(backgroundSound);
 
     delete level;
@@ -455,7 +468,7 @@ GameWindow::process_event()
     }
     else if(event.type == ALLEGRO_EVENT_MOUSE_BUTTON_DOWN) {
         if(event.mouse.button == 1) {
-            mainCharacter->DoAttack(mouse_x, mouse_y);
+            jacket->DoAttack(mouse_x, mouse_y);
             // if(selectedTower != -1 && mouse_hover(0, 0, field_width, field_height)) {
             //     Tower *t = create_tower(selectedTower);
 
@@ -498,7 +511,7 @@ GameWindow::process_event()
         mouse_x = event.mouse.x;
         mouse_y = event.mouse.y;
         // printf("mouse_x = %d, mouse_y = %d\n", mouse_x, mouse_y);
-        mainCharacter->SetDir(mouse_x, mouse_y);
+        jacket->SetDir(mouse_x, mouse_y);
         menu->MouseIn(mouse_x, mouse_y);
     }
 
@@ -524,11 +537,11 @@ GameWindow::draw_running_map()
     //al_clear_to_color(al_map_rgb(100, 100, 100));
     al_draw_bitmap(background, -board_x, -board_y, 0);
 
-    mainCharacter->Draw();
+    jacket->Draw();
     //printf("%d %d\n", x_axis, y_axis);
     //al_draw_bitmap_region(background, 0, 0, 1200, 800, 0, 0, 0);
-    //al_draw_bitmap_region(background, 60, 400, 1200, 800, mainCharacter->getCircle()->x - 400, mainCharacter->getCircle()->y - 400, 0);
-    //al_draw_bitmap(background, mainCharacter->getCircle()->x - 400, mainCharacter->getCircle()->y - 300, 0);
+    //al_draw_bitmap_region(background, 60, 400, 1200, 800, jacket->getCircle()->x - 400, jacket->getCircle()->y - 400, 0);
+    //al_draw_bitmap(background, jacket->getCircle()->x - 400, jacket->getCircle()->y - 300, 0);
 
     /*for(i = 0; i < field_height/40; i++)
     {
@@ -567,17 +580,20 @@ GameWindow::draw_startscene()
     bool help_button = false;
 
     //al_clear_to_color(al_map_rgb(100, 100, 100));
-    //al_draw_bitmap_region(background, mainCharacter->getCircle()->x - 20, mainCharacter->getCircle()->y - 20, 1200, 800, 0, 0, 0);
-    //al_draw_bitmap_region(background, 60, 400, 1200, 800, mainCharacter->getCircle()->x - 400, mainCharacter->getCircle()->y - 400, 0);
+    //al_draw_bitmap_region(background, jacket->getCircle()->x - 20, jacket->getCircle()->y - 20, 1200, 800, 0, 0, 0);
+    //al_draw_bitmap_region(background, 60, 400, 1200, 800, jacket->getCircle()->x - 400, jacket->getCircle()->y - 400, 0);
     while(!start_button){
         if (!al_is_event_queue_empty(event_queue)) {
             al_wait_for_event(event_queue, &event);
             if(event.type == ALLEGRO_EVENT_KEY_DOWN){
                 switch(event.keyboard.keycode){
                     case ALLEGRO_KEY_S:
+                        al_play_sample_instance(clickSound);
+                        while(al_get_sample_instance_playing(clickSound));
                         start_button = true;
                         break;
                     case ALLEGRO_KEY_H:
+                        al_play_sample_instance(clickSound);
                         if(help_button) help_button = false;
                         else help_button = true;
                         break;
@@ -592,10 +608,4 @@ GameWindow::draw_startscene()
     }
 }
 
-void
-GameWindow::TuggleHold(int k)
-{
-    hold[k] = !hold[k];
-    // if (hold[k] == true)    hold[k] = false;
-    // else                    hold[k] = true;
-}
+void GameWindow::TuggleHold(int k) { hold[k] = !hold[k]; }

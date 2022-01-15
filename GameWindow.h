@@ -27,7 +27,7 @@ enum {W_KEY=0, A_KEY, S_KEY, D_KEY, E_KEY};
 #include "Slider.h"
 
 // EDITED
-#include "Character.h"
+#include "Jacket.h"
 //
 
 #define GAME_INIT -1
@@ -80,7 +80,7 @@ public:
 
     // Tower* create_tower(int);
     // Monster* create_monster();
-    Character* create_character();
+    Character* create_character(int);
 
     void TuggleHold(int);
 
@@ -106,7 +106,7 @@ private:
     ALLEGRO_TIMER *character_pro = NULL;
 
     ALLEGRO_SAMPLE *sample = NULL;
-    ALLEGRO_SAMPLE_INSTANCE *startSound = NULL;
+    ALLEGRO_SAMPLE_INSTANCE *clickSound = NULL;
     ALLEGRO_SAMPLE_INSTANCE *clearSound = NULL;
     ALLEGRO_SAMPLE_INSTANCE *failSound = NULL;
     ALLEGRO_SAMPLE_INSTANCE *backgroundSound = NULL;
@@ -115,7 +115,8 @@ private:
     LEVEL *level = NULL;
     Menu *menu = NULL;
 
-    Character* mainCharacter;
+    Character* jacket;
+    std::vector<Character*> enemySet;
     // std::vector<Monster*> monsterSet;
     // std::list<Tower*> towerSet;
 
