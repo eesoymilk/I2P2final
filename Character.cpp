@@ -1,7 +1,8 @@
 #include "Character.h"
 
-#define InitX 0
-#define InitY 0
+#define InitX 8
+#define InitY 8
+#define MaxSpeed 3
 
 const int axis_x[] = {-1, 1, 0, 0};
 const int axis_y[] = {0, 0, -1, 1};
@@ -101,8 +102,15 @@ Character::Move()
     if(circle->x == end_x && circle->y == end_y)
         return true;
 
-    circle->x += speed * axis_x[direction];
-    circle->y += speed * axis_y[direction];
+    // circle->x += vx * axis_x[direction];
+    // circle->y += vy * axis_y[direction];
+    circle->x += vx;
+    circle->y += vy;
+
+    if (vx > 0)         vx--;
+    else if (vx < 0)    vx++;
+    if (vy > 0)         vy--;
+    else if (vy < 0)    vy++;
 
     // if not reaching end point, return false
     return false;
@@ -116,8 +124,19 @@ Character::Subtract_HP(int harm_point)
     return (HealthPoint <= 0);
 }
 
-void
-Character::Set_Direction(int direc){
-    direction = direc;
+void Character::TuggleHold(int k) {
+    hold[k] = ~hold[k];
+}
+
+void Character::SetVx(int v){
+    if (v > MaxSpeed)       vx = MaxSpeed;
+    else if (v < -MaxSpeed) vx = -MaxSpeed;
+    else                    vx = v;
+}
+
+void Character::SetVy(int v){
+    if (v > MaxSpeed)       vy = MaxSpeed;
+    else if (v < -MaxSpeed) vy = -MaxSpeed;
+    else                    vy = v;
 }
 
