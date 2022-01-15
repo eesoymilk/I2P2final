@@ -14,10 +14,10 @@ enum {W_KEY=0, A_KEY, S_KEY, D_KEY, E_KEY};
 #include <time.h>
 #include "Menu.h"
 #include "Level.h"
-#include "WolfKnight.h"
-#include "CaveMan.h"
-#include "Wolf.h"
-#include "DemonNijia.h"
+// #include "WolfKnight.h"
+// #include "CaveMan.h"
+// #include "Wolf.h"
+// #include "DemonNijia.h"
 #include "Arcane.h"
 #include "Archer.h"
 #include "Canon.h"
@@ -102,7 +102,7 @@ private:
     ALLEGRO_EVENT_QUEUE *event_queue = NULL;
     ALLEGRO_EVENT event;
     ALLEGRO_TIMER *timer = NULL;
-    ALLEGRO_TIMER *monster_pro = NULL;
+    // ALLEGRO_TIMER *monster_pro = NULL;
     ALLEGRO_TIMER *character_pro = NULL;
 
     ALLEGRO_SAMPLE *sample = NULL;
@@ -115,10 +115,10 @@ private:
     Menu *menu = NULL;
 
     Character* mainCharacter;
-    std::vector<Monster*> monsterSet;
+    // std::vector<Monster*> monsterSet;
     std::list<Tower*> towerSet;
 
-    int Monster_Pro_Count = 0;
+    // int Monster_Pro_Count = 0;
     int Coin_Inc_Count = 0;
     int mouse_x, mouse_y;
     int selectedTower = -1, lastClicked = -1;

@@ -5,8 +5,6 @@
 #define MaxSpeed 3
 #define Acceleration 1
 
-const int axis_x[] = {-1, 1, 0, 0};
-const int axis_y[] = {0, 0, -1, 1};
 const char direction_name[][10] = {"LEFT", "RIGHT", "UP", "DOWN"};
 
 // set counter frequency of drawing moving animation

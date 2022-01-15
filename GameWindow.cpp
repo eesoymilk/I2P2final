@@ -139,38 +139,38 @@ GameWindow::create_character()
     return new Character();
 }
 
-Monster*
-GameWindow::create_monster()
-{
-    Monster *m = NULL;
+// Monster*
+// GameWindow::create_monster()
+// {
+//     Monster *m = NULL;
 
-    if(level->MonsterNum[WOLF])
-    {
-        level->MonsterNum[WOLF]--;
-        m = new Wolf(level->ReturnPath());
-    }
-    else if(level->MonsterNum[WOLFKNIGHT])
-    {
-        level->MonsterNum[WOLFKNIGHT]--;
-        m = new WolfKnight(level->ReturnPath());
-    }
-    else if(level->MonsterNum[DEMONNIJIA])
-    {
-        level->MonsterNum[DEMONNIJIA]--;
-        m = new DemonNijia(level->ReturnPath());
-    }
-    else if(level->MonsterNum[CAVEMAN])
-    {
-        level->MonsterNum[CAVEMAN]--;
-        m = new CaveMan(level->ReturnPath());
-    }
-    else
-    {
-        al_stop_timer(monster_pro);
-    }
+//     if(level->MonsterNum[WOLF])
+//     {
+//         level->MonsterNum[WOLF]--;
+//         m = new Wolf(level->ReturnPath());
+//     }
+//     else if(level->MonsterNum[WOLFKNIGHT])
+//     {
+//         level->MonsterNum[WOLFKNIGHT]--;
+//         m = new WolfKnight(level->ReturnPath());
+//     }
+//     else if(level->MonsterNum[DEMONNIJIA])
+//     {
+//         level->MonsterNum[DEMONNIJIA]--;
+//         m = new DemonNijia(level->ReturnPath());
+//     }
+//     else if(level->MonsterNum[CAVEMAN])
+//     {
+//         level->MonsterNum[CAVEMAN]--;
+//         m = new CaveMan(level->ReturnPath());
+//     }
+//     else
+//     {
+//         al_stop_timer(monster_pro);
+//     }
 
-    return m;
-}
+//     return m;
+// }
 
 void
 GameWindow::game_play()
@@ -214,11 +214,11 @@ GameWindow::GameWindow()
     event_queue = al_create_event_queue();
 
     timer = al_create_timer(1.0 / FPS);
-    monster_pro = al_create_timer(1.0 / FPS);
+    // monster_pro = al_create_timer(1.0 / FPS);
     character_pro = al_create_timer(1.0 / FPS);
 
-    if(timer == NULL || monster_pro == NULL)
-        show_err_msg(-1);
+    // if(timer == NULL || monster_pro == NULL)
+    //     show_err_msg(-1);
 
     if(timer == NULL || character_pro == NULL)
         show_err_msg(-1);
@@ -245,7 +245,7 @@ GameWindow::GameWindow()
     al_register_event_source(event_queue, al_get_mouse_event_source());
 
     al_register_event_source(event_queue, al_get_timer_event_source(timer));
-    al_register_event_source(event_queue, al_get_timer_event_source(monster_pro));
+    // al_register_event_source(event_queue, al_get_timer_event_source(monster_pro));
     al_register_event_source(event_queue, al_get_timer_event_source(character_pro));
 
     game_init();
@@ -265,7 +265,7 @@ GameWindow::game_begin()
     al_play_sample_instance(backgroundSound);
 
     al_start_timer(timer);
-    al_start_timer(monster_pro);
+    // al_start_timer(monster_pro);
     al_start_timer(character_pro);
 }
 
@@ -288,54 +288,54 @@ GameWindow::game_update()
 
     mainCharacter->Move(hold);
 
-    /*TODO:*/
-    /*Allow towers to detect if monster enters its range*/
-    /*Hint: Tower::DetectAttack*/
-    for(auto _tower: towerSet){
-        for(auto _monster: monsterSet){
-            if(_tower->DetectAttack(_monster)) break;
-        }
-    }
+    // /*TODO:*/
+    // /*Allow towers to detect if monster enters its range*/
+    // /*Hint: Tower::DetectAttack*/
+    // for(auto _tower: towerSet){
+    //     for(auto _monster: monsterSet){
+    //         if(_tower->DetectAttack(_monster)) break;
+    //     }
+    // }
 
     // update every monster
     // check if it is destroyed or reaches end point
-    for(i=0; i < monsterSet.size(); i++)
-    {
-        bool isDestroyed = false, isReachEnd = false;
+    // for(i=0; i < monsterSet.size(); i++)
+    // {
+    //     bool isDestroyed = false, isReachEnd = false;
 
-        /*TODO:*/
-        /*1. For each tower, traverse its attack set*/
-        /*2. If the monster collide with any attack, reduce the HP of the monster*/
-        /*3. Remember to set isDestroyed to "true" if monster is killed*/
-        /*Hint: Tower::TriggerAttack*/
-        for(auto _tower: towerSet)
-            isDestroyed = _tower->TriggerAttack(monsterSet[i]);
+    //     /*TODO:*/
+    //     /*1. For each tower, traverse its attack set*/
+    //     /*2. If the monster collide with any attack, reduce the HP of the monster*/
+    //     /*3. Remember to set isDestroyed to "true" if monster is killed*/
+    //     /*Hint: Tower::TriggerAttack*/
+    //     for(auto _tower: towerSet)
+    //         isDestroyed = _tower->TriggerAttack(monsterSet[i]);
 
-        isReachEnd = monsterSet[i]->Move();
+    //     isReachEnd = monsterSet[i]->Move();
 
-        if(isDestroyed)
-        {
-            Monster *m = monsterSet[i];
+    //     if(isDestroyed)
+    //     {
+    //         Monster *m = monsterSet[i];
 
-            menu->Change_Coin(m->getWorth());
-            menu->Gain_Score(m->getScore());
-            monsterSet.erase(monsterSet.begin() + i);
-            i--;
-            delete m;
+    //         menu->Change_Coin(m->getWorth());
+    //         menu->Gain_Score(m->getScore());
+    //         monsterSet.erase(monsterSet.begin() + i);
+    //         i--;
+    //         delete m;
 
-        }
-        else if(isReachEnd)
-        {
-            Monster *m = monsterSet[i];
+    //     }
+    //     else if(isReachEnd)
+    //     {
+    //         Monster *m = monsterSet[i];
 
-            if(menu->Subtract_HP())
-                return GAME_EXIT;
+    //         if(menu->Subtract_HP())
+    //             return GAME_EXIT;
 
-            monsterSet.erase(monsterSet.begin() + i);
-            i--;
-            delete m;
-        }
-    }
+    //         monsterSet.erase(monsterSet.begin() + i);
+    //         i--;
+    //         delete m;
+    //     }
+    // }
 
     /*TODO:*/
     /*1. Update the attack set of each tower*/
@@ -355,13 +355,13 @@ GameWindow::game_reset()
         delete child;
     }
     towerSet.clear();
-    monsterSet.clear();
+    // monsterSet.clear();
 
 
     selectedTower = -1;
     lastClicked = -1;
     Coin_Inc_Count = 0;
-    Monster_Pro_Count = 0;
+    // Monster_Pro_Count = 0;
     mute = false;
     redraw = false;
     menu->Reset();
@@ -372,7 +372,8 @@ GameWindow::game_reset()
 
     // stop timer
     al_stop_timer(timer);
-    al_stop_timer(monster_pro);
+    al_stop_timer(character_pro);
+    // al_stop_timer(monster_pro);
 }
 
 void
@@ -387,7 +388,8 @@ GameWindow::game_destroy()
     al_destroy_font(Large_font);
 
     al_destroy_timer(timer);
-    al_destroy_timer(monster_pro);
+    al_destroy_timer(character_pro);
+    // al_destroy_timer(monster_pro);
 
     for(int i=0;i<5; i++)
         al_destroy_bitmap(tower[i]);
@@ -426,26 +428,26 @@ GameWindow::process_event()
 
             Coin_Inc_Count = (Coin_Inc_Count + 1) % CoinSpeed;
 
-            if(monsterSet.size() == 0 && !al_get_timer_started(monster_pro))
-            {
-                int Current_Level = level->getLevel();
-                if (Current_Level == MaxLevel) return GAME_EXIT;
+            // if(monsterSet.size() == 0 && !al_get_timer_started(monster_pro))
+            // {
+            //     int Current_Level = level->getLevel();
+            //     if (Current_Level == MaxLevel) return GAME_EXIT;
 
-                for(auto&& child : towerSet)    delete child;
-                towerSet.clear();
-                level->setLevel(++Current_Level);
-                al_start_timer(monster_pro);
-            }
+            //     for(auto&& child : towerSet)    delete child;
+            //     towerSet.clear();
+            //     level->setLevel(++Current_Level);
+            //     al_start_timer(monster_pro);
+            // }
 
         }
         else {
-            if(Monster_Pro_Count == 0) {
-                Monster *m = create_monster();
+            // if(Monster_Pro_Count == 0) {
+            //     Monster *m = create_monster();
 
-                if(m != NULL)
-                    monsterSet.push_back(m);
-            }
-            Monster_Pro_Count = (Monster_Pro_Count + 1) % level->getMonsterSpeed();
+            //     if(m != NULL)
+            //         monsterSet.push_back(m);
+            // }
+            // Monster_Pro_Count = (Monster_Pro_Count + 1) % level->getMonsterSpeed();
         }
     }
     else if(event.type == ALLEGRO_EVENT_DISPLAY_CLOSE) {
