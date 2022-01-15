@@ -2,6 +2,10 @@
     "files.associations": {
         "vector": "cpp",
         "list": "cpp",
-        "xstring": "cpp"
+        "xstring": "cpp",
+        "cstdlib": "cpp",
+        "*.rh": "cpp",
+        "memory": "cpp",
+        "type_traits": "cpp"
     }
 }

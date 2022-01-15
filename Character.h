@@ -15,6 +15,12 @@
 enum {LEFT=0, RIGHT, UP, DOWN};
 #endif
 
+#ifndef CHARACTER_KEYS
+#define CHARACTER_KEYS
+enum {W_KEY=0, A_KEY, S_KEY, D_KEY, E_KEY};
+#endif
+
+
 class Character: public Object {
 public:
     Character();
@@ -34,10 +40,15 @@ public:
     int getDir() { return direction; }
     int getWorth() { return worth; }
     int getScore() { return score; }
+    int getHold(int k) { return hold[k]; }
+    int getVx() { return vx; }
+    int getVy() { return vy; }
 
     bool Subtract_HP(int);
 
-    void Set_Direction(int);
+    void TuggleHold(int);
+    void SetVx(int);
+    void SetVy(int);
 
 protected:
     int direction_count[4];
@@ -54,6 +65,10 @@ private:
     int counter;
     // animation image of current direction
     int sprite_pos;
+    // VELOCITY
+    int vx = 0, vy = 0;
+    // WASD key flags
+    bool hold[4] = {false};
 
     bool stop;
 

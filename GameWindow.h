@@ -63,6 +63,7 @@ public:
 
     // each drawing scene function
     void draw_running_map();
+    void draw_startscene();
 
     // process of updated event
     int process_event();
@@ -82,6 +83,7 @@ private:
     ALLEGRO_BITMAP *icon;
     ALLEGRO_BITMAP *tower[Num_TowerType];
     ALLEGRO_BITMAP *background = NULL;
+    ALLEGRO_BITMAP *startscene = NULL;
 
     ALLEGRO_DISPLAY* display = NULL;
     ALLEGRO_FONT *font = NULL;

@@ -15,6 +15,7 @@
 // EDITED
 
 #define MaxLevel 4
+#define Acceleration 5
 
 //
 
@@ -37,6 +38,7 @@ GameWindow::game_init()
 
     icon = al_load_bitmap("./icon.png");
     background = al_load_bitmap("./StartBackground.jpg");
+    //startscene = al_load_bitmap("./StartScene");
 
     for(int i = 0; i < Num_TowerType; i++)
     {
@@ -133,9 +135,7 @@ GameWindow::create_tower(int type)
 Character*
 GameWindow::create_character()
 {
-    Character *mc = NULL;
-    mc = new Character();
-    return mc;
+    return new Character();
 }
 
 Monster*
@@ -452,20 +452,46 @@ GameWindow::process_event()
     }
     else if(event.type == ALLEGRO_EVENT_KEY_DOWN) {
         switch(event.keyboard.keycode) {
-
+            // case ALLEGRO_KEY_W:
+            //     mainCharacter->Set_Vy(vy - Acceleration);
+            //     break;
+            // case ALLEGRO_KEY_S:
+            //     mainCharacter->Set_Vy(vy + Acceleration);
+            //     break;
+            // case ALLEGRO_KEY_A:
+            //     mainCharacter->Set_Vx(vx - Acceleration);
+            //     break;
+            // case ALLEGRO_KEY_D:
+            //     mainCharacter->Set_Vx(vx + Acceleration);
+            //     break;
             case ALLEGRO_KEY_W:
-                mainCharacter->Set_Direction(UP);
+                if (!mainCharacter->getHold(W_KEY)) mainCharacter->TuggleHold(W_KEY); 
                 break;
             case ALLEGRO_KEY_A:
-                mainCharacter->Set_Direction(LEFT);
+                if (!mainCharacter->getHold(A_KEY)) mainCharacter->TuggleHold(A_KEY); 
                 break;
             case ALLEGRO_KEY_S:
-                mainCharacter->Set_Direction(DOWN);
+                if (!mainCharacter->getHold(S_KEY)) mainCharacter->TuggleHold(S_KEY); 
                 break;
             case ALLEGRO_KEY_D:
-                mainCharacter->Set_Direction(RIGHT);
+                if (!mainCharacter->getHold(D_KEY)) mainCharacter->TuggleHold(D_KEY); 
                 break;
-            default:
+        }
+    }
+    else if(event.type == ALLEGRO_EVENT_KEY_UP) {
+        switch(event.keyboard.keycode) {
+            case ALLEGRO_KEY_W:
+                if (mainCharacter->getHold(W_KEY))  mainCharacter->TuggleHold(W_KEY); 
+                break;
+            case ALLEGRO_KEY_A:
+                if (mainCharacter->getHold(A_KEY))  mainCharacter->TuggleHold(A_KEY); 
+                break;
+            case ALLEGRO_KEY_S:
+                if (mainCharacter->getHold(S_KEY))  mainCharacter->TuggleHold(S_KEY); 
+                break;
+            case ALLEGRO_KEY_D:
+                if (mainCharacter->getHold(D_KEY))  mainCharacter->TuggleHold(D_KEY); 
+                break;
         }
     }
     else if(event.type == ALLEGRO_EVENT_MOUSE_BUTTON_DOWN) {
@@ -567,3 +593,27 @@ GameWindow::draw_running_map()
 
     al_flip_display();
 }
+
+/*void
+GameWindow::draw_startscene()
+{
+    bool start_button = false;
+    bool help_button = false;
+
+    //al_clear_to_color(al_map_rgb(100, 100, 100));
+    //al_draw_bitmap_region(background, mainCharacter->getCircle()->x - 20, mainCharacter->getCircle()->y - 20, 1200, 800, 0, 0, 0);
+    //al_draw_bitmap_region(background, 60, 400, 1200, 800, mainCharacter->getCircle()->x - 400, mainCharacter->getCircle()->y - 400, 0);
+    while(!start_button){
+        al_draw_bitmap(startscene, 0, 0, 0);
+        if (!al_is_event_queue_empty(event_queue)) {
+            al_wait_for_event(event_queue, &event);
+            if(event.type == ALLEGRO_EVENT_KEY_DOWN){
+                if(event.keyboard.keycode == ALLEGRO_KEY_S)
+            }
+        }
+    }
+
+    
+
+    al_flip_display();
+}*/
