@@ -452,45 +452,43 @@ GameWindow::process_event()
     }
     else if(event.type == ALLEGRO_EVENT_KEY_DOWN) {
         switch(event.keyboard.keycode) {
-            // case ALLEGRO_KEY_W:
-            //     mainCharacter->Set_Vy(vy - Acceleration);
-            //     break;
-            // case ALLEGRO_KEY_S:
-            //     mainCharacter->Set_Vy(vy + Acceleration);
-            //     break;
-            // case ALLEGRO_KEY_A:
-            //     mainCharacter->Set_Vx(vx - Acceleration);
-            //     break;
-            // case ALLEGRO_KEY_D:
-            //     mainCharacter->Set_Vx(vx + Acceleration);
-            //     break;
             case ALLEGRO_KEY_W:
-                if (!mainCharacter->getHold(W_KEY)) mainCharacter->TuggleHold(W_KEY); 
+                printf("W is pressed!\n");
+                if (!mainCharacter->getHold(W_KEY))
+                    mainCharacter->TuggleHold(W_KEY); 
                 break;
             case ALLEGRO_KEY_A:
-                if (!mainCharacter->getHold(A_KEY)) mainCharacter->TuggleHold(A_KEY); 
+                if (!mainCharacter->getHold(A_KEY))
+                    mainCharacter->TuggleHold(A_KEY); 
                 break;
             case ALLEGRO_KEY_S:
-                if (!mainCharacter->getHold(S_KEY)) mainCharacter->TuggleHold(S_KEY); 
+                if (!mainCharacter->getHold(S_KEY))
+                    mainCharacter->TuggleHold(S_KEY); 
                 break;
             case ALLEGRO_KEY_D:
-                if (!mainCharacter->getHold(D_KEY)) mainCharacter->TuggleHold(D_KEY); 
+                if (!mainCharacter->getHold(D_KEY))
+                    mainCharacter->TuggleHold(D_KEY); 
                 break;
         }
     }
     else if(event.type == ALLEGRO_EVENT_KEY_UP) {
         switch(event.keyboard.keycode) {
             case ALLEGRO_KEY_W:
-                if (mainCharacter->getHold(W_KEY))  mainCharacter->TuggleHold(W_KEY); 
+                printf("W is released!\n");
+                if (mainCharacter->getHold(W_KEY))
+                    mainCharacter->TuggleHold(W_KEY); 
                 break;
             case ALLEGRO_KEY_A:
-                if (mainCharacter->getHold(A_KEY))  mainCharacter->TuggleHold(A_KEY); 
+                if (mainCharacter->getHold(A_KEY))
+                    mainCharacter->TuggleHold(A_KEY); 
                 break;
             case ALLEGRO_KEY_S:
-                if (mainCharacter->getHold(S_KEY))  mainCharacter->TuggleHold(S_KEY); 
+                if (mainCharacter->getHold(S_KEY))
+                    mainCharacter->TuggleHold(S_KEY); 
                 break;
             case ALLEGRO_KEY_D:
-                if (mainCharacter->getHold(D_KEY))  mainCharacter->TuggleHold(D_KEY); 
+                if (mainCharacter->getHold(D_KEY))
+                    mainCharacter->TuggleHold(D_KEY); 
                 break;
         }
     }

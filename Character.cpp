@@ -103,18 +103,29 @@ Character::Move()
     if(circle->x == end_x && circle->y == end_y)
         return true;
 
-    if (hold[W_KEY])    SetVy(vy - 1);
-    if (hold[A_KEY])    SetVx(vx + 1);
-    if (hold[S_KEY])    SetVy(vy + 1);
-    if (hold[D_KEY])    SetVx(vx - 1);
+    if (hold[W_KEY])    SetVy(vy - Acceleration);
+    // else if (vy < 0)    SetVy(vy + 1);
+    else                SetVy(0);
+
+    if (hold[A_KEY])    SetVx(vx - Acceleration);
+    // else if (vx < 0)    SetVx(vx + 1);
+    // else                SetVx(0);
+
+    if (hold[S_KEY])    SetVy(vy + Acceleration);
+    // else if (vy > 0)    SetVy(vy - 1);
+    // else                SetVy(0);
+
+    if (hold[D_KEY])    SetVx(vx + Acceleration);
+    // else if (vx > 0)    SetVx(vx - 1);
+    // else                SetVx(0);
 
     circle->x += vx;
     circle->y += vy;
 
-    if (vx > 0)         vx--;
-    else if (vx < 0)    vx++;
-    if (vy > 0)         vy--;
-    else if (vy < 0)    vy++;
+    // if (vx > 0)         vx--;
+    // else if (vx < 0)    vx++;
+    // if (vy > 0)         vy--;
+    // else if (vy < 0)    vy++;
 
     // if not reaching end point, return false
     return false;
@@ -136,11 +147,13 @@ void Character::SetVx(int v){
     if (v > MaxSpeed)       vx = MaxSpeed;
     else if (v < -MaxSpeed) vx = -MaxSpeed;
     else                    vx = v;
+    vx = v;
 }
 
 void Character::SetVy(int v){
     if (v > MaxSpeed)       vy = MaxSpeed;
     else if (v < -MaxSpeed) vy = -MaxSpeed;
     else                    vy = v;
+    vy = v;
 }
 
