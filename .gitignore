@@ -1,9 +1,7 @@
 allegro/
 bin/
 obj/
-allegro_monolith-5.2.ddl
-allegro_monolith-debug-5.2.ddl
-allegro.log
+*.layout
 *.ddl
 *.log
 *.depend
