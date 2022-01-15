@@ -103,21 +103,17 @@ Character::Move()
     if(circle->x == end_x && circle->y == end_y)
         return true;
 
-    if (hold[W_KEY])    SetVy(vy - Acceleration);
-    // else if (vy < 0)    SetVy(vy + 1);
-    else                SetVy(0);
+    if (hold[W_KEY])                    SetVy(vy - Acceleration);
+    else if (!hold[S_KEY] && vy < 0)    SetVy(vy + 1);
 
-    if (hold[A_KEY])    SetVx(vx - Acceleration);
-    // else if (vx < 0)    SetVx(vx + 1);
-    // else                SetVx(0);
+    if (hold[A_KEY])                    SetVx(vx - Acceleration);
+    else if (!hold[D_KEY] && vx < 0)    SetVx(vx + 1);
 
-    if (hold[S_KEY])    SetVy(vy + Acceleration);
-    // else if (vy > 0)    SetVy(vy - 1);
-    // else                SetVy(0);
+    if (hold[S_KEY])                    SetVy(vy + Acceleration);
+    else if (!hold[W_KEY] && vy > 0)    SetVy(vy - 1);
 
-    if (hold[D_KEY])    SetVx(vx + Acceleration);
-    // else if (vx > 0)    SetVx(vx - 1);
-    // else                SetVx(0);
+    if (hold[D_KEY])                    SetVx(vx + Acceleration);
+    else if (!hold[A_KEY] && vx > 0)    SetVx(vx - 1);
 
     circle->x += vx;
     circle->y += vy;
@@ -140,20 +136,19 @@ Character::Subtract_HP(int harm_point)
 }
 
 void Character::TuggleHold(int k) {
-    hold[k] = ~hold[k];
+    if (hold[k] == true)    hold[k] = false;
+    else                    hold[k] = true;
 }
 
 void Character::SetVx(int v){
     if (v > MaxSpeed)       vx = MaxSpeed;
     else if (v < -MaxSpeed) vx = -MaxSpeed;
     else                    vx = v;
-    vx = v;
 }
 
 void Character::SetVy(int v){
     if (v > MaxSpeed)       vy = MaxSpeed;
     else if (v < -MaxSpeed) vy = -MaxSpeed;
     else                    vy = v;
-    vy = v;
 }
 

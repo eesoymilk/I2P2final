@@ -558,7 +558,10 @@ GameWindow::draw_running_map()
     unsigned int i, j;
 
     al_clear_to_color(al_map_rgb(100, 100, 100));
-    al_draw_bitmap(background, 0, 0, 0);
+    //al_clear_to_color(al_map_rgb(100, 100, 100));
+    al_draw_bitmap_region(background, mainCharacter->getCircle()->x - 20, mainCharacter->getCircle()->y - 20, 1200, 800, 0, 0, 0);
+    //al_draw_bitmap_region(background, 60, 400, 1200, 800, mainCharacter->getCircle()->x - 400, mainCharacter->getCircle()->y - 400, 0);
+    //al_draw_bitmap(background, mainCharacter->getCircle()->x - 400, mainCharacter->getCircle()->y - 300, 0);
 
     for(i = 0; i < field_height/40; i++)
     {
@@ -592,7 +595,7 @@ GameWindow::draw_running_map()
     al_flip_display();
 }
 
-/*void
+void
 GameWindow::draw_startscene()
 {
     bool start_button = false;
@@ -602,16 +605,21 @@ GameWindow::draw_startscene()
     //al_draw_bitmap_region(background, mainCharacter->getCircle()->x - 20, mainCharacter->getCircle()->y - 20, 1200, 800, 0, 0, 0);
     //al_draw_bitmap_region(background, 60, 400, 1200, 800, mainCharacter->getCircle()->x - 400, mainCharacter->getCircle()->y - 400, 0);
     while(!start_button){
-        al_draw_bitmap(startscene, 0, 0, 0);
         if (!al_is_event_queue_empty(event_queue)) {
             al_wait_for_event(event_queue, &event);
             if(event.type == ALLEGRO_EVENT_KEY_DOWN){
-                if(event.keyboard.keycode == ALLEGRO_KEY_S)
+                switch(event.keyboard.keycode){
+                    case ALLEGRO_KEY_S:
+                        start_button = true;
+                        break;
+                    case ALLEGRO_KEY_H:
+                        help_button = ~help_button;
+                        break;
+                }
             }
         }
+        if(help_button) al_draw_bitmap(helpscene, 0, 0, 0);
+        else al_draw_bitmap(startscene, 0, 0, 0);
+        al_flip_display();
     }
-
-    
-
-    al_flip_display();
-}*/
+}

@@ -84,6 +84,7 @@ private:
     ALLEGRO_BITMAP *tower[Num_TowerType];
     ALLEGRO_BITMAP *background = NULL;
     ALLEGRO_BITMAP *startscene = NULL;
+    ALLEGRO_BITMAP *helpscene = NULL;
 
     ALLEGRO_DISPLAY* display = NULL;
     ALLEGRO_FONT *font = NULL;
