@@ -786,29 +786,31 @@
 1615199857 c:\users\user\i2p2final\allegro\include\allegro5\allegro_audio.h
 	"allegro5/allegro.h"
 
-1642302691 c:\users\user\i2p2final\object.h
+1642353787 c:\users\user\i2p2final\object.h
 	<utility>
+	<cmath>
 	"Circle.h"
 	"global.h"
 
-1642302691 c:\users\user\i2p2final\circle.h
+1642353293 c:\users\user\i2p2final\circle.h
 
-1642302691 source:c:\users\user\i2p2final\circle.cpp
+1642353293 source:c:\users\user\i2p2final\circle.cpp
 	"Circle.h"
+	<cmath>
 
-1642302692 source:c:\users\user\i2p2final\global.cpp
+1642353294 source:c:\users\user\i2p2final\global.cpp
 	"global.h"
 
-1642302997 c:\users\user\i2p2final\global.h
+1642353693 c:\users\user\i2p2final\global.h
 	<allegro5/allegro_font.h>
 
 1615199857 c:\users\user\i2p2final\allegro\include\allegro5\allegro_font.h
 	"allegro5/allegro.h"
 
-1642302691 source:c:\users\user\i2p2final\level.cpp
+1642353293 source:c:\users\user\i2p2final\level.cpp
 	"Level.h"
 
-1642302691 c:\users\user\i2p2final\level.h
+1642353731 c:\users\user\i2p2final\level.h
 	<stdio.h>
 	<stdlib.h>
 	<string.h>
@@ -816,10 +818,10 @@
 	<vector>
 	"global.h"
 
-1642302691 source:c:\users\user\i2p2final\main.cpp
+1642353293 source:c:\users\user\i2p2final\main.cpp
 	"GameWindow.h"
 
-1642310550 c:\users\user\i2p2final\gamewindow.h
+1642353678 c:\users\user\i2p2final\gamewindow.h
 	<allegro5/allegro_audio.h>
 	<allegro5/allegro_acodec.h>
 	<vector>
@@ -827,16 +829,18 @@
 	<time.h>
 	"Menu.h"
 	"Level.h"
-	"Attack.h"
+	"Bullet.h"
 	"Slider.h"
 	"Jacket.h"
 	"Pistol.h"
+	"SubmachineGun.h"
+	"AssaultRifle.h"
 
 1615199857 c:\users\user\i2p2final\allegro\include\allegro5\allegro_acodec.h
 	"allegro5/allegro.h"
 	"allegro5/allegro_audio.h"
 
-1642304170 c:\users\user\i2p2final\menu.h
+1642353759 c:\users\user\i2p2final\menu.h
 	<stdio.h>
 	<stdlib.h>
 	<allegro5/allegro.h>
@@ -902,20 +906,20 @@
 1642225244 c:\users\user\i2p2final\storm.h
 	"Tower.h"
 
-1642302692 c:\users\user\i2p2final\slider.h
+1642353293 c:\users\user\i2p2final\slider.h
 	<allegro5/allegro.h>
 	<allegro5/allegro_font.h>
 	<allegro5/allegro_ttf.h>
 	<allegro5/allegro_primitives.h>
 	"Object.h"
 
-1642305904 source:c:\users\user\i2p2final\menu.cpp
+1642353293 source:c:\users\user\i2p2final\menu.cpp
 	"Menu.h"
 
 1642302691 source:c:\users\user\i2p2final\monster.cpp
 	"Monster.h"
 
-1642302692 source:c:\users\user\i2p2final\slider.cpp
+1642353293 source:c:\users\user\i2p2final\slider.cpp
 	<stdio.h>
 	<string.h>
 	"Slider.h"
@@ -942,12 +946,13 @@
 	"Character.h"
 	<cmath>
 
-1642309965 source:c:\users\user\i2p2final\gamewindow.cpp
+1642353293 source:c:\users\user\i2p2final\gamewindow.cpp
 	"GameWindow.h"
 	"global.h"
 	<iostream>
+	<algorithm>
 
-1642302691 c:\users\user\i2p2final\character.h
+1642353640 c:\users\user\i2p2final\character.h
 	<stdio.h>
 	<string.h>
 	<vector>
@@ -959,10 +964,10 @@
 	"Circle.h"
 	"Object.h"
 	"Weapon.h"
-	"Attack.h"
+	"Bullet.h"
 	"global.h"
 
-1642309014 source:c:\users\user\i2p2final\character.cpp
+1642353293 source:c:\users\user\i2p2final\character.cpp
 	"Character.h"
 	<cmath>
 
@@ -991,7 +996,7 @@
 1642344588 source:e:\github\i2p2final\weapon.cpp
 	"Weapon.h"
 
-1642302692 c:\users\user\i2p2final\weapon.h
+1642353808 c:\users\user\i2p2final\weapon.h
 	<stdio.h>
 	<string.h>
 	<vector>
@@ -1000,21 +1005,23 @@
 	<allegro5/allegro_font.h>
 	<allegro5/allegro_ttf.h>
 	<allegro5/allegro_primitives.h>
+	<allegro5/allegro_audio.h>
+	<allegro5/allegro_acodec.h>
 	"Circle.h"
 	"Object.h"
-	"Attack.h"
+	"Weapon.h"
 	"global.h"
 
-1642302691 c:\users\user\i2p2final\jacket.h
+1642353710 c:\users\user\i2p2final\jacket.h
 	"Character.h"
 
-1642302692 c:\users\user\i2p2final\pistol.h
+1642353293 c:\users\user\i2p2final\pistol.h
 	"Weapon.h"
 
 1642302692 source:c:\users\user\i2p2final\weapon.cpp
 	"Weapon.h"
 
-1642302691 source:c:\users\user\i2p2final\jacket.cpp
+1642353293 source:c:\users\user\i2p2final\jacket.cpp
 	"Jacket.h"
 
 1642274213 source:e:\github\i2p2final\jacket.cpp
@@ -1040,5 +1047,21 @@
 	"Weapon.h"
 
 1642343411 e:\github\i2p2final\assaultrifle.h
+	"Weapon.h"
+
+1642353625 c:\users\user\i2p2final\bullet.h
+	<stdio.h>
+	<math.h>
+	<allegro5/allegro.h>
+	<allegro5/allegro_image.h>
+	<allegro5/allegro_primitives.h>
+	<allegro5/allegro_audio.h>
+	"Object.h"
+	"Circle.h"
+
+1642353293 c:\users\user\i2p2final\submachinegun.h
+	"Weapon.h"
+
+1642353577 c:\users\user\i2p2final\assaultrifle.h
 	"Weapon.h"
 

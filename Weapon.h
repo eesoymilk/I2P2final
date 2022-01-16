@@ -39,6 +39,9 @@ public:
     double getDamage() { return damage; }
     int getFireRate() { return fire_rate; }
     int getSpeed() { return speed; }
+    int getIn() { return in_magzine; }
+    int getSize() { return magzine_size; }
+    int getReserved() { return reserved_bullets; }
     ALLEGRO_BITMAP* getBulletImg() { return bulletImg; }
 
 protected:

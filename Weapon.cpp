@@ -105,7 +105,7 @@ Weapon::Reload()
         reload_counter++;
         return;
     }
-    al_play_sample_instance(Sound);// RELOAD SOUND EFFECT
+    al_play_sample_instance(ReloadSound);// RELOAD SOUND EFFECT
     int to_reload = magzine_size - in_magzine;
     if (reserved_bullets >= to_reload) {
         reserved_bullets -= to_reload;
