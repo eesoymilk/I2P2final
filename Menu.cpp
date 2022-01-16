@@ -7,6 +7,10 @@ const int offsetX = 30 + field_width, offsetY = 150;
 const int Initial_Health = 1;
 const int Initial_Coin = 10;
 
+const int menu_width = 300;
+const int menu_height = 270;
+const int font_start = 20;
+
 bool
 Menu::isInRange(int point, int startPos, int length)
 {
@@ -26,7 +30,7 @@ Menu::Menu()
 
     //menu = al_load_bitmap("./Menu.png");
 
-    menuFont = al_load_ttf_font("pirulen.ttf", 12, 0); // load font
+    menuFont = al_load_ttf_font("pirulen.ttf", font_size, 0); // load font
 }
 
 Menu::~Menu()
@@ -52,6 +56,13 @@ Menu::Reset()
 void
 Menu::Draw()
 {
+    char buffer[50];
+    sprintf(buffer, "%d", Character_Health);
+    al_draw_filled_rectangle(window_width - menu_width, 0, window_width, menu_height, al_map_rgb(0, 0, 0));
+    al_draw_text(menuFont, al_map_rgb(255, 255, 255), window_width - menu_width + font_start, font_start, 0, "Health: ");
+    al_draw_text(menuFont, al_map_rgb(255, 255, 255), window_width - menu_width + font_start, font_start + 2 * font_size, 0, buffer);
+    al_draw_text(menuFont, al_map_rgb(255, 255, 255), window_width - menu_width + font_start, font_start + 4 * font_size, 0, "Score: ");
+    al_draw_text(menuFont, al_map_rgb(255, 255, 255), window_width - menu_width + font_start, font_start + 6 * font_size, 0, "Health: ");
     /*char buffer[50];
 
     sprintf(buffer, "%d", HealthPoint);

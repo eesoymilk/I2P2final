@@ -5,7 +5,6 @@
 #define InitY 0
 #define MaxSpeed 3
 #define Acceleration 1
-#define PI 3.1415926
 #define SCALE 2
 
 const char  state_name[][10] = {"UNARMED", "PISTOL", "SMG", "AR"};
@@ -58,34 +57,25 @@ Character::Load_Img()
 void
 Character::Draw()
 {
-    int w, h;
+    for (unsigned int i = 0; i < this->bullets.size(); i++)
+        this->bullets[i]->Draw();
+
     int offset = 0;
-
     if (getWeapon())    offset += 7;
-    // for(int i = 0; i < state; i++)  offset += 7;
-
     if(!moveImg[offset + sprite_pos])
         return;
 
     // get height and width of sprite bitmap
-    w = al_get_bitmap_width(moveImg[offset + sprite_pos]);
-    h = al_get_bitmap_height(moveImg[offset + sprite_pos]);
+    int w = al_get_bitmap_width(moveImg[offset + sprite_pos]);
+    int h = al_get_bitmap_height(moveImg[offset + sprite_pos]);
 
-    // draw bitmap align grid edge
     ALLEGRO_BITMAP* curImg = moveImg[offset + sprite_pos];
     double cx = w / 2, cy = h / 2;
-    // double dx = circle->x - w / 2, dy = circle->y - h / 2;
     double angle = 2 * PI - getRadianCCW();
     auto [dx, dy] = Transform();
-    // std::pair<int, int> cam = Transform();
     //printf("%d %d\n", cam.first, cam.second);
-    printf("Jacket: %d %d %d %d\n", circle->x, circle->y, dx, dy);
+    // printf("Jacket: %d %d %d %d\n", circle->x, circle->y, dx, dy);
     al_draw_scaled_rotated_bitmap(curImg, cx, cy, dx, dy, SCALE, SCALE, angle, 0);
-
-
-    //al_draw_filled_circle(circle->x, circle->y, circle->r, al_map_rgba(196, 79, 79, 200));
-    for (unsigned int i = 0; i < this->attack_set.size(); i++)
-        this->attack_set[i]->Draw();
 }
 
 bool
@@ -130,18 +120,24 @@ Character::PickWeapon(Weapon* w)
 void
 Character::DoAttack(int mouse_x, int mouse_y)
 {
-    printf("Attack!\n");
-    std::pair<int, int> cam = Transform();
-    Circle* createdCircle = new Circle(cam.first, cam.second, this->circle->r);
     Weapon* w = this->getWeapon();
-    Attack *attack = new Attack (
-        createdCircle,
-        mouse_x, mouse_y,
-        w->getDamage(),
-        w->getSpeed(),
-        w->getBulletImg()
-    );
-    this->attack_set.push_back(attack);
+    if (w != NULL && w->isReadyToFire()) {
+        w->Fire();
+        auto [x1, y1] = Transform();
+        // printf("x1 = %d, y1 = %d\n", x1, y1);
+        auto [ux, uy] = UnitVector(mouse_x - x1, mouse_y - y1);
+        // printf("ux = %lf, uy = %lf\n", ux, uy);
+        // Circle* shooter = new Circle(cam.first, cam.second, this->circle->r);
+        printf("Fire!\n");
+        Bullet *b = new Bullet (
+            this->getCircle(),
+            ux, uy,
+            w->getDamage(),
+            w->getSpeed(),
+            w->getBulletImg()
+        );
+        this->bullets.push_back(b);
+    }
 }
 
 bool

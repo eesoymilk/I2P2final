@@ -3,7 +3,7 @@
 
 #include <allegro5/allegro_font.h>
 
-#define font_size 12
+#define font_size 30
 #define grid_width 40
 #define grid_height 40
 
@@ -22,6 +22,7 @@ extern int TowerWidth[];
 extern int TowerHeight[];
 extern int background_width;
 extern int background_height;
+extern int Character_Health;
 
 enum {ARCANE = 0, ARCHER, CANON, POISON, STORM};
 enum {WOLF = 0, WOLFKNIGHT, DEMONNIJIA, CAVEMAN};

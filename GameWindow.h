@@ -23,7 +23,7 @@ enum {W_KEY=0, A_KEY, S_KEY, D_KEY, E_KEY};
 // #include "Canon.h"
 // #include "Poison.h"
 // #include "Storm.h"
-#include "Attack.h"
+#include "Bullet.h"
 #include "Slider.h"
 
 // EDITED

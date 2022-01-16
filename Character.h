@@ -12,7 +12,7 @@
 #include "Circle.h"
 #include "Object.h"
 #include "Weapon.h"
-#include "Attack.h"
+#include "Bullet.h"
 #include "global.h"
 
 #ifndef KEYS
@@ -41,9 +41,11 @@ public:
 
     // functions that return informations of monster
     Weapon* getWeapon() { return wielding; }
+    std::vector<Bullet*> getBullets() { return bullets; }
     double getRadianCCW() { return radian_ccw; }
     int getVx() { return vx; }
     int getVy() { return vy; }
+    int getHealth() { return HealthPoint; }
 
     bool Subtract_HP(int);
     void setRadianCCW(int, int);
@@ -53,8 +55,7 @@ public:
 protected:
     int HealthPoint = 20;
     char class_name[20];
-    ALLEGRO_BITMAP *attack_img = al_load_bitmap("./Tower/Storm_Beam.png");
-    std::vector<Attack*> attack_set;
+    std::vector<Bullet*> bullets;
     //
 private:
     double radian_ccw;

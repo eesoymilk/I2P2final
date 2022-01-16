@@ -11,7 +11,7 @@
 #include <allegro5/allegro_primitives.h>
 #include "Circle.h"
 #include "Object.h"
-#include "Attack.h"
+#include "Weapon.h"
 #include "global.h"
 
 enum {PISTOL = 0, SMG, AR};
@@ -27,6 +27,9 @@ public:
     void Draw();
     void Pick();
     void Drop(int, int);
+    void CoolDown() { if (fire_counter < fire_rate) fire_counter++; };
+    void Fire() { fire_counter = 0; };
+    bool isReadyToFire() { return fire_counter == fire_rate; };
 
     // functions that return informations of monster
     double getDamage() { return damage; }
@@ -36,7 +39,8 @@ public:
 
 protected:
     int damage = 10;
-    int fire_rate = 1;
+    int fire_rate = 10;
+    int fire_counter = 0;
     int speed = 10;
     char class_name[20];
     bool dropped;

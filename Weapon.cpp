@@ -39,15 +39,16 @@ Weapon::Draw()
     // draw bitmap align grid edge
     double dx = circle->x - w / 2, dy = circle->y - h / 2;
     // printf("Transforming...\n");
-    std::pair<int, int> cam = Transform();
+    // std::pair<int, int> cam = Transform();
     // printf("cam_x = %d, cam_y = %d\n", cam.first, cam.second);
-    al_draw_bitmap(weaponImg, cam.first, cam.second, 0);
+    al_draw_bitmap(weaponImg, dx, dy, 0);
     // printf("Drawn weapon.\n");
 }
 
 void
 Weapon::Pick()
 {
+    fire_counter = 50;
     if (circle != NULL) delete circle;
     circle = NULL;
 }

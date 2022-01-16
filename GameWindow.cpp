@@ -19,14 +19,14 @@
 const int draw_frequency = 10;
 int background_width;
 int background_height;
-
+int Character_Health;
 //
 
-float Attack::volume = 1.0;
+double Bullet::volume = 1.0;
 
-void set_attack_volume(float volume)
+void set_attack_volume(double volume)
 {
-    Attack::volume = volume;
+    Bullet::volume = volume;
 }
 
 void
@@ -282,18 +282,24 @@ GameWindow::game_update()
     }
 
     jacket->Move(hold);
+    for (auto bullet : jacket->getBullets())
+        bullet->Move();
+
+    Weapon* w = jacket->getWeapon();
+    if (w != NULL)  w->CoolDown();
+
     if (mouse_hold) {
         if (jacket->getWeapon())
             jacket->DoAttack(mouse_x, mouse_y);
     }
     board_x = jacket->getCircle()->x - window_width / 2;
     board_y = jacket->getCircle()->y - window_height / 2;
-    printf("Board1: %d %d\n", board_x, board_y);
+    //printf("Board1: %d %d\n", board_x, board_y);
     if(board_x < 0) board_x = 0;
     if(board_x > background_width - window_width) board_x = background_width - window_width;
     if(board_y > background_height - window_height) board_y = background_height - window_height;
     if(board_y < 0) board_y = 0;
-    printf("Board2: %d %d\n", board_x, board_y);
+    //printf("Board2: %d %d\n", board_x, board_y);
 
     //WindowMove();
 
