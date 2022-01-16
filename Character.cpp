@@ -124,11 +124,10 @@ Character::PickWeapon(Weapon* w)
 }
 
 void
-Character::DoAttack(int mouse_x, int mouse_y)
+Character::FireWeapon(int mouse_x, int mouse_y)
 {
     Weapon* w = this->getWeapon();
-    if (w != NULL && w->isReadyToFire()) {
-        w->Fire();
+    if (w != NULL && w->Fire()) {
         auto [x1, y1] = Transform();
         // printf("x1 = %d, y1 = %d\n", x1, y1);
         auto [ux, uy] = UnitVector(mouse_x - x1, mouse_y - y1);

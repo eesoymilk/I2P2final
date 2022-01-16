@@ -9,6 +9,8 @@
 #include <allegro5/allegro_font.h>
 #include <allegro5/allegro_ttf.h>
 #include <allegro5/allegro_primitives.h>
+#include <allegro5/allegro_audio.h>
+#include <allegro5/allegro_acodec.h>
 #include "Circle.h"
 #include "Object.h"
 #include "Weapon.h"
@@ -26,8 +28,10 @@ public:
     void Pick();
     void Drop(int, int);
     void CoolDown() { if (fire_counter < fire_rate) fire_counter++; };
-    void Fire() { fire_counter = 0; };
-    bool isReadyToFire() { return fire_counter == fire_rate; };
+    bool Fire();
+    void StartReload();
+    void Reload();
+    bool isReloading() { return reloading; };
     bool isDropped() { return dropped; };
 
     // functions that return informations of monster
@@ -38,15 +42,19 @@ public:
     ALLEGRO_BITMAP* getBulletImg() { return bulletImg; }
 
 protected:
-    int type;
-    int damage = 10;
-    int fire_rate = 10;
-    int fire_counter = 0;
-    int speed = 10;
+    int type, damage, fire_rate;
+    int fire_counter = 0, reload_counter = 0;
+    int speed;
     char class_name[20];
-    bool dropped;
+    int in_magzine, magzine_size, reserved_bullets, reload_time;
+    bool dropped, reloading;
     ALLEGRO_BITMAP* weaponImg;
     ALLEGRO_BITMAP* bulletImg;
+    ALLEGRO_BITMAP* icon;
+    ALLEGRO_SAMPLE* sample = NULL;
+    ALLEGRO_SAMPLE_INSTANCE* Sound = NULL;
+    ALLEGRO_SAMPLE_INSTANCE* ReloadSound = NULL;
+
 private:
 };
 

@@ -314,13 +314,13 @@
 	"Circle.h"
 	<cmath>
 
-1642337511 source:e:\github\i2p2final\gamewindow.cpp
+1642342956 source:e:\github\i2p2final\gamewindow.cpp
 	"GameWindow.h"
 	"global.h"
 	<iostream>
 	<algorithm>
 
-1642331705 e:\github\i2p2final\gamewindow.h
+1642342438 e:\github\i2p2final\gamewindow.h
 	<allegro5/allegro_audio.h>
 	<allegro5/allegro_acodec.h>
 	<vector>
@@ -358,7 +358,7 @@
 	"allegro5/allegro.h"
 	"allegro5/allegro_font.h"
 
-1642326811 e:\github\i2p2final\global.h
+1642340434 e:\github\i2p2final\global.h
 	<allegro5/allegro_font.h>
 
 1642180709 e:\github\i2p2final\level.h
@@ -435,7 +435,7 @@
 1642247910 source:e:\github\i2p2final\main.cpp
 	"GameWindow.h"
 
-1642317030 source:e:\github\i2p2final\menu.cpp
+1642341826 source:e:\github\i2p2final\menu.cpp
 	"Menu.h"
 
 1520543704 source:e:\github\i2p2final\monster.cpp
@@ -889,7 +889,7 @@
 1642225244 source:c:\users\user\i2p2final\tower.cpp
 	"Tower.h"
 
-1642334537 e:\github\i2p2final\character.h
+1642339643 e:\github\i2p2final\character.h
 	<stdio.h>
 	<string.h>
 	<vector>
@@ -904,7 +904,7 @@
 	"Bullet.h"
 	"global.h"
 
-1642337172 source:e:\github\i2p2final\character.cpp
+1642339647 source:e:\github\i2p2final\character.cpp
 	"Character.h"
 	<cmath>
 
@@ -935,7 +935,7 @@
 1642331207 e:\github\i2p2final\jacket.h
 	"Character.h"
 
-1642326858 e:\github\i2p2final\weapon.h
+1642341985 e:\github\i2p2final\weapon.h
 	<stdio.h>
 	<string.h>
 	<vector>
@@ -944,15 +944,17 @@
 	<allegro5/allegro_font.h>
 	<allegro5/allegro_ttf.h>
 	<allegro5/allegro_primitives.h>
+	<allegro5/allegro_audio.h>
+	<allegro5/allegro_acodec.h>
 	"Circle.h"
 	"Object.h"
 	"Weapon.h"
 	"global.h"
 
-1642331796 e:\github\i2p2final\pistol.h
+1642343412 e:\github\i2p2final\pistol.h
 	"Weapon.h"
 
-1642337002 source:e:\github\i2p2final\weapon.cpp
+1642343041 source:e:\github\i2p2final\weapon.cpp
 	"Weapon.h"
 
 1642302692 c:\users\user\i2p2final\weapon.h
@@ -1000,9 +1002,9 @@
 1642332991 source:e:\github\i2p2final\object.cpp
 	"Object.h"
 
-1642331673 e:\github\i2p2final\submachinegun.h
+1642343410 e:\github\i2p2final\submachinegun.h
 	"Weapon.h"
 
-1642331643 e:\github\i2p2final\assaultrifle.h
+1642343411 e:\github\i2p2final\assaultrifle.h
 	"Weapon.h"
 

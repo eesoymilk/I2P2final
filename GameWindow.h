@@ -114,6 +114,7 @@ private:
     ALLEGRO_SAMPLE_INSTANCE *backgroundSound = NULL;
     ALLEGRO_SAMPLE_INSTANCE *gameSound = NULL;
 
+
     LEVEL *level = NULL;
     Menu *menu = NULL;
 
@@ -129,6 +130,8 @@ private:
     bool hold[KeysUsed] = {false};
     bool mouse_hold = false;
     bool function_key_pressed = false;
+    bool reload_key_pressed = false;
+    bool drop_key_pressed = false;
     bool PAUSE = false;
 };
 

@@ -260,8 +260,8 @@ GameWindow::game_run()
 int
 GameWindow::game_update()
 {
-    unsigned int i, j;
-
+    Weapon* w = jacket->getWeapon();
+    
     if (function_key_pressed) {
         function_key_pressed = false;
         std::vector<Weapon*> near_weapons;
@@ -288,17 +288,28 @@ GameWindow::game_update()
         }
     }
 
-    jacket->Move(hold);
-    for (auto bullet : jacket->getBullets())
-        bullet->Move();
-
-    Weapon* w = jacket->getWeapon();
-    if (w != NULL)  w->CoolDown();
-
-    if (mouse_hold) {
-        if (jacket->getWeapon())
-            jacket->DoAttack(mouse_x, mouse_y);
+    if (reload_key_pressed) {
+        reload_key_pressed = false;
+        if (w)  w->StartReload();
     }
+
+    if (drop_key_pressed) {
+        drop_key_pressed = false;
+        if (w)  w->Drop(jacket->getX(), jacket->getY());
+    }
+
+    if (w) {
+        if (w->isReloading()) {
+            w->Reload();
+        } else {
+            w->CoolDown();
+            if (mouse_hold) jacket->FireWeapon(mouse_x, mouse_y);
+        }
+    }
+    
+    jacket->Move(hold);
+    for (auto bullet : jacket->getBullets())    bullet->Move();
+
     camera_origin_x = jacket->getCircle()->x - window_width / 2;
     camera_origin_y = jacket->getCircle()->y - window_height / 2;
     //printf("Board1: %d %d\n", board_x, board_y);
@@ -451,21 +462,26 @@ GameWindow::process_event()
                 printf("E is pressed!\n");
                 function_key_pressed = true;
                 break;
+            case ALLEGRO_KEY_G:
+                printf("E is pressed!\n");
+                drop_key_pressed = true;
+                break;
             case ALLEGRO_KEY_P:
-                if(!PAUSE){
+                if(!PAUSE) {
                     al_stop_timer(timer);
                     al_stop_timer(enemy_pro);
                     PAUSE = true;
                 }
-
-                else{
+                else {
                     al_start_timer(timer);
                     al_start_timer(enemy_pro);
                     PAUSE = false;
                 }
                 break;
             case ALLEGRO_KEY_R:
-                if(PAUSE){
+                printf("R is pressed!\n");
+                reload_key_pressed = true;
+                if(PAUSE) {
                     PAUSE = false;
                     game_play();
                 }
@@ -542,6 +558,7 @@ GameWindow::draw_running_map()
     al_draw_bitmap(background, -board_x, -board_y, 0);
     for (auto weapon : weapons) weapon->Draw();
     jacket->Draw();
+    menu->Draw();
 
     //printf("%d %d\n", x_axis, y_axis);
     //al_draw_bitmap_region(background, 0, 0, 1200, 800, 0, 0, 0);
@@ -577,18 +594,6 @@ GameWindow::draw_running_map()
 
     al_flip_display();
 }
-
-// void GameWindow::SetVx(int v) {
-//     if (v > MaxSpeed)       vx = MaxSpeed;
-//     else if (v < -MaxSpeed) vx = -MaxSpeed;
-//     else                    vx = v;
-// }
-
-// void GameWindow::SetVy(int v){
-//     if (v > MaxSpeed)       vy = MaxSpeed;
-//     else if (v < -MaxSpeed) vy = -MaxSpeed;
-//     else                    vy = v;
-// }
 
 void
 GameWindow::draw_startscene()

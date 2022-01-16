@@ -61,7 +61,7 @@ Menu::Draw()
     al_draw_filled_rectangle(window_width - menu_width, 0, window_width, menu_height, al_map_rgb(0, 0, 0));
     al_draw_text(menuFont, al_map_rgb(255, 255, 255), window_width - menu_width + font_start, font_start, 0, "Health: ");
     al_draw_text(menuFont, al_map_rgb(255, 255, 255), window_width - menu_width + font_start, font_start + 2 * font_size, 0, buffer);
-    al_draw_text(menuFont, al_map_rgb(255, 255, 255), window_width - menu_width + font_start, font_start + 4 * font_size, 0, "Score: ");
+    al_draw_text(menuFont, al_map_rgb(255, 255, 255), window_width - menu_width + font_start, font_start + 4 * font_size, 0, "Ammo: ");
     al_draw_text(menuFont, al_map_rgb(255, 255, 255), window_width - menu_width + font_start, font_start + 6 * font_size, 0, "Health: ");
     /*char buffer[50];
 

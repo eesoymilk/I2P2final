@@ -40,7 +40,7 @@ public:
     bool Move(bool (&hold)[KeysUsed]);
     void DropWeapon();
     void PickWeapon(Weapon*);
-    void DoAttack(int, int);
+    void FireWeapon(int, int);
 
     // functions that return informations of monster
     Weapon* getWeapon() { return wielding; }
