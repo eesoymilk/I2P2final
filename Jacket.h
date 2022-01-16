@@ -10,9 +10,9 @@ public:
     {
         HealthPoint = 20;
         sprites[UNARMED] = 7;
-        sprites[PISTOL] = 5;
-        sprites[SMG] = 7;
-        sprites[AR] = 7;
+        sprites[PISTOL] = 8;
+        sprites[SMG] = 8;
+        sprites[AR] = 8;
 
         strncpy(class_name, "Jacket", 20);
         Load_Img();

@@ -37,3 +37,9 @@ Object::UnitVector(double X, double Y)
     double length = sqrt(X * X + Y * Y);
     return { X / length, Y / length };
 }
+
+double Distance(Object* a, Object* b)
+{
+    double dx = b->getX() - a->getX(), dy = b->getY() - a->getY();
+    return sqrt(dx * dx + dy * dy);
+}

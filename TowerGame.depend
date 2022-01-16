@@ -302,23 +302,25 @@
 1615199857 e:\github\i2p2final\allegro\include\allegro5\allegro_audio.h
 	"allegro5/allegro.h"
 
-1642318242 e:\github\i2p2final\object.h
+1642333621 e:\github\i2p2final\object.h
 	<utility>
 	<cmath>
 	"Circle.h"
 	"global.h"
 
-1642261578 e:\github\i2p2final\circle.h
+1642332760 e:\github\i2p2final\circle.h
 
-1518073262 source:e:\github\i2p2final\circle.cpp
+1642333505 source:e:\github\i2p2final\circle.cpp
 	"Circle.h"
+	<cmath>
 
-1642326885 source:e:\github\i2p2final\gamewindow.cpp
+1642337511 source:e:\github\i2p2final\gamewindow.cpp
 	"GameWindow.h"
 	"global.h"
 	<iostream>
+	<algorithm>
 
-1642315848 e:\github\i2p2final\gamewindow.h
+1642331705 e:\github\i2p2final\gamewindow.h
 	<allegro5/allegro_audio.h>
 	<allegro5/allegro_acodec.h>
 	<vector>
@@ -330,6 +332,8 @@
 	"Slider.h"
 	"Jacket.h"
 	"Pistol.h"
+	"SubmachineGun.h"
+	"AssaultRifle.h"
 
 1615199857 e:\github\i2p2final\allegro\include\allegro5\allegro_acodec.h
 	"allegro5/allegro.h"
@@ -885,7 +889,7 @@
 1642225244 source:c:\users\user\i2p2final\tower.cpp
 	"Tower.h"
 
-1642327460 e:\github\i2p2final\character.h
+1642334537 e:\github\i2p2final\character.h
 	<stdio.h>
 	<string.h>
 	<vector>
@@ -900,7 +904,7 @@
 	"Bullet.h"
 	"global.h"
 
-1642327866 source:e:\github\i2p2final\character.cpp
+1642337172 source:e:\github\i2p2final\character.cpp
 	"Character.h"
 	<cmath>
 
@@ -928,7 +932,7 @@
 	"Character.h"
 	<cmath>
 
-1642327620 e:\github\i2p2final\jacket.h
+1642331207 e:\github\i2p2final\jacket.h
 	"Character.h"
 
 1642326858 e:\github\i2p2final\weapon.h
@@ -945,10 +949,10 @@
 	"Weapon.h"
 	"global.h"
 
-1642326873 e:\github\i2p2final\pistol.h
+1642331796 e:\github\i2p2final\pistol.h
 	"Weapon.h"
 
-1642326480 source:e:\github\i2p2final\weapon.cpp
+1642337002 source:e:\github\i2p2final\weapon.cpp
 	"Weapon.h"
 
 1642302692 c:\users\user\i2p2final\weapon.h
@@ -990,9 +994,15 @@
 	"Object.h"
 	"Circle.h"
 
-1642323822 source:e:\github\i2p2final\bullet.cpp
+1642328204 source:e:\github\i2p2final\bullet.cpp
 	"Bullet.h"
 
-1642327414 source:e:\github\i2p2final\object.cpp
+1642332991 source:e:\github\i2p2final\object.cpp
 	"Object.h"
+
+1642331673 e:\github\i2p2final\submachinegun.h
+	"Weapon.h"
+
+1642331643 e:\github\i2p2final\assaultrifle.h
+	"Weapon.h"
 

@@ -1,6 +1,7 @@
 #include "GameWindow.h"
 #include "global.h"
 #include <iostream>
+#include <algorithm>
 
 #define WHITE al_map_rgb(255, 255, 255)
 #define BLACK al_map_rgb(0, 0, 0)
@@ -116,12 +117,23 @@ GameWindow::spawnCharacter(int type, int x, int y)
 Weapon*
 GameWindow::spawnWeapon(int type, int x, int y)
 {
+    int i = SMG;
     Weapon* w = NULL;
     switch (type)
     {
     case 1:
         w = new Pistol();
         printf("Dropping Pistol...\n");
+        w->Drop(x, y);
+        break;
+    case 2:
+        w = new SubmachineGun();
+        printf("Dropping SMG...\n");
+        w->Drop(x, y);
+        break;
+    case 3:
+        w = new AssaultRifle();
+        printf("Dropping AR...\n");
         w->Drop(x, y);
         break;
     default:
@@ -218,9 +230,10 @@ GameWindow::game_begin()
 
     // tmp init for debugging
     jacket = spawnCharacter(1, 0, 0);
-    printf("Spawning pistol...\n");
-    weapons.push_back(spawnWeapon(1, 4, 4));
-    printf("Spawned pistol.\n");
+    printf("Spawning Weapon...\n");
+    weapons.push_back(spawnWeapon(1, 200, 200));
+    weapons.push_back(spawnWeapon(2, 200, 300));
+    weapons.push_back(spawnWeapon(3, 200, 400));
     //
 
     draw_running_map();
@@ -254,7 +267,7 @@ GameWindow::game_update()
         std::vector<Weapon*> near_weapons;
         Weapon* pick_target;
         Circle* jacket_cirle = jacket->getCircle();
-        
+
         for (auto weapon : weapons) {
             if (weapon->isDropped() && Circle::isOverlap(jacket_cirle, weapon->getCircle()))
                 near_weapons.push_back(weapon);
@@ -262,9 +275,16 @@ GameWindow::game_update()
 
         if (!near_weapons.empty()) {
             printf("Picking Weapon...\n");
-            if (near_weapons.size() == 1)   pick_target = *near_weapons.begin();
+            pick_target = *near_weapons.begin();
+            double min_distance = Circle::Distance(jacket_cirle, pick_target->getCircle());
+            for (int i = 1; i < near_weapons.size(); i++) {
+                double distance = Circle::Distance(jacket_cirle, pick_target->getCircle());
+                if (distance < min_distance) {
+                    min_distance = distance;
+                    pick_target = near_weapons[i];
+                }
+            }
             jacket->PickWeapon(pick_target);
-            pick_target->Pick();
         }
     }
 
@@ -437,6 +457,7 @@ GameWindow::process_event()
                     al_stop_timer(enemy_pro);
                     PAUSE = true;
                 }
+
                 else{
                     al_start_timer(timer);
                     al_start_timer(enemy_pro);

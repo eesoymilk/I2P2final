@@ -1,4 +1,5 @@
 #include "Circle.h"
+#include <cmath>
 
 bool
 Circle::isOverlap(Circle *circle_1, Circle *circle_2)
@@ -11,4 +12,11 @@ Circle::isOverlap(Circle *circle_1, Circle *circle_2)
         return true;
 
     return false;
+}
+
+double 
+Circle::Distance(Circle* a, Circle* b)
+{
+    double dx = b->x - a->x, dy = b->y - a->y;
+    return sqrt(dx * dx + dy * dy);
 }

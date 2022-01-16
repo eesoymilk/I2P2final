@@ -29,6 +29,8 @@ enum {W_KEY=0, A_KEY, S_KEY, D_KEY, E_KEY};
 // EDITED
 #include "Jacket.h"
 #include "Pistol.h"
+#include "SubmachineGun.h"
+#include "AssaultRifle.h"
 //
 
 #define GAME_INIT -1

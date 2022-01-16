@@ -38,10 +38,13 @@
 			<Add option="-Wall" />
 			<Add directory="allegro/include" />
 		</Compiler>
+		<Unit filename="AR.h" />
 		<Unit filename="Arcane.h" />
 		<Unit filename="Archer.h" />
-		<Unit filename="Attack.cpp" />
+		<Unit filename="AssaultRifle.h" />
 		<Unit filename="Attack.h" />
+		<Unit filename="Bullet.cpp" />
+		<Unit filename="Bullet.h" />
 		<Unit filename="Canon.h" />
 		<Unit filename="CaveMan.h" />
 		<Unit filename="Character.cpp" />
@@ -58,14 +61,16 @@
 		<Unit filename="Main.cpp" />
 		<Unit filename="Menu.cpp" />
 		<Unit filename="Menu.h" />
-		<Unit filename="Monster.cpp" />
 		<Unit filename="Monster.h" />
+		<Unit filename="Object.cpp" />
 		<Unit filename="Object.h" />
 		<Unit filename="Pistol.h" />
 		<Unit filename="Poison.h" />
+		<Unit filename="SMG.h" />
 		<Unit filename="Slider.cpp" />
 		<Unit filename="Slider.h" />
 		<Unit filename="Storm.h" />
+		<Unit filename="SubmachineGun.h" />
 		<Unit filename="Tower.h" />
 		<Unit filename="Weapon.cpp" />
 		<Unit filename="Weapon.h" />

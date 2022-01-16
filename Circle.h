@@ -14,6 +14,7 @@ public:
     }
 
     static bool isOverlap(Circle*, Circle*);
+    static double Distance(Circle*, Circle*);
 
     int r;
     int x, y;

@@ -38,6 +38,7 @@ public:
     // Update monster position per frame
     // And detect if it reaches end point but not destroyed
     bool Move(bool (&hold)[KeysUsed]);
+    void DropWeapon();
     void PickWeapon(Weapon*);
     void DoAttack(int, int);
 

@@ -40,7 +40,7 @@ Character::Load_Img()
 {
     char buffer[50];
 
-    for (int i = 0; i < 2; i++) {
+    for (int i = 0; i < 4; i++) {
         for(int j = 0; j < sprites[i]; j++) {
             ALLEGRO_BITMAP *img;
             sprintf(buffer, "./%s/%s_%d.png", class_name, firearm_names[i], j);
@@ -55,8 +55,6 @@ Character::Draw()
 {
     for (unsigned int i = 0; i < this->bullets.size(); i++)
         this->bullets[i]->Draw();
-
-    printf("firearm = %d\n", firearm);
 
     int offset = 0;
     for (int i = 0; i < firearm; i++)       offset += sprites[i];
@@ -108,11 +106,19 @@ Character::Move(bool (&hold)[KeysUsed])
 }
 
 void
+Character::DropWeapon()
+{
+    firearm = 0;
+    if (wielding == NULL) return;
+    wielding->Drop(circle->x, circle->y);
+    wielding = NULL;
+}
+
+void
 Character::PickWeapon(Weapon* w)
 {
-    if (wielding != NULL) {
-        wielding->Drop(circle->x, circle->y);
-    }
+    if (wielding != NULL)   DropWeapon();
+    w->Pick();
     wielding = w;
     firearm = w->getType();
 }
@@ -149,8 +155,9 @@ Character::Subtract_HP(int harm_point)
 }
 
 void Character::setRadianCCW(int mouse_x, int mouse_y){
-    double vector_x = mouse_x - circle->x;
-    double vector_y = -(mouse_y - circle->y);
+    auto [x0, y0] = Transform();
+    double vector_x = mouse_x - x0;
+    double vector_y = -(mouse_y - y0);
     double radian = atan(vector_y / vector_x);
 
     if (vector_x > 0 && vector_y < 0)   radian += 2 * PI;

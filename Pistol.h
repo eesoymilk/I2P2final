@@ -15,7 +15,7 @@ public:
         speed = 10;
         strncpy(class_name, "PISTOL", 20);
         sprintf(buffer, "./Weapon/%s.png", class_name);
-        printf("Loading Image...\n");
+        // printf("Loading Image...\n");
         weaponImg = al_load_bitmap(buffer);
         bulletImg = al_load_bitmap("./Weapon/BULLET.png");
     }

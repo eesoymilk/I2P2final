@@ -12,7 +12,8 @@ const int draw_frequency = 10;
 
 Weapon::Weapon()
 {
-    circle = NULL;
+    circle = new Circle;
+    circle->r = 2 * grid_width;
     dropped = false;
     strncpy(class_name, "Weapon", 20);
 }
@@ -36,9 +37,9 @@ Weapon::Draw()
         // printf("Image's data gotten.\n");
 
         // draw bitmap align grid edge
-        double dx = circle->x - w / 2, dy = circle->y - h / 2;
+        // double dx = circle->x - w / 2, dy = circle->y - h / 2;
         // printf("Transforming...\n");
-        // std::pair<int, int> cam = Transform();
+        auto [dx, dy] = Transform();
         // printf("cam_x = %d, cam_y = %d\n", cam.first, cam.second);
         al_draw_bitmap(weaponImg, dx, dy, 0);
         // printf("Drawn weapon.\n");
@@ -55,9 +56,8 @@ Weapon::Pick()
 void
 Weapon::Drop(int drop_x, int drop_y)
 {
-    circle = new Circle;
-    circle->x = drop_x * grid_width + grid_width/2;
-    circle->y = drop_y * grid_height + grid_height/2;
-    circle->r = 2 * grid_width;
+    circle->x = drop_x;
+    circle->y = drop_y;
     dropped = true;
+    printf("Dropped\n");
 }
