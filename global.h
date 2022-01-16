@@ -10,7 +10,7 @@ enum {E_KEY = 0, R_KEY, G_KEY};
 #define FuncKeysUsed 4
 enum {ENTER_KEY=0, P_KEY, H_KEY, ESCAPE_KEY};
 
-#define font_size 30
+#define font_size 50
 #define grid_width 40
 #define grid_height 40
 

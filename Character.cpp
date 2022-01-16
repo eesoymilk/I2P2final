@@ -1,8 +1,6 @@
 #include "Character.h"
 #include <cmath>
 
-const char firearm_names[][10] = {"UNARMED", "PISTOL", "SMG", "AR"};
-
 Character::Character(int spawn_x, int spawn_y)
 {
     circle = new Circle;
@@ -37,8 +35,8 @@ Character::Load_Img()
     for (int i = 0; i < 4; i++) {
         for(int j = 0; j < sprites[i]; j++) {
             ALLEGRO_BITMAP *img;
-            // sprintf(buffer, "./%s/%s_%d.png", class_name, firearm_names[i], j);
-            sprintf(buffer, "./Jacket/%s_%d.png", firearm_names[i], j);
+            sprintf(buffer, "./%s/%s_%d.png", class_name, firearm_names[i], j);
+            // sprintf(buffer, "./Jacket/%s_%d.png", firearm_names[i], j);
             img = al_load_bitmap(buffer);
             if(img) moveImg.push_back(img);
         }

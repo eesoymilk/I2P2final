@@ -42,7 +42,6 @@
 		<Unit filename="Arcane.h" />
 		<Unit filename="Archer.h" />
 		<Unit filename="AssaultRifle.h" />
-		<Unit filename="Attack.cpp" />
 		<Unit filename="Attack.h" />
 		<Unit filename="Bullet.cpp" />
 		<Unit filename="Bullet.h" />
