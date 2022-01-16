@@ -314,17 +314,15 @@
 	"Circle.h"
 	<cmath>
 
-1642352515 source:e:\github\i2p2final\gamewindow.cpp
+1642356735 source:e:\github\i2p2final\gamewindow.cpp
 	"GameWindow.h"
 	"global.h"
 	<iostream>
 	<algorithm>
 
-<<<<<<< HEAD
-1642352515 e:\github\i2p2final\gamewindow.h
-=======
-1642353895 e:\github\i2p2final\gamewindow.h
->>>>>>> fsm
+1642352956 D
+
+1642356735 e:\github\i2p2final\gamewindow.h
 	<allegro5/allegro_audio.h>
 	<allegro5/allegro_acodec.h>
 	<vector>
@@ -338,6 +336,38 @@
 	"Pistol.h"
 	"SubmachineGun.h"
 	"AssaultRifle.h"
+
+1642352956 
+	<allegro5/allegro_audio.h>
+	<allegro5/allegro_acodec.h>
+	<vector>
+	<list>
+	<time.h>
+	"Menu.h"
+	"Level.h"
+	"Bullet.h"
+	"Slider.h"
+	"Jacket.h"
+	"Pistol.h"
+	"SubmachineGun.h"
+	"AssaultRifle.h"
+	<allegro5/allegro_font.h>
+	"GameWindow.h"
+	<stdio.h>
+	<string.h>
+	<vector>
+	<allegro5/allegro.h>
+	<allegro5/allegro_image.h>
+	<allegro5/allegro_font.h>
+	<allegro5/allegro_ttf.h>
+	<allegro5/allegro_primitives.h>
+	"Circle.h"
+	"Object.h"
+	"Weapon.h"
+	"Bullet.h"
+	"global.h"
+	"Character.h"
+	<cmath>
 
 1615199857 e:\github\i2p2final\allegro\include\allegro5\allegro_acodec.h
 	"allegro5/allegro.h"
@@ -362,11 +392,7 @@
 	"allegro5/allegro.h"
 	"allegro5/allegro_font.h"
 
-<<<<<<< HEAD
-1642352515 e:\github\i2p2final\global.h
-=======
-1642352956 e:\github\i2p2final\global.h
->>>>>>> fsm
+1642356735 e:\github\i2p2final\global.h
 	<allegro5/allegro_font.h>
 
 1642180709 e:\github\i2p2final\level.h
@@ -440,11 +466,7 @@
 1518075208 source:e:\github\i2p2final\level.cpp
 	"Level.h"
 
-<<<<<<< HEAD
-1642352515 source:e:\github\i2p2final\main.cpp
-=======
-1642352956 source:e:\github\i2p2final\main.cpp
->>>>>>> fsm
+1642356735 source:e:\github\i2p2final\main.cpp
 	"GameWindow.h"
 
 1642346749 source:e:\github\i2p2final\menu.cpp
@@ -901,11 +923,7 @@
 1642225244 source:c:\users\user\i2p2final\tower.cpp
 	"Tower.h"
 
-<<<<<<< HEAD
-1642352515 e:\github\i2p2final\character.h
-=======
-1642352956 e:\github\i2p2final\character.h
->>>>>>> fsm
+1642356884 e:\github\i2p2final\character.h
 	<stdio.h>
 	<string.h>
 	<vector>
@@ -920,11 +938,7 @@
 	"Bullet.h"
 	"global.h"
 
-<<<<<<< HEAD
-1642352515 source:e:\github\i2p2final\character.cpp
-=======
-1642352956 source:e:\github\i2p2final\character.cpp
->>>>>>> fsm
+1642356735 source:e:\github\i2p2final\character.cpp
 	"Character.h"
 	<cmath>
 
