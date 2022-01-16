@@ -19,7 +19,6 @@
 const int draw_frequency = 10;
 int background_width;
 int background_height;
-bool PAUSE = false;
 
 //
 
@@ -39,7 +38,7 @@ GameWindow::game_init()
     background = al_load_bitmap("./Map1.png");
     startscene = al_load_bitmap("./Scene.jpg");
     helpscene = al_load_bitmap("./HelpScene.jpg");
-    stopscene = al_load_bitmap("./StopScene.jpg");
+    stopscene = al_load_bitmap("./StopScene.png");
     background_width = al_get_bitmap_width(background);
     background_height = al_get_bitmap_height(background);
 
@@ -448,6 +447,18 @@ GameWindow::process_event()
                     PAUSE = false;
                 }
                 break;
+            case ALLEGRO_KEY_R:
+                if(PAUSE){
+                    PAUSE = false;
+                    game_play();
+                }
+                break;
+            case ALLEGRO_KEY_ESCAPE:
+                if(PAUSE){
+                    PAUSE = false;
+                    game_play();
+                }
+                break;
         }
     }
     else if(event.type == ALLEGRO_EVENT_KEY_UP) {
@@ -486,6 +497,11 @@ GameWindow::process_event()
         //menu->MouseIn(mouse_x, mouse_y);
     }
 
+    if(PAUSE){
+        al_draw_bitmap(stopscene, 0, 0, 0);
+        al_flip_display();
+    }
+
     if(redraw) {
         // update each object in game
         instruction = game_update();
@@ -506,12 +522,10 @@ GameWindow::draw_running_map()
     al_clear_to_color(al_map_rgb(0, 0, 0));
 
     //al_clear_to_color(al_map_rgb(100, 100, 100));
-    //if(!PAUSE){
-       al_draw_bitmap(background, -board_x, -board_y, 0);
-        for (auto weapon : weapons) weapon->Draw();
-        jacket->Draw();
-    //}
-    //else al_draw_bitmap(stopscene, 0, 0, 0);
+    al_draw_bitmap(background, -board_x, -board_y, 0);
+    for (auto weapon : weapons) weapon->Draw();
+    jacket->Draw();
+
     //printf("%d %d\n", x_axis, y_axis);
     //al_draw_bitmap_region(background, 0, 0, 1200, 800, 0, 0, 0);
     //al_draw_bitmap_region(background, 60, 400, 1200, 800, jacket->getCircle()->x - 400, jacket->getCircle()->y - 400, 0);

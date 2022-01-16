@@ -127,6 +127,7 @@ private:
     bool hold[KeysUsed] = {false};
     bool mouse_hold = false;
     bool function_key_pressed = false;
+    bool PAUSE = false;
 };
 
 
