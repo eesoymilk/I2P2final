@@ -2,10 +2,10 @@
 
 int main(int argc, char *argv[])
 {
-    GameWindow *TowerGame= new GameWindow();
+    GameWindow *CyperPunk2069= new GameWindow();
 
-    TowerGame->game_play();
+    CyperPunk2069->game_play();
 
-    delete TowerGame;
+    delete CyperPunk2069;
     return 0;
 }

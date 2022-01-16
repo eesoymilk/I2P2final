@@ -18,7 +18,6 @@ Character::Character(int spawn_x, int spawn_y)
     sprite_count = 0;
     counter = 0;
     strncpy(class_name, "Jacket", 20);
-    Load_Img();
 }
 
 
@@ -73,7 +72,7 @@ Character::Draw()
 }
 
 bool
-Character::Move(bool (&hold)[KeysUsed])
+Character::Move(bool (&hold)[4])
 {
     // when getting to end point, return true
     if(circle->x == end_x && circle->y == end_y)    return true;

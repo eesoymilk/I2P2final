@@ -3,6 +3,13 @@
 
 #include <allegro5/allegro_font.h>
 
+#define DirKeysUsed 4
+enum {W_KEY=0, A_KEY, S_KEY, D_KEY};
+#define GameKeysUsed 3
+enum {E_KEY = 0, R_KEY, G_KEY};
+#define FuncKeysUsed 4
+enum {ENTER_KEY=0, P_KEY, H_KEY, ESCAPE_KEY};
+
 #define font_size 30
 #define grid_width 40
 #define grid_height 40

@@ -1,6 +1,16 @@
 #ifndef CHARACTER_H_INCLUDED
 #define CHARACTER_H_INCLUDED
 
+// #ifndef KEYS
+// #define KEYS
+// #define DirKeysUsed 4
+// enum {W_KEY=0, A_KEY, S_KEY, D_KEY};
+// #define GameKeysUsed 3
+// enum {E_KEY = 0, R_KEY, G_KEY};
+// #define FuncKeysUsed 4
+// enum {ENTER_KEY=0, P_KEY, H_KEY, ESCAPE_KEY};
+// #endif
+
 #include <stdio.h>
 #include <string.h>
 #include <vector>
@@ -17,12 +27,6 @@
 
 enum {UNARMED = 0, PISTOL, SMG, AR};
 
-#ifndef KEYS
-#define KEYS
-#define KeysUsed 5
-enum {W_KEY=0, A_KEY, S_KEY, D_KEY, E_KEY};
-#endif
-
 class Character : public Object
 {
 public:
@@ -37,7 +41,7 @@ public:
 
     // Update monster position per frame
     // And detect if it reaches end point but not destroyed
-    bool Move(bool (&hold)[KeysUsed]);
+    bool Move(bool (&hold)[4]);
     void DropWeapon();
     void PickWeapon(Weapon*);
     void FireWeapon(int, int);
