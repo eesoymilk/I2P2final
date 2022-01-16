@@ -1,14 +1,11 @@
 #include "Character.h"
 #include <cmath>
 
-#define InitX 0
-#define InitY 0
 #define MaxSpeed 3
 #define Acceleration 1
 #define SCALE 2
 
-const char  state_name[][10] = {"UNARMED", "PISTOL", "SMG", "AR"};
-
+const char firearm_names[][10] = {"UNARMED", "PISTOL", "SMG", "AR"};
 // set counter frequency of drawing moving animation
 const int draw_frequency = 10;
 
@@ -18,7 +15,7 @@ Character::Character(int spawn_x, int spawn_y)
     circle->x = spawn_x * grid_width + grid_width/2;
     circle->y = spawn_y * grid_height + grid_height/2;
     circle->r = grid_width / 2;
-    sprite_pos = 0;
+    sprite_count = 0;
     counter = 0;
     strncpy(class_name, "Jacket", 20);
     Load_Img();
@@ -43,13 +40,12 @@ Character::Load_Img()
 {
     char buffer[50];
 
-    for (int i = 0; i < 1; i++) {
-        for(int j = 0; j < 7; j++) {
+    for (int i = 0; i < 2; i++) {
+        for(int j = 0; j < sprites[i]; j++) {
             ALLEGRO_BITMAP *img;
-            sprintf(buffer, "./%s/%s_%d.png", class_name, state_name[i], j);
+            sprintf(buffer, "./%s/%s_%d.png", class_name, firearm_names[i], j);
             img = al_load_bitmap(buffer);
-            if(img)
-                moveImg.push_back(img);
+            if(img) moveImg.push_back(img);
         }
     }
 }
@@ -60,16 +56,16 @@ Character::Draw()
     for (unsigned int i = 0; i < this->bullets.size(); i++)
         this->bullets[i]->Draw();
 
+    printf("firearm = %d\n", firearm);
+
     int offset = 0;
-    if (getWeapon())    offset += 7;
-    if(!moveImg[offset + sprite_pos])
-        return;
+    for (int i = 0; i < firearm; i++)       offset += sprites[i];
+    if (!moveImg[offset + sprite_count])    return;
 
     // get height and width of sprite bitmap
-    int w = al_get_bitmap_width(moveImg[offset + sprite_pos]);
-    int h = al_get_bitmap_height(moveImg[offset + sprite_pos]);
-
-    ALLEGRO_BITMAP* curImg = moveImg[offset + sprite_pos];
+    ALLEGRO_BITMAP* curImg = moveImg[offset + sprite_count];
+    int w = al_get_bitmap_width(curImg);
+    int h = al_get_bitmap_height(curImg);
     double cx = w / 2, cy = h / 2;
     double angle = 2 * PI - getRadianCCW();
     auto [dx, dy] = Transform();
@@ -81,10 +77,6 @@ Character::Draw()
 bool
 Character::Move(bool (&hold)[KeysUsed])
 {
-    counter = (counter + 1) % draw_frequency;
-
-    if(counter == 0)    sprite_pos = (sprite_pos + 1) % 7;
-
     // when getting to end point, return true
     if(circle->x == end_x && circle->y == end_y)    return true;
 
@@ -99,6 +91,13 @@ Character::Move(bool (&hold)[KeysUsed])
 
     if (hold[D_KEY])                    setVx(vx + Acceleration);
     else if (!hold[A_KEY] && vx > 0)    setVx(vx - 1);
+
+    counter = (counter + 1) % draw_frequency;
+    if (vx == 0 && vy == 0) {
+        sprite_count = 0;
+    } else if (counter == 0) {
+        sprite_count = (sprite_count + 1) % sprites[firearm];
+    }
 
     // printf("vx: %d, vy: %d\n", vx, vy);
     circle->x += vx;
@@ -115,6 +114,7 @@ Character::PickWeapon(Weapon* w)
         wielding->Drop(circle->x, circle->y);
     }
     wielding = w;
+    firearm = w->getType();
 }
 
 void

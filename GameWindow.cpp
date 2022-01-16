@@ -20,14 +20,8 @@ const int draw_frequency = 10;
 int background_width;
 int background_height;
 int Character_Health;
-//
-
-double Bullet::volume = 1.0;
-
-void set_attack_volume(double volume)
-{
-    Bullet::volume = volume;
-}
+int camera_origin_x;
+int camera_origin_y;
 
 void
 GameWindow::game_init()
@@ -41,14 +35,6 @@ GameWindow::game_init()
     stopscene = al_load_bitmap("./StopScene.png");
     background_width = al_get_bitmap_width(background);
     background_height = al_get_bitmap_height(background);
-
-    //printf("%d %d\n", background_width, background_height);
-
-    // for(int i = 0; i < Num_TowerType; i++)
-    // {
-    //     sprintf(buffer, "./Tower/%s.png", TowerClass[i]);
-    //     tower[i] = al_load_bitmap(buffer);
-    // }
 
     al_set_display_icon(display, icon);
     al_reserve_samples(3);
@@ -268,16 +254,17 @@ GameWindow::game_update()
         std::vector<Weapon*> near_weapons;
         Weapon* pick_target;
         Circle* jacket_cirle = jacket->getCircle();
-        for (auto weapon : weapons)
-            if (Circle::isOverlap(jacket_cirle, weapon->getCircle()))
+        
+        for (auto weapon : weapons) {
+            if (weapon->isDropped() && Circle::isOverlap(jacket_cirle, weapon->getCircle()))
                 near_weapons.push_back(weapon);
+        }
+
         if (!near_weapons.empty()) {
-            if (near_weapons.size() == 1)
-                pick_target = *near_weapons.begin();
-            if (jacket->getWeapon() != NULL) {
-                weapons.push_back(jacket->getWeapon());
-            }
+            printf("Picking Weapon...\n");
+            if (near_weapons.size() == 1)   pick_target = *near_weapons.begin();
             jacket->PickWeapon(pick_target);
+            pick_target->Pick();
         }
     }
 
@@ -292,13 +279,16 @@ GameWindow::game_update()
         if (jacket->getWeapon())
             jacket->DoAttack(mouse_x, mouse_y);
     }
-    board_x = jacket->getCircle()->x - window_width / 2;
-    board_y = jacket->getCircle()->y - window_height / 2;
+    camera_origin_x = jacket->getCircle()->x - window_width / 2;
+    camera_origin_y = jacket->getCircle()->y - window_height / 2;
     //printf("Board1: %d %d\n", board_x, board_y);
-    if(board_x < 0) board_x = 0;
-    if(board_x > background_width - window_width) board_x = background_width - window_width;
-    if(board_y > background_height - window_height) board_y = background_height - window_height;
-    if(board_y < 0) board_y = 0;
+    if(camera_origin_x < 0) camera_origin_x = 0;
+    if(camera_origin_x > background_width - window_width) camera_origin_x = background_width - window_width;
+    if(camera_origin_y > background_height - window_height) camera_origin_y = background_height - window_height;
+    if(camera_origin_y < 0) camera_origin_y = 0;
+
+    board_x = camera_origin_x;
+    board_y = camera_origin_y;
     //printf("Board2: %d %d\n", board_x, board_y);
 
     //WindowMove();

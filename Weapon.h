@@ -14,8 +14,6 @@
 #include "Weapon.h"
 #include "global.h"
 
-enum {PISTOL = 0, SMG, AR};
-
 class Weapon : public Object
 {
 public:
@@ -30,14 +28,17 @@ public:
     void CoolDown() { if (fire_counter < fire_rate) fire_counter++; };
     void Fire() { fire_counter = 0; };
     bool isReadyToFire() { return fire_counter == fire_rate; };
+    bool isDropped() { return dropped; };
 
     // functions that return informations of monster
+    int getType() { return type; }
     double getDamage() { return damage; }
     int getFireRate() { return fire_rate; }
     int getSpeed() { return speed; }
     ALLEGRO_BITMAP* getBulletImg() { return bulletImg; }
 
 protected:
+    int type;
     int damage = 10;
     int fire_rate = 10;
     int fire_counter = 0;

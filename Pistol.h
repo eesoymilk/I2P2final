@@ -9,7 +9,7 @@ public:
     Pistol() : Weapon()
     {
         char buffer[50];
-        
+        type = 1;
         damage = 10;
         fire_rate = 30;
         speed = 10;

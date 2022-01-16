@@ -24,7 +24,6 @@ public:
     int getDamage() { return damage; }
     double getRadianCCW() { return radian_ccw; }
 
-    static double volume;
 
 protected:
     ALLEGRO_BITMAP *bulletImg;
@@ -36,6 +35,7 @@ private:
     int damage = 5;
     double pos_x, pos_y, unit_x, unit_y;
     double radian_ccw;
+    double volume = 1.0;
 };
 
 #endif // BULLET_H_INCLUDED

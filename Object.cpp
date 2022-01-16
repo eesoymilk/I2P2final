@@ -1,6 +1,6 @@
 #include "Object.h"
 
-std::pair<int, int>
+/*std::pair<int, int>
 Object::Transform(){
     int rx = getX(); int ry = getY();
     //printf("%d %d %d %d\n", rx, ry, background_width, background_height);
@@ -22,6 +22,13 @@ Object::Transform(){
         return {window_width / 2 , window_height + ry - background_height};
     else
         return {window_width / 2, window_height / 2};
+}*/
+
+std::pair<int, int>
+Object::Transform(){
+    int rx = getX(); int ry = getY();
+    //printf("%d %d %d %d\n", rx, ry, background_width, background_height);
+    return {rx - camera_origin_x, ry - camera_origin_y};
 }
 
 std::pair<double, double>

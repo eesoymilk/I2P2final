@@ -50,6 +50,7 @@ Bullet::Draw()
     double dx = circle->x - w / 2, dy = circle->y - h / 2;
     // printf("%d %d\n", dx, dy);
     // printf("Jacket: %d %d %d %d\n", circle->x, circle->y, dx, dy);
-    al_draw_scaled_rotated_bitmap(bulletImg, cx, cy, circle->x, circle->y, 1, 1, angle, 0);
+    std::pair<int, int> cam = Transform();
+    al_draw_scaled_rotated_bitmap(bulletImg, cx, cy, cam.first, cam.second, 1, 1, angle, 0);
     //al_draw_filled_circle(pos_x, pos_y, circle->r, al_map_rgba(196, 79, 79, 200));
 }

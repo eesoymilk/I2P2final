@@ -24,6 +24,10 @@ extern int background_width;
 extern int background_height;
 extern int Character_Health;
 
+// the origin of camera
+extern int camera_origin_x;
+extern int camera_origin_y;
+
 enum {ARCANE = 0, ARCHER, CANON, POISON, STORM};
 enum {WOLF = 0, WOLFKNIGHT, DEMONNIJIA, CAVEMAN};
 

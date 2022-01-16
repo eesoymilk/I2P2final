@@ -15,6 +15,8 @@
 #include "Bullet.h"
 #include "global.h"
 
+enum {UNARMED = 0, PISTOL, SMG, AR};
+
 #ifndef KEYS
 #define KEYS
 #define KeysUsed 5
@@ -55,6 +57,7 @@ public:
 protected:
     int HealthPoint = 20;
     char class_name[20];
+    int sprites[4];
     std::vector<Bullet*> bullets;
     //
 private:
@@ -62,9 +65,9 @@ private:
     // end point
     int end_x, end_y;
     // animation counter
-    int counter;
+    int firearm = 0, counter;
     // animation image of current direction
-    int sprite_pos;
+    int sprite_count;
     // VELOCITY
     int vx = 0, vy = 0;
 
