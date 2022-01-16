@@ -3,7 +3,6 @@
 
 #define MaxSpeed 3
 #define Acceleration 1
-#define SCALE 2
 
 const char firearm_names[][10] = {"UNARMED", "PISTOL", "SMG", "AR"};
 // set counter frequency of drawing moving animation
@@ -69,7 +68,7 @@ Character::Draw()
     auto [dx, dy] = Transform();
     //printf("%d %d\n", cam.first, cam.second);
     // printf("Jacket: %d %d %d %d\n", circle->x, circle->y, dx, dy);
-    al_draw_scaled_rotated_bitmap(curImg, cx, cy, dx, dy, SCALE, SCALE, angle, 0);
+    al_draw_scaled_rotated_bitmap(curImg, cx, cy, dx, dy, CharacterScale, CharacterScale, angle, 0);
 }
 
 bool

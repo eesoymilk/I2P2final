@@ -41,6 +41,8 @@ public:
     int getSpeed() { return speed; }
     int getIn() { return in_magzine; }
     int getSize() { return magzine_size; }
+    int getAmmo() { return in_magzine; }
+    int getMagSize() { return magzine_size; }
     int getReserved() { return reserved_bullets; }
     ALLEGRO_BITMAP* getBulletImg() { return bulletImg; }
 

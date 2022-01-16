@@ -35,7 +35,7 @@ public:
 
     // Draw image per frame
     // override virtual function "Object::Draw"
-    void Draw();
+    virtual void Draw();
     // Load bitmaps of animation image into container "moveImg"
     void Load_Img();
 
@@ -53,7 +53,9 @@ public:
     int getVx() { return vx; }
     int getVy() { return vy; }
     int getHealth() { return HealthPoint; }
+    std::pair<std::vector<ALLEGRO_BITMAP*>, std::vector<ALLEGRO_BITMAP*>> getImg() { return {moveImg, attackImg};}
     int getFirearm() {return firearm; }
+    int getSpriteCnt() {return sprite_count; }
 
     bool Subtract_HP(int);
     void setRadianCCW(int, int);

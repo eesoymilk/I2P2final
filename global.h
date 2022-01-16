@@ -23,6 +23,8 @@ enum {ENTER_KEY=0, P_KEY, H_KEY, ESCAPE_KEY};
 #define Num_MonsterType 4
 #define NumOfGrid (field_width / grid_width) * (field_height / grid_height)
 
+#define CharacterScale 3
+
 extern int TowerRadius[];
 extern char TowerClass[][20];
 extern int TowerWidth[];
