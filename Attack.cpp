@@ -22,12 +22,6 @@ Attack::Attack(Circle *attacker, int mx, int my, int harm_point, int velocity, A
     this->attack_img = attack_img;
 
     // initialize the effect sound of attack
-    sample = al_load_sample("Arrow.wav");
-    arrow = al_create_sample_instance(sample);
-    al_set_sample_instance_playmode(arrow, ALLEGRO_PLAYMODE_ONCE);
-    al_attach_sample_instance_to_mixer(arrow, al_get_default_mixer());
-    al_set_sample_instance_gain(arrow, Attack::volume);
-    al_play_sample_instance(arrow);
 }
 
 Attack::~Attack()

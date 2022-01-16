@@ -14,7 +14,7 @@ Circle::isOverlap(Circle *circle_1, Circle *circle_2)
     return false;
 }
 
-double 
+double
 Circle::Distance(Circle* a, Circle* b)
 {
     double dx = b->x - a->x, dy = b->y - a->y;

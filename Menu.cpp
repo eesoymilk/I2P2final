@@ -7,8 +7,8 @@ const int offsetX = 30 + field_width, offsetY = 150;
 const int Initial_Health = 1;
 const int Initial_Coin = 10;
 
-const int menu_width = 300;
-const int menu_height = 270;
+const int menu_width = 600;
+const int menu_height = 300;
 const int font_start = 20;
 
 bool
@@ -24,19 +24,21 @@ Menu::Menu()
 {
     char filename[50];
 
-    HealthPoint = 10;
-    Coin = 0;
-    Score = 0;
+    HealthPoint = 0;
+    Ammo = 0;
+    reserved_Ammo = 0;
 
     //menu = al_load_bitmap("./Menu.png");
 
     menuFont = al_load_ttf_font("pirulen.ttf", font_size, 0); // load font
+    icon = al_load_bitmap("./unarmed_icon.png");
 }
 
 Menu::~Menu()
 {
     //al_destroy_bitmap(menu);
     al_destroy_font(menuFont);
+    al_destroy_bitmap(icon);
 
     /*for(int i=0; i < Num_TowerType; i++)
         al_destroy_bitmap(menu_tower[i]);
@@ -47,22 +49,56 @@ Menu::~Menu()
 void
 Menu::Reset()
 {
-    HealthPoint = Initial_Health;
-    Coin = Initial_Coin;
-    Score = 0;
-    killedMonster = 0;
+    char filename[50];
+
+    HealthPoint = 0;
+    Magzine_size = 0;
+    Ammo = 0;
+    reserved_Ammo = 0;
+    icon = al_load_bitmap("./unarmed_icon.png");
+
+    //menu = al_load_bitmap("./Menu.png");
+
+    //menuFont = al_load_ttf_font("pirulen.ttf", font_size, 0); // load font
+}
+
+void
+Menu::Update(int health, int ammo, int magzine_size, int reserved_ammo, int type)
+{
+    HealthPoint = health;
+    Ammo = ammo;
+    Magzine_size = magzine_size;
+    reserved_Ammo = reserved_ammo;
+    switch(type){
+        case 0:
+            icon = al_load_bitmap("./unarmed_icon.png");
+            break;
+        case 1:
+            icon = al_load_bitmap("./Pistol_icon.png");
+            break;
+        case 2:
+            icon = al_load_bitmap("./SMG_icon.png");
+            break;
+        case 3:
+            icon = al_load_bitmap("./AR_icon.png");
+            break;
+    }
 }
 
 void
 Menu::Draw()
 {
     char buffer[50];
-    sprintf(buffer, "%d", Character_Health);
-    al_draw_filled_rectangle(window_width - menu_width, 0, window_width, menu_height, al_map_rgb(0, 0, 0));
-    al_draw_text(menuFont, al_map_rgb(255, 255, 255), window_width - menu_width + font_start, font_start, 0, "Health: ");
+    sprintf(buffer, "%d", HealthPoint);
+    int alpha = 128; // half translucent
+    //al_set_blender(ALLEGRO_ALPHA, ALLEGRO_INVERSE_ALPHA, al_map_rgba(255, 255, 255, 255));
+    al_draw_filled_rectangle(0, window_height - menu_height, menu_width, window_height, al_map_rgb(0, 0, 0));
+    al_draw_text(menuFont, al_map_rgb(255, 255, 255), 20, window_height - menu_height + font_start, 0, "Health: ");
     al_draw_text(menuFont, al_map_rgb(255, 255, 255), window_width - menu_width + font_start, font_start + 2 * font_size, 0, buffer);
     al_draw_text(menuFont, al_map_rgb(255, 255, 255), window_width - menu_width + font_start, font_start + 4 * font_size, 0, "Ammo: ");
-    al_draw_text(menuFont, al_map_rgb(255, 255, 255), window_width - menu_width + font_start, font_start + 6 * font_size, 0, "Health: ");
+    sprintf(buffer, "%d/%d %d", Ammo, Magzine_size, reserved_Ammo);
+    al_draw_text(menuFont, al_map_rgb(255, 255, 255), window_width - menu_width + font_start, font_start + 6 * font_size, 0, buffer);
+    al_draw_bitmap(icon, 0, window_height - menu_height, 0);
     /*char buffer[50];
 
     sprintf(buffer, "%d", HealthPoint);
@@ -89,44 +125,5 @@ Menu::Draw()
             al_draw_rectangle(pos_x, pos_y, pos_x + ThumbWidth, pos_y + ThumbHeight, al_map_rgb(255, 255, 255), 0);
     }*/
 }
-
-/*int
-Menu::MouseIn(int mouse_x, int mouse_y)
-{
-    bool enoughCoin;
-
-    selectedTower = -1;
-
-    for(int i=0; i < Num_TowerType; i++)
-    {
-        int pos_x = offsetX + (ThumbWidth + gapX) * (i % 2);
-        int pos_y = offsetY + (ThumbHeight + gapY) * (i / 2);
-
-        if(isInRange(mouse_x, pos_x, ThumbWidth) && isInRange(mouse_y, pos_y, ThumbHeight))
-        {
-            if(Enough_Coin(i))
-            {
-                selectedTower = i;
-                break;
-            }
-        }
-    }
-    return selectedTower;
-}
-
-bool
-Menu::Subtract_HP(int escapeNum)
-{
-    HealthPoint -= escapeNum;
-
-    return (HealthPoint == 0);
-}
-
-void
-Menu::Gain_Score(int scoreWorth)
-{
-    killedMonster++;
-    Score += scoreWorth;
-}*/
 
 

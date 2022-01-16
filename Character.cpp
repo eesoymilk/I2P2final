@@ -18,6 +18,7 @@ Character::Character(int spawn_x, int spawn_y)
     sprite_count = 0;
     counter = 0;
     strncpy(class_name, "Jacket", 20);
+    //Load_Img();
 }
 
 

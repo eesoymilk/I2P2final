@@ -19,6 +19,7 @@ public:
     virtual ~Menu();
 
     void Reset();
+    void Update(int, int, int, int, int);
     void Draw();
 
     // Detect if cursor hovers over any of tower on menu
@@ -31,20 +32,15 @@ public:
     static bool isInRange(int, int, int);
 
     // Check if current coin is not less than needed coin
-    bool Enough_Coin(int);
-    void Change_Coin(int change) { Coin += change; }
-    bool Subtract_HP(int escapeNum = 1);
-    void Gain_Score(int);
 
-    int getScore() { return Score; }
-    int getCoin() { return Coin; }
 
 private:
     ALLEGRO_FONT *menuFont;
+    ALLEGRO_BITMAP *icon = NULL;
     int HealthPoint = 0;
-    int killedMonster = 0;
-    int Score = 0;
-    int Coin = 0;
+    int Ammo = 0;
+    int Magzine_size = 0;
+    int reserved_Ammo = 0;
 };
 
 #endif // MENU_H_INCLUDED

@@ -49,6 +49,7 @@ public:
     int getVx() { return vx; }
     int getVy() { return vy; }
     int getHealth() { return HealthPoint; }
+    int getFirearm() {return firearm; }
 
     bool Subtract_HP(int);
     void setRadianCCW(int, int);

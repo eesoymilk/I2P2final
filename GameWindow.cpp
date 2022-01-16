@@ -227,7 +227,7 @@ GameWindow::game_begin()
     draw_startscene();
 
     al_stop_sample_instance(backgroundSound);
-
+    //printf("Hello\n");
     // tmp init for debugging
     jacket = spawnCharacter(1, 0, 0);
     printf("Spawning Weapon...\n");
@@ -261,7 +261,7 @@ int
 GameWindow::game_update()
 {
     Weapon* w = jacket->getWeapon();
-    
+
     if (function_key_pressed) {
         function_key_pressed = false;
         std::vector<Weapon*> near_weapons;
@@ -306,7 +306,7 @@ GameWindow::game_update()
             if (mouse_hold) jacket->FireWeapon(mouse_x, mouse_y);
         }
     }
-    
+
     jacket->Move(hold);
     for (auto bullet : jacket->getBullets())    bullet->Move();
 
@@ -320,6 +320,10 @@ GameWindow::game_update()
 
     board_x = camera_origin_x;
     board_y = camera_origin_y;
+    if(jacket->getWeapon() != NULL)
+        menu->Update(jacket->getHealth(), jacket->getWeapon()->getIn(), jacket->getWeapon()->getSize(), jacket->getWeapon()->getReserved(), jacket->getFirearm());
+    else
+        menu->Update(jacket->getHealth(), 0, 0, 0, jacket->getFirearm());
     //printf("Board2: %d %d\n", board_x, board_y);
 
     //WindowMove();
