@@ -93,6 +93,7 @@ private:
     ALLEGRO_BITMAP *background = NULL;
     ALLEGRO_BITMAP *startscene = NULL;
     ALLEGRO_BITMAP *helpscene = NULL;
+    ALLEGRO_BITMAP *stopscene = NULL;
 
     ALLEGRO_DISPLAY* display = NULL;
     ALLEGRO_FONT *font = NULL;

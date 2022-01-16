@@ -16,16 +16,6 @@ Menu::isInRange(int point, int startPos, int length)
     return false;
 }
 
-bool
-Menu::Enough_Coin(int type)
-{
-
-    if(type < 0 || type >= Num_TowerType)
-        return false;
-
-    return (Coin + need_coin[type] >= 0);
-}
-
 Menu::Menu()
 {
     char filename[50];
@@ -34,29 +24,20 @@ Menu::Menu()
     Coin = 0;
     Score = 0;
 
-    for(int i=0;i<Num_TowerType; i++)
-    {
-        ALLEGRO_BITMAP *tower;
-        sprintf(filename, "./Tower/%s_Menu.png", TowerClass[i]);
-
-        tower = al_load_bitmap(filename);
-        menu_tower.push_back(tower);
-    }
-
-    love = al_load_bitmap("./Tower/love.png");
+    //menu = al_load_bitmap("./Menu.png");
 
     menuFont = al_load_ttf_font("pirulen.ttf", 12, 0); // load font
 }
 
 Menu::~Menu()
 {
-    al_destroy_bitmap(love);
+    //al_destroy_bitmap(menu);
     al_destroy_font(menuFont);
 
-    for(int i=0; i < Num_TowerType; i++)
+    /*for(int i=0; i < Num_TowerType; i++)
         al_destroy_bitmap(menu_tower[i]);
 
-    menu_tower.clear();
+    menu_tower.clear();*/
 }
 
 void
@@ -71,7 +52,7 @@ Menu::Reset()
 void
 Menu::Draw()
 {
-    char buffer[50];
+    /*char buffer[50];
 
     sprintf(buffer, "%d", HealthPoint);
     al_draw_bitmap(love, offsetX, 20, 0);
@@ -95,10 +76,10 @@ Menu::Draw()
             al_draw_rectangle(pos_x, pos_y, pos_x + ThumbWidth, pos_y + ThumbHeight, al_map_rgb(255, 0, 0), 0);
         else
             al_draw_rectangle(pos_x, pos_y, pos_x + ThumbWidth, pos_y + ThumbHeight, al_map_rgb(255, 255, 255), 0);
-    }
+    }*/
 }
 
-int
+/*int
 Menu::MouseIn(int mouse_x, int mouse_y)
 {
     bool enoughCoin;
@@ -135,6 +116,6 @@ Menu::Gain_Score(int scoreWorth)
 {
     killedMonster++;
     Score += scoreWorth;
-}
+}*/
 
 

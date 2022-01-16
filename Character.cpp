@@ -79,6 +79,7 @@ Character::Draw()
     auto [dx, dy] = Transform();
     // std::pair<int, int> cam = Transform();
     //printf("%d %d\n", cam.first, cam.second);
+    printf("Jacket: %d %d %d %d\n", circle->x, circle->y, dx, dy);
     al_draw_scaled_rotated_bitmap(curImg, cx, cy, dx, dy, SCALE, SCALE, angle, 0);
 
 

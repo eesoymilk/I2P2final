@@ -19,6 +19,7 @@
 const int draw_frequency = 10;
 int background_width;
 int background_height;
+bool PAUSE = false;
 
 //
 
@@ -34,11 +35,11 @@ GameWindow::game_init()
 {
     char buffer[50];
 
-    icon = al_load_bitmap("./icon.png");
-    background = al_load_bitmap("./StartBackground.jpg");
-    startscene = al_load_bitmap("./StartScene.jpg");
+    icon = al_load_bitmap("./icon.jpg");
+    background = al_load_bitmap("./Map1.png");
+    startscene = al_load_bitmap("./Scene.jpg");
     helpscene = al_load_bitmap("./HelpScene.jpg");
-
+    stopscene = al_load_bitmap("./StopScene.jpg");
     background_width = al_get_bitmap_width(background);
     background_height = al_get_bitmap_height(background);
 
@@ -53,7 +54,7 @@ GameWindow::game_init()
     al_set_display_icon(display, icon);
     al_reserve_samples(3);
 
-    sample = al_load_sample("ClickSound.wav");
+    sample = al_load_sample("ClickSound.ogg");
     clickSound = al_create_sample_instance(sample);
     al_set_sample_instance_playmode(clickSound, ALLEGRO_PLAYMODE_ONCE);
     al_attach_sample_instance_to_mixer(clickSound, al_get_default_mixer());
@@ -236,7 +237,7 @@ GameWindow::game_begin()
     weapons.push_back(spawnWeapon(1, 4, 4));
     printf("Spawned pistol.\n");
     //
-    
+
     draw_running_map();
 
     /*al_play_sample_instance(startSound);
@@ -286,12 +287,14 @@ GameWindow::game_update()
         if (jacket->getWeapon())
             jacket->DoAttack(mouse_x, mouse_y);
     }
-    board_x = jacket->getCircle()->x - 400;
-    board_y = jacket->getCircle()->y - 300;
+    board_x = jacket->getCircle()->x - window_width / 2;
+    board_y = jacket->getCircle()->y - window_height / 2;
+    printf("Board1: %d %d\n", board_x, board_y);
     if(board_x < 0) board_x = 0;
-    if(board_x > 1000) board_x = 1000;
-    if(board_y > 600) board_y = 600;
+    if(board_x > background_width - window_width) board_x = background_width - window_width;
+    if(board_y > background_height - window_height) board_y = background_height - window_height;
     if(board_y < 0) board_y = 0;
+    printf("Board2: %d %d\n", board_x, board_y);
 
     //WindowMove();
 
@@ -415,23 +418,35 @@ GameWindow::process_event()
         switch(event.keyboard.keycode) {
             case ALLEGRO_KEY_W:
                 printf("W is pressed!\n");
-                if (!hold[W_KEY])    hold[W_KEY] = true;
+                if (!hold[W_KEY] && !PAUSE)    hold[W_KEY] = true;
                 break;
             case ALLEGRO_KEY_A:
                 printf("A is pressed!\n");
-                if (!hold[A_KEY])    hold[A_KEY] = true;
+                if (!hold[A_KEY] && !PAUSE)    hold[A_KEY] = true;
                 break;
             case ALLEGRO_KEY_S:
                 printf("S is pressed!\n");
-                if (!hold[S_KEY])    hold[S_KEY] = true;
+                if (!hold[S_KEY] && !PAUSE)    hold[S_KEY] = true;
                 break;
             case ALLEGRO_KEY_D:
                 printf("D is pressed!\n");
-                if (!hold[D_KEY])    hold[D_KEY] = true;
+                if (!hold[D_KEY] && !PAUSE)    hold[D_KEY] = true;
                 break;
             case ALLEGRO_KEY_E:
                 printf("E is pressed!\n");
                 function_key_pressed = true;
+                break;
+            case ALLEGRO_KEY_P:
+                if(!PAUSE){
+                    al_stop_timer(timer);
+                    al_stop_timer(enemy_pro);
+                    PAUSE = true;
+                }
+                else{
+                    al_start_timer(timer);
+                    al_start_timer(enemy_pro);
+                    PAUSE = false;
+                }
                 break;
         }
     }
@@ -439,19 +454,19 @@ GameWindow::process_event()
         switch(event.keyboard.keycode) {
             case ALLEGRO_KEY_W:
                 printf("W is released!\n");
-                if (hold[W_KEY])    hold[W_KEY] = false;
+                if (hold[W_KEY] && !PAUSE)    hold[W_KEY] = false;
                 break;
             case ALLEGRO_KEY_A:
                 printf("A is released!\n");
-                if (hold[A_KEY])    hold[A_KEY] = false;
+                if (hold[A_KEY] && !PAUSE)    hold[A_KEY] = false;
                 break;
             case ALLEGRO_KEY_S:
                 printf("S is released!\n");
-                if (hold[S_KEY])    hold[S_KEY] = false;
+                if (hold[S_KEY] && !PAUSE)    hold[S_KEY] = false;
                 break;
             case ALLEGRO_KEY_D:
                 printf("D is released!\n");
-                if (hold[D_KEY])    hold[D_KEY] = false;
+                if (hold[D_KEY] && !PAUSE)    hold[D_KEY] = false;
                 break;
         }
     }
@@ -468,7 +483,7 @@ GameWindow::process_event()
         mouse_y = event.mouse.y;
         // printf("mouse_x = %d, mouse_y = %d\n", mouse_x, mouse_y);
         jacket->setRadianCCW(mouse_x, mouse_y);
-        menu->MouseIn(mouse_x, mouse_y);
+        //menu->MouseIn(mouse_x, mouse_y);
     }
 
     if(redraw) {
@@ -491,10 +506,12 @@ GameWindow::draw_running_map()
     al_clear_to_color(al_map_rgb(0, 0, 0));
 
     //al_clear_to_color(al_map_rgb(100, 100, 100));
-    al_draw_bitmap(background, -board_x, -board_y, 0);
-
-    for (auto weapon : weapons) weapon->Draw();
-    jacket->Draw();
+    //if(!PAUSE){
+       al_draw_bitmap(background, -board_x, -board_y, 0);
+        for (auto weapon : weapons) weapon->Draw();
+        jacket->Draw();
+    //}
+    //else al_draw_bitmap(stopscene, 0, 0, 0);
     //printf("%d %d\n", x_axis, y_axis);
     //al_draw_bitmap_region(background, 0, 0, 1200, 800, 0, 0, 0);
     //al_draw_bitmap_region(background, 60, 400, 1200, 800, jacket->getCircle()->x - 400, jacket->getCircle()->y - 400, 0);
@@ -561,17 +578,20 @@ GameWindow::draw_startscene()
                         while(al_get_sample_instance_playing(clickSound));
                         start_button = true;
                         break;
-                    case ALLEGRO_KEY_H:
+                    case ALLEGRO_KEY_T:
                         al_play_sample_instance(clickSound);
                         if(help_button) help_button = false;
                         else help_button = true;
+                        break;
+                    case ALLEGRO_KEY_E:
+                        game_destroy();
                         break;
                 }
             }
         }
         //if(help_button) printf("1\n");
         //else printf("0\n");
-        if(help_button) al_draw_bitmap(helpscene, -130, 0, 0);
+        if(help_button) al_draw_bitmap(helpscene, 0, 0, 0);
         else al_draw_bitmap(startscene, 0, 0, 0);
         al_flip_display();
     }

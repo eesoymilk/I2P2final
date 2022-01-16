@@ -51,6 +51,8 @@
 		<Unit filename="DemonNijia.h" />
 		<Unit filename="GameWindow.cpp" />
 		<Unit filename="GameWindow.h" />
+		<Unit filename="Jacket.cpp" />
+		<Unit filename="Jacket.h" />
 		<Unit filename="Level.cpp" />
 		<Unit filename="Level.h" />
 		<Unit filename="Main.cpp" />

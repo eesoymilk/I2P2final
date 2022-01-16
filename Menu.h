@@ -36,21 +36,15 @@ public:
     bool Subtract_HP(int escapeNum = 1);
     void Gain_Score(int);
 
-    int getTowerCoin(int type) { return need_coin[type]; }
     int getScore() { return Score; }
     int getCoin() { return Coin; }
-    int getKilled() { return killedMonster; }
 
 private:
-    std::vector<ALLEGRO_BITMAP*> menu_tower;
-    ALLEGRO_BITMAP *love = NULL;
     ALLEGRO_FONT *menuFont;
-    int HealthPoint = 10;
+    int HealthPoint = 0;
     int killedMonster = 0;
     int Score = 0;
     int Coin = 0;
-    int selectedTower = -1;
-    int need_coin[Num_TowerType] = {-5, -10, -20, -40, -70};
 };
 
 #endif // MENU_H_INCLUDED
