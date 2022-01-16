@@ -320,7 +320,11 @@
 	<iostream>
 	<algorithm>
 
+<<<<<<< HEAD
 1642352515 e:\github\i2p2final\gamewindow.h
+=======
+1642353895 e:\github\i2p2final\gamewindow.h
+>>>>>>> fsm
 	<allegro5/allegro_audio.h>
 	<allegro5/allegro_acodec.h>
 	<vector>
@@ -358,7 +362,11 @@
 	"allegro5/allegro.h"
 	"allegro5/allegro_font.h"
 
+<<<<<<< HEAD
 1642352515 e:\github\i2p2final\global.h
+=======
+1642352956 e:\github\i2p2final\global.h
+>>>>>>> fsm
 	<allegro5/allegro_font.h>
 
 1642180709 e:\github\i2p2final\level.h
@@ -432,7 +440,11 @@
 1518075208 source:e:\github\i2p2final\level.cpp
 	"Level.h"
 
+<<<<<<< HEAD
 1642352515 source:e:\github\i2p2final\main.cpp
+=======
+1642352956 source:e:\github\i2p2final\main.cpp
+>>>>>>> fsm
 	"GameWindow.h"
 
 1642346749 source:e:\github\i2p2final\menu.cpp
@@ -889,7 +901,11 @@
 1642225244 source:c:\users\user\i2p2final\tower.cpp
 	"Tower.h"
 
+<<<<<<< HEAD
 1642352515 e:\github\i2p2final\character.h
+=======
+1642352956 e:\github\i2p2final\character.h
+>>>>>>> fsm
 	<stdio.h>
 	<string.h>
 	<vector>
@@ -904,7 +920,11 @@
 	"Bullet.h"
 	"global.h"
 
+<<<<<<< HEAD
 1642352515 source:e:\github\i2p2final\character.cpp
+=======
+1642352956 source:e:\github\i2p2final\character.cpp
+>>>>>>> fsm
 	"Character.h"
 	<cmath>
 

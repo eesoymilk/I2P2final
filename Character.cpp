@@ -72,7 +72,7 @@ Character::Draw()
 }
 
 bool
-Character::Move(bool (&hold)[KeysUsed])
+Character::Move(bool (&hold)[4])
 {
     // when getting to end point, return true
     if(circle->x == end_x && circle->y == end_y)    return true;

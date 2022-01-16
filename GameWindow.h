@@ -1,12 +1,6 @@
 #ifndef MAINWINDOW_H_INCLUDED
 #define MAINWINDOW_H_INCLUDED
 
-#ifndef KEYS
-#define KeysUsed 5
-#define KEYS
-enum {W_KEY=0, A_KEY, S_KEY, D_KEY, E_KEY};
-#endif
-
 #include <allegro5/allegro_audio.h>
 #include <allegro5/allegro_acodec.h>
 #include <vector>
@@ -14,15 +8,6 @@ enum {W_KEY=0, A_KEY, S_KEY, D_KEY, E_KEY};
 #include <time.h>
 #include "Menu.h"
 #include "Level.h"
-// #include "WolfKnight.h"
-// #include "CaveMan.h"
-// #include "Wolf.h"
-// #include "DemonNijia.h"
-// #include "Arcane.h"
-// #include "Archer.h"
-// #include "Canon.h"
-// #include "Poison.h"
-// #include "Storm.h"
 #include "Bullet.h"
 #include "Slider.h"
 
@@ -33,15 +18,17 @@ enum {W_KEY=0, A_KEY, S_KEY, D_KEY, E_KEY};
 #include "AssaultRifle.h"
 //
 
-#define GAME_INIT -1
-#define GAME_SETTING 0
-#define GAME_SELECT 1
-#define GAME_BEGIN 2
-#define GAME_CONTINUE 3
-#define GAME_FAIL 4
-#define GAME_TERMINATE 5
-#define GAME_NEXT_LEVEL 6
-#define GAME_EXIT 7
+#define GAME_EXIT -1
+#define GAME_CONTINUE 0
+#define GAME_NEXT 1
+#define GAME_STOP 2
+
+#define GAMESTATE_MENU      0
+#define GAMESTATE_INGAME    1
+#define GAMESTATE_TUTORIAL  2
+#define GAMESTATE_PAUSE     3
+#define GAMESTATE_END       4
+
 #define MaxSpeed 3
 #define Acceleration 1
 
@@ -65,6 +52,7 @@ public:
     void game_reset();
     void game_play();
     void game_begin();
+    void game_menu();
 
     int game_run();
     int game_update();
@@ -75,6 +63,7 @@ public:
     // each drawing scene function
     void draw_running_map();
     void draw_startscene();
+    void Draw();
 
     // process of updated event
     int process_event();
@@ -124,15 +113,14 @@ private:
 
     int mouse_x, mouse_y;
     int board_x = 0, board_y = 0;
+    int preGameState = 0, GameState = 0;
 
-    bool redraw = false;
+    bool update = false;
     bool mute = false;
-    bool hold[KeysUsed] = {false};
+    bool dir_keys[DirKeysUsed] = {false};
+    bool game_keys[GameKeysUsed] = {false};
+    bool func_keys[FuncKeysUsed] = {false};
     bool mouse_hold = false;
-    bool function_key_pressed = false;
-    bool reload_key_pressed = false;
-    bool drop_key_pressed = false;
-    bool PAUSE = false;
 };
 
 
