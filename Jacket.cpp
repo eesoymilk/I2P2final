@@ -1,7 +1,7 @@
 #include "Jacket.h"
 
 const int hud_width = 600;
-const int hud_height = 300;
+const int hud_height = 200;
 const int font_start = 20;
 
 Jacket::Jacket(int spwan_x, int spwan_y) : Character(spwan_x, spwan_y)
@@ -33,7 +33,7 @@ Jacket::~Jacket()
 
 void
 Jacket::Draw()
-{   
+{
     for (unsigned int i = 0; i < this->bullets.size(); i++)
         this->bullets[i]->Draw();
 
@@ -79,12 +79,14 @@ Jacket::Draw()
     char buffer[50];
     sprintf(buffer, "%d", HealthPoint);
     int alpha = 128; // half translucent
-    //al_set_blender(ALLEGRO_ALPHA, ALLEGRO_INVERSE_ALPHA, al_map_rgba(255, 255, 255, 255));
+    //al_set_blender(ALLEGRO_ALPHA, ALLEGRO_INVERSE_ALPHA, al_map_rgba(255, 255, 255, alpha));
+    //al_draw_bitmap(bmp, 0, 0, 0);
     al_draw_filled_rectangle(0, window_height - hud_height, hud_width, window_height, al_map_rgb(0, 0, 0));
-    al_draw_text(hudFont, al_map_rgb(255, 255, 255), 20, window_height - hud_height + font_start, 0, "Health: ");
-    al_draw_text(hudFont, al_map_rgb(255, 255, 255), window_width - hud_width + font_start, font_start + 2 * font_size, 0, buffer);
-    al_draw_text(hudFont, al_map_rgb(255, 255, 255), window_width - hud_width + font_start, font_start + 4 * font_size, 0, "Ammo: ");
-    sprintf(buffer, "%d/%d %d", ammo, mag_size, reserved);
-    al_draw_text(hudFont, al_map_rgb(255, 255, 255), window_width - hud_width + font_start, font_start + 6 * font_size, 0, buffer);
-    al_draw_bitmap(icon, 0, window_height - hud_height, 0);
+    al_draw_text(hudFont, al_map_rgb(255, 255, 255), font_size, window_height - hud_height + font_start, 0, buffer);
+    double length = (hud_width - font_start - 4 * font_size) * HealthPoint / 100.0;
+    al_draw_filled_rectangle(4 * font_size, window_height - hud_height + font_start, 4 * font_size + (int)length, window_height - hud_height + font_start + font_size, al_map_rgb(255, 0, 0));
+    sprintf(buffer, "%d/%d   %d", ammo, mag_size, reserved);
+    al_draw_text(hudFont, al_map_rgb(255, 255, 255), font_start, window_height - font_start - 3 * font_size / 2, 0, buffer);
+    w = al_get_bitmap_width(icon); h = al_get_bitmap_height(icon);
+    al_draw_bitmap(icon, hud_width - w - font_size, window_height - h - font_start, 0);
 }
