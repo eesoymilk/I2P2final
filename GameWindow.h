@@ -121,7 +121,6 @@ private:
     bool game_keys[GameKeysUsed] = {false};
     bool func_keys[FuncKeysUsed] = {false};
     bool mouse_hold = false;
-    bool PAUSE = false;
 };
 
 
