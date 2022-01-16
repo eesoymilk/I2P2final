@@ -6,7 +6,7 @@ const int font_start = 20;
 
 Jacket::Jacket(int spwan_x, int spwan_y) : Character(spwan_x, spwan_y)
 {
-    HealthPoint = 20;
+    HealthPoint = 100;
     sprites[UNARMED] = 7;
     sprites[PISTOL] = 8;
     sprites[SMG] = 8;
@@ -29,6 +29,33 @@ Jacket::~Jacket()
     moveImg.clear();
 
     delete circle;
+}
+
+void
+Jacket::Move(bool (&hold)[4])
+{
+    if (hold[W_KEY])                    setVy(vy - Acceleration);
+    else if (!hold[S_KEY] && vy < 0)    setVy(vy + 1);
+
+    if (hold[A_KEY])                    setVx(vx - Acceleration);
+    else if (!hold[D_KEY] && vx < 0)    setVx(vx + 1);
+
+    if (hold[S_KEY])                    setVy(vy + Acceleration);
+    else if (!hold[W_KEY] && vy > 0)    setVy(vy - 1);
+
+    if (hold[D_KEY])                    setVx(vx + Acceleration);
+    else if (!hold[A_KEY] && vx > 0)    setVx(vx - 1);
+
+    counter = (counter + 1) % draw_frequency;
+    if (vx == 0 && vy == 0) {
+        sprite_count = 0;
+    } else if (counter == 0) {
+        sprite_count = (sprite_count + 1) % sprites[firearm];
+    }
+
+    // printf("vx: %d, vy: %d\n", vx, vy);
+    circle->x += vx;
+    circle->y += vy;
 }
 
 void
@@ -87,4 +114,17 @@ Jacket::Draw()
     sprintf(buffer, "%d/%d %d", ammo, mag_size, reserved);
     al_draw_text(hudFont, al_map_rgb(255, 255, 255), window_width - hud_width + font_start, font_start + 6 * font_size, 0, buffer);
     al_draw_bitmap(icon, 0, window_height - hud_height, 0);
+}
+
+void Jacket::setRadianCCW(int mouse_x, int mouse_y){
+    auto [x0, y0] = Transform();
+    double vector_x = mouse_x - x0;
+    double vector_y = -(mouse_y - y0);
+    double radian = atan(vector_y / vector_x);
+
+    if (vector_x > 0 && vector_y < 0)   radian += 2 * PI;
+    if (vector_x < 0)                   radian += PI;
+    // printf("vector_x = %lf, vector_y = %lf\n", vector_x, vector_y);
+    // printf("degree = %lf\n", radian * 180 / PI);
+    radian_ccw = radian;
 }

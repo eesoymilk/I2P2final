@@ -1,12 +1,7 @@
 #include "Character.h"
 #include <cmath>
 
-#define MaxSpeed 3
-#define Acceleration 1
-
 const char firearm_names[][10] = {"UNARMED", "PISTOL", "SMG", "AR"};
-// set counter frequency of drawing moving animation
-const int draw_frequency = 10;
 
 Character::Character(int spawn_x, int spawn_y)
 {
@@ -42,7 +37,8 @@ Character::Load_Img()
     for (int i = 0; i < 4; i++) {
         for(int j = 0; j < sprites[i]; j++) {
             ALLEGRO_BITMAP *img;
-            sprintf(buffer, "./%s/%s_%d.png", class_name, firearm_names[i], j);
+            // sprintf(buffer, "./%s/%s_%d.png", class_name, firearm_names[i], j);
+            sprintf(buffer, "./Jacket/%s_%d.png", firearm_names[i], j);
             img = al_load_bitmap(buffer);
             if(img) moveImg.push_back(img);
         }
@@ -71,11 +67,9 @@ Character::Draw()
     al_draw_scaled_rotated_bitmap(curImg, cx, cy, dx, dy, CharacterScale, CharacterScale, angle, 0);
 }
 
-bool
+void
 Character::Move(bool (&hold)[4])
 {
-    // when getting to end point, return true
-    if(circle->x == end_x && circle->y == end_y)    return true;
 
     if (hold[W_KEY])                    setVy(vy - Acceleration);
     else if (!hold[S_KEY] && vy < 0)    setVy(vy + 1);
@@ -99,9 +93,6 @@ Character::Move(bool (&hold)[4])
     // printf("vx: %d, vy: %d\n", vx, vy);
     circle->x += vx;
     circle->y += vy;
-
-    // if not reaching end point, return false
-    return false;
 }
 
 void

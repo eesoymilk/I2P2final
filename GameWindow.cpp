@@ -458,16 +458,6 @@ GameWindow::process_event()
                     break;
                 case ALLEGRO_KEY_P:
                     func_keys[P_KEY] = true;
-                    // if(!PAUSE) {
-                    //     al_stop_timer(timer);
-                    //     al_stop_timer(enemy_pro);
-                    //     PAUSE = true;
-                    // }
-                    // else {
-                    //     al_start_timer(timer);
-                    //     al_start_timer(enemy_pro);
-                    //     PAUSE = false;
-                    // }
                     break;
                 case ALLEGRO_KEY_H:
                     func_keys[H_KEY] = true;
@@ -528,92 +518,6 @@ GameWindow::process_event()
 
     return message;
 }
-
-// void
-// GameWindow::draw_running_map()
-// {
-//     //unsigned int i, j;
-
-//     al_clear_to_color(al_map_rgb(0, 0, 0));
-
-//     //al_clear_to_color(al_map_rgb(100, 100, 100));
-//     al_draw_bitmap(background, -board_x, -board_y, 0);
-//     for (auto weapon : weapons) weapon->Draw();
-//     jacket->Draw();
-//     menu->Draw();
-
-//     //printf("%d %d\n", x_axis, y_axis);
-//     //al_draw_bitmap_region(background, 0, 0, 1200, 800, 0, 0, 0);
-//     //al_draw_bitmap_region(background, 60, 400, 1200, 800, jacket->getCircle()->x - 400, jacket->getCircle()->y - 400, 0);
-//     //al_draw_bitmap(background, jacket->getCircle()->x - 400, jacket->getCircle()->y - 300, 0);
-
-//     /*for(i = 0; i < field_height/40; i++)
-//     {
-//         for(j = 0; j < field_width/40; j++)
-//         {
-//             char buffer[50];
-//             sprintf(buffer, "%d", i*15 + j);
-//             if(level->isRoad(i*15 + j)) {
-//                 al_draw_filled_rectangle(j*40, i*40, j*40+40, i*40+40, al_map_rgb(255, 244, 173));
-//             }
-//             //al_draw_text(font, al_map_rgb(0, 0, 0), j*40, i*40, ALLEGRO_ALIGN_CENTER, buffer);
-//         }
-//     }
-//     for(i=0; i<monsterSet.size(); i++)
-//     {
-//         monsterSet[i]->Draw();
-//     }*/
-
-//     /*for(std::list<Tower*>::iterator it = towerSet.begin(); it != towerSet.end(); it++)
-//         (*it)->Draw();
-
-//     if(selectedTower != -1)
-//         Tower::SelectedTower(mouse_x, mouse_y, selectedTower);
-
-//     al_draw_filled_rectangle(field_width, 0, window_width, window_height, al_map_rgb(100, 100, 100));
-
-//     menu->Draw();*/
-
-//     al_flip_display();
-// }
-
-// void
-// GameWindow::draw_startscene()
-// {
-//     bool start_button = false;
-//     bool help_button = false;
-
-//     //al_clear_to_color(al_map_rgb(100, 100, 100));
-//     //al_draw_bitmap_region(background, jacket->getCircle()->x - 20, jacket->getCircle()->y - 20, 1200, 800, 0, 0, 0);
-//     //al_draw_bitmap_region(background, 60, 400, 1200, 800, jacket->getCircle()->x - 400, jacket->getCircle()->y - 400, 0);
-//     while(!start_button){
-//         if (!al_is_event_queue_empty(event_queue)) {
-//             al_wait_for_event(event_queue, &event);
-//             if(event.type == ALLEGRO_EVENT_KEY_DOWN){
-//                 switch(event.keyboard.keycode){
-//                     case ALLEGRO_KEY_S:
-//                         al_play_sample_instance(clickSound);
-//                         while(al_get_sample_instance_playing(clickSound));
-//                         start_button = true;
-//                         break;
-//                     case ALLEGRO_KEY_T:
-//                         al_play_sample_instance(clickSound);
-//                         if(help_button) help_button = false;
-//                         else help_button = true;
-//                         break;
-//                     case ALLEGRO_KEY_E:
-//                         game_destroy();
-//                         break;
-//                 }
-//             }
-//         }
-//         //if(help_button) printf("1\n");
-//         //else printf("0\n");
-//         if(help_button) al_draw_bitmap(helpscene, 0, 0, 0);
-//         else al_draw_bitmap(startscene, 0, 0, 0);
-//         al_flip_display();
-//     }
-// }
 
 void
 GameWindow::Draw()

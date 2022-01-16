@@ -1,16 +1,6 @@
 #ifndef CHARACTER_H_INCLUDED
 #define CHARACTER_H_INCLUDED
 
-// #ifndef KEYS
-// #define KEYS
-// #define DirKeysUsed 4
-// enum {W_KEY=0, A_KEY, S_KEY, D_KEY};
-// #define GameKeysUsed 3
-// enum {E_KEY = 0, R_KEY, G_KEY};
-// #define FuncKeysUsed 4
-// enum {ENTER_KEY=0, P_KEY, H_KEY, ESCAPE_KEY};
-// #endif
-
 #include <stdio.h>
 #include <string.h>
 #include <vector>
@@ -25,7 +15,12 @@
 #include "Bullet.h"
 #include "global.h"
 
+#define MaxSpeed 3
+#define Acceleration 1
+
 enum {UNARMED = 0, PISTOL, SMG, AR};
+const char firearm_names[][10] = {"UNARMED", "PISTOL", "SMG", "AR"};
+const int draw_frequency = 10;
 
 class Character : public Object
 {
@@ -41,7 +36,7 @@ public:
 
     // Update monster position per frame
     // And detect if it reaches end point but not destroyed
-    bool Move(bool(&hold)[4]);
+    virtual void Move(bool(&hold)[4]);
     void DropWeapon();
     void PickWeapon(Weapon*);
     void FireWeapon(int, int);
@@ -58,7 +53,7 @@ public:
     int getSpriteCnt() {return sprite_count; }
 
     bool Subtract_HP(int);
-    void setRadianCCW(int, int);
+    virtual void setRadianCCW(int, int);
     void setVx(int);
     void setVy(int);
 
@@ -67,22 +62,19 @@ protected:
     char class_name[20];
     int sprites[4];
     std::vector<Bullet*> bullets;
-    //
-private:
     double radian_ccw;
-    // end point
-    int end_x, end_y;
     // animation counter
     int firearm = 0, counter;
     // animation image of current direction
     int sprite_count;
     // VELOCITY
     int vx = 0, vy = 0;
-
     // set of animation images
     std::vector<ALLEGRO_BITMAP*>    moveImg;
     std::vector<ALLEGRO_BITMAP*>    attackImg;
     Weapon *wielding = NULL;
+private:
+
 };
 
 
