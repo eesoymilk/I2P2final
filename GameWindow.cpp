@@ -655,6 +655,7 @@ GameWindow::Draw()
         for (auto enemy : enemies)  enemy->Draw();
         // printf("Drawing Jacket...\n");
         jacket->Draw();
+        for(auto wall: WallMap) wall->Draw();
         // printf("Done!!!...\n\n");
         // menu->Draw();
     } else if (GameState == GAMESTATE_PAUSE) {

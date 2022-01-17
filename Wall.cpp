@@ -21,11 +21,13 @@ Wall::Wall(int x1, int y1, int x2, int y2) : Object()
         xl = min(x1, x2);
         xr = max(x1, x2);
     }
+    tmp = al_load_bitmap("./SMG_icon.png");
 }
 
 Wall::~Wall()
 {
     if (circle != NULL) delete circle;
+    al_destroy_bitmap(tmp);
 }
 
 bool
