@@ -436,6 +436,10 @@ GameWindow::game_update()
 
             int ex = e->getX(), ey = e->getY();
             Weapon* enemy_w = e->getWeapon();
+            if (enemy_w) {
+                if (enemy_w->isReloading()) enemy_w->Reload();
+                else                        enemy_w->CoolDown();
+            }
             bool visible = true;
             for (auto w : WallMap) {
                 if (wallBetween(w, ex, ey, jx, jy)) {
@@ -444,10 +448,6 @@ GameWindow::game_update()
                 }
             }
             if (visible)    e->Assault(jx, jy, WallMap);
-            if (enemy_w) {
-                if (enemy_w->isReloading()) enemy_w->Reload();
-                else                        enemy_w->CoolDown();
-            }
 
             bullets = e->getBullets();
             for (int i = 0; i < bullets.size(); i++) {
@@ -771,9 +771,20 @@ GameWindow::wallBetween(Wall* wall, int x1, int y1, int x2, int y2){
         }
         else return false;
     }
-    double slope = (y1 - y2) / (x1 - x2); double con = y1 - slope * x1;
-    double intersect_y1 = slope * xl + con; if(intersect_y1 >= min(y1, y2) && intersect_y1 <= max(y1, y2) && intersect_y1 >= yl && intersect_y1 <= yr) return true;
-    double intersect_y2 = slope * xr + con; if(intersect_y2 >= min(y1, y2) && intersect_y1 <= max(y1, y2) && intersect_y2 >= yl && intersect_y2 <= yr) return true;
-    double intersect_x1 = (yl - con) / slope; if(intersect_x1 >= min(x1, x2) && intersect_x1 <= max(x1, x2) && intersect_x1 >= xl && intersect_x1 <= xr) return true;
-    double intersect_x2 = (yr - con) / slope; if(intersect_x2 >= min(x1, x2) && intersect_x2 <= max(x1, x2) && intersect_x2 >= xl && intersect_x2 <= xr) return true;
+    double slope = (y1 - y2) / (x1 - x2); double con = y1 - slope * x1; int thick = 30;
+    if(wall->get_type() == 0){
+        int intersect_y = slope * (xl + thick) + con;
+        if(intersect_y >= yl && intersect_y <= yr && intersect_y <= max(y1, y2) && intersect_y >= min(y1, y2))
+            return true;
+        else 
+            return false; 
+    }
+    else{
+        double tmp = (yl + thick - con) / slope;
+        int intersect_x = (int)tmp;
+        if(intersect_x >= xl && intersect_x <= xr && intersect_x <= max(x1, x2) && intersect_x >= min(x1, x2))
+            return true;
+        else 
+            return false;
+    }
 }

@@ -22,6 +22,7 @@ public:
     int get_xr() { return xr; }
     int get_yl() { return yl; }
     int get_yr() { return yr; }
+    int get_type() { return type; }
 
     // Draw image per frame
     // override virtual function "Object::Draw"
@@ -29,6 +30,7 @@ public:
 protected:
     ALLEGRO_BITMAP *tmp = NULL;
     int xl, xr, yl, yr;
+    int type;
 
 private:
 };

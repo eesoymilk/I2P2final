@@ -75,7 +75,7 @@ Weapon::Fire()
     }
     in_magzine--;
     fire_counter = 0;
-    al_play_sample_instance(Sound);// FIRING SOUND EFFECT
+    al_play_sample_instance(Sound); // FIRING SOUND EFFECT
     return true;
 }
 
@@ -90,6 +90,7 @@ Weapon::StartReload()
         // RELOAD BUT FULL MAG EFFECT
         return;
     }
+    // RELOADING SOUND EFFECT
     reloading = true;
     reload_counter = 0;
     return;
@@ -102,7 +103,7 @@ Weapon::Reload()
         reload_counter++;
         return;
     }
-    al_play_sample_instance(ReloadSound);// RELOAD SOUND EFFECT
+    al_play_sample_instance(ReloadSound);   // LOADED SOUND EFFECT
     int to_reload = magzine_size - in_magzine;
     if (reserved_bullets >= to_reload) {
         reserved_bullets -= to_reload;

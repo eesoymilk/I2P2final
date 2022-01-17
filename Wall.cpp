@@ -14,12 +14,14 @@ Wall::Wall(int x1, int y1, int x2, int y2) : Object()
         xr = x1 + thick;
         yl = min(y1, y2);
         yr = max(y1, y2);
+        type = 0;
     }
     else{
         yl = y1 - thick;
         yr = y1 + thick;
         xl = min(x1, x2);
         xr = max(x1, x2);
+        type = 1;
     }
     tmp = al_load_bitmap("./SMG_icon.png");
 }
