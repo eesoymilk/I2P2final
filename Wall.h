@@ -13,6 +13,7 @@ class Wall : public Object
 public:
     Wall(int, int, int, int);
     virtual ~Wall();
+    void Draw() { return; }
     bool overlap(int, int);
     int get_xl() { return xl; }
     int get_xr() { return xr; }

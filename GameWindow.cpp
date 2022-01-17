@@ -169,7 +169,7 @@ GameWindow::GameWindow()
 
     // printf("Loading Bitmaps...\n");
     icon = al_load_bitmap("./icon.jpg");
-    background = al_load_bitmap("./Map2.png");
+    background = al_load_bitmap("./Map1.png");
     startscene = al_load_bitmap("./Scene.jpg");
     helpscene = al_load_bitmap("./HelpScene.jpg");
     stopscene = al_load_bitmap("./StopScene.png");
@@ -260,6 +260,36 @@ GameWindow::level_init(int l)
         w = spawnWeapon(arm, x, y);
         weapons.push_back(w);
     }
+
+    fscanf(file, "%s", buffer);
+    Node_Amount = atoi(buffer);
+    for(int i=0; i < Node_Amount; i++)
+    {
+        int x, y;
+        fscanf(file, "%d %d", &x, &y);
+        LevelMap.push_back({x, y});
+    }
+
+    fscanf(file, "%s", buffer);
+    Wall_Amount = atoi(buffer);
+
+    for(int i = 0; i < Wall_Amount; i++){
+        int index_1, index_2;
+        fscanf(file, "%d %d", &index_1, &index_2);
+        Wall* new_wall = new Wall(LevelMap[index_1].first, LevelMap[index_1].second, LevelMap[index_2].first, LevelMap[index_2].second);
+        WallMap.push_back(new_wall);
+    }
+
+    /*fscanf(file, "%s", buffer);
+    Door_Amount = atoi(buffer);
+
+    for(int i = 0; i < Door_Amount; i++){
+        int index_1, index_2;
+        fscanf(file, "%d %d", &index_1, &index_2);
+        Door* new_door = new Door(LevelMap[index_1].first, LevelMap[index_1].second, LevelMap[index_2].first, LevelMap[index_2].second);
+        DoorMap.push_back(new_door);
+    }*/
+
     fclose(file);
 }
 
@@ -321,7 +351,7 @@ GameWindow::game_update()
             Weapon* pick_target;
             Circle* jacket_cirle = jacket->getCircle();
 
-            for (auto weapon : weapons) 
+            for (auto weapon : weapons)
                 if (weapon->isDropped() && Circle::isOverlap(jacket_cirle, weapon->getCircle()))
                     near_weapons.push_back(weapon);
 
@@ -358,8 +388,8 @@ GameWindow::game_update()
                 if (mouse_hold) jacket->FireWeapon(mouse_x, mouse_y);
             }
         }
-        
-        jacket->Move(dir_keys);
+
+        jacket->Move(dir_keys, WallMap);
         std::vector<Bullet*>    bullets = jacket->getBullets();
         std::vector<int>        erase_idices;
         for (int i = 0; i < bullets.size(); i++) {
@@ -380,8 +410,8 @@ GameWindow::game_update()
         for (auto idx : erase_idices)   jacket->EraseBullet(idx);
 
         success = true;
-        for (auto e : enemies)  if (e->getHP() != 0)    success = false;    
-        
+        for (auto e : enemies)  if (e->getHP() != 0)    success = false;
+
 
         camera_origin_x = jacket->getCircle()->x - window_width / 2;
         camera_origin_y = jacket->getCircle()->y - window_height / 2;
@@ -391,7 +421,7 @@ GameWindow::game_update()
         if(camera_origin_y < 0) camera_origin_y = 0;
         board_x = camera_origin_x;
         board_y = camera_origin_y;
-    
+
     }
 
     int msg = GAME_CONTINUE, nxtState = GameState;
@@ -438,7 +468,7 @@ GameWindow::game_update()
     }
     for (int i = 0; i < FuncKeysUsed; i++)
         if (func_keys[i])   func_keys[i] = false;
-    
+
     Draw();
     preGameState = GameState;
     GameState = nxtState;
@@ -448,7 +478,7 @@ GameWindow::game_update()
 
 void
 GameWindow::game_reset()
-{   
+{
     printf("Resetting...\n");
     mute = false;
     update = false;
@@ -634,7 +664,7 @@ GameWindow::Draw()
     } else if (GameState == GAMESTATE_FAILURE) {
         al_draw_bitmap(failscene, 0, 0, 0);
     } else if (GameState == GAMESTATE_END) {
-        
+
     }
     al_flip_display();
 }

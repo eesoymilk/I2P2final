@@ -68,7 +68,7 @@ Character::Draw()
 }
 
 void
-Character::Move(bool (&hold)[4])
+Character::Move(bool (&hold)[4], std::vector<Wall*> WallMap)
 {
 
     if (hold[W_KEY])                    setVy(vy - Acceleration);
@@ -93,6 +93,13 @@ Character::Move(bool (&hold)[4])
     // printf("vx: %d, vy: %d\n", vx, vy);
     circle->x += vx;
     circle->y += vy;
+    for(auto wall: WallMap){
+        if(wall->overlap(circle->x, circle->y)){
+            circle->x -= vx;
+            circle->y -= vy;
+            break;
+        }
+    }
 }
 
 void

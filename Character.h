@@ -14,6 +14,7 @@
 #include "Weapon.h"
 #include "Bullet.h"
 #include "global.h"
+#include "Wall.h"
 
 #define MaxSpeed 3
 #define Acceleration 1
@@ -35,7 +36,7 @@ public:
 
     // Update monster position per frame
     // And detect if it reaches end point but not destroyed
-    virtual void Move(bool(&hold)[4]);
+    virtual void Move(bool(&hold)[4], std::vector<Wall*>);
     void DropWeapon();
     void PickWeapon(Weapon*);
     void FireWeapon(int, int);
