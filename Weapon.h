@@ -20,7 +20,7 @@ class Weapon : public Object
 {
 public:
     Weapon();
-    virtual ~Weapon();
+    ~Weapon();
 
     // Draw image per frame
     // override virtual function "Object::Draw"

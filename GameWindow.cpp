@@ -132,11 +132,7 @@ GameWindow::GameWindow()
     event_queue = al_create_event_queue();
 
     timer = al_create_timer(1.0 / FPS);
-    enemy_pro = al_create_timer(1.0 / FPS);
     record_time = al_create_timer(1.0 / FPS);
-
-    if(timer == NULL || enemy_pro == NULL)
-        show_err_msg(-1);
 
     if (display == NULL || event_queue == NULL)
         show_err_msg(-1);
@@ -162,7 +158,6 @@ GameWindow::GameWindow()
     al_register_event_source(event_queue, al_get_keyboard_event_source());
     al_register_event_source(event_queue, al_get_mouse_event_source());
     al_register_event_source(event_queue, al_get_timer_event_source(timer));
-    al_register_event_source(event_queue, al_get_timer_event_source(enemy_pro));
 
 
     board_x = 0; board_y = 0;
@@ -312,10 +307,21 @@ GameWindow::game_begin(int l)
     game_reset();
     printf(">>> In Game <<<\n");
     printf("Clearing Jacket...\n");
-    // if (jacket) delete jacket;
+    if (jacket) delete jacket;
     printf("Clearing Enemies...\n");
+    for (int i = 0; i < enemies.size(); i++) {
+        delete enemies[i];
+        printf("One Enemy Deleted.\n");
+    }
+    printf("All Enemies Deleted.\n");
     enemies.clear();
+    printf("Clearing Walls...\n");
+    for (int i = 0; i < WallMap.size(); i++)    delete WallMap[i];
+    WallMap.clear();
+    printf("Clearing Nodes...\n");
+    LevelMap.clear();
     printf("Clearing Weapons...\n");
+    for (int i = 0; i < weapons.size(); i++)    delete weapons[i];
     weapons.clear();
     printf("All Cleared.\n");
 
@@ -327,7 +333,6 @@ GameWindow::game_begin(int l)
     /*al_play_sample_instance(startSound);
     while(al_get_sample_instance_playing(startSound));*/
     al_play_sample_instance(gameSound);
-    al_start_timer(enemy_pro);
 }
 
 int
@@ -553,7 +558,6 @@ GameWindow::game_reset()
     printf("Stop All Timers...\n");
     // stop timer
     // al_stop_timer(timer);
-    al_stop_timer(enemy_pro);
     al_set_timer_count(record_time, 0);
 }
 
@@ -574,7 +578,6 @@ GameWindow::game_destroy()
     al_destroy_font(Large_font);
 
     al_destroy_timer(timer);
-    al_destroy_timer(enemy_pro);
 
     al_destroy_bitmap(icon);
     al_destroy_bitmap(background);

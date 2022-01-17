@@ -10,7 +10,7 @@
 class Object {
 public:
     Object() {}
-    ~Object() {}
+    ~Object() {};
 
     // pure function for drawing object
     virtual void Draw() = 0;

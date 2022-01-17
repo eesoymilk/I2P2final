@@ -16,18 +16,18 @@ Character::Character(int spawn_x, int spawn_y)
 }
 
 
-Character::~Character()
-{
-    for(unsigned int i = 0; i < moveImg.size(); i++) {
-        ALLEGRO_BITMAP *img = moveImg[i];
-        moveImg.erase(moveImg.begin() + i);
-        i--;
-        al_destroy_bitmap(img);
-    }
-    moveImg.clear();
+// Character::~Character()
+// {
+//     for(unsigned int i = 0; i < moveImg.size(); i++) {
+//         ALLEGRO_BITMAP *img = moveImg[i];
+//         moveImg.erase(moveImg.begin() + i);
+//         i--;
+//         al_destroy_bitmap(img);
+//     }
+//     moveImg.clear();
 
-    delete circle;
-}
+//     delete circle;
+// }
 
 void
 Character::Load_Img()

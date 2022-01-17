@@ -35,6 +35,7 @@ Enemy::~Enemy()
     bullets.clear();
 
     delete circle;
+    printf("Enemy Deleted!\n");
 }
 
 void
@@ -86,16 +87,16 @@ Enemy::FireWeapon(double ux, double uy)
 void
 Enemy::Assault(int jx, int jy, std::vector<Wall*> WallMap)
 {
-    printf("I see you...\n");
+    // printf("I see you...\n");
     auto [ux, uy] = UnitVector(jx - getX(), jy - getY());
     setRadianCCW(jx, jy);
     if (Distance(jx, jy) > 500) {
         Move(ux, uy, WallMap);
     }
     if (wielding) {
-        printf("Enemy is about to fire.\n");
-        if (wielding->getAmmo() != 0)   FireWeapon(ux, uy);
-        else                            wielding->Reload();
+        // printf("Enemy is about to fire.\n");
+        if (wielding->getAmmo() > 0)        FireWeapon(ux, uy);
+        else if (!wielding->isReloading())  wielding->StartReload();
     }
 }
 
@@ -106,7 +107,7 @@ Enemy::Draw()
     ALLEGRO_BITMAP* curImg;
 
     for (unsigned int i = 0; i < this->bullets.size(); i++) {
-        printf("Drawing Enemy's Bullet...\n");
+        // printf("Drawing Enemy's Bullet...\n");
         this->bullets[i]->Draw();
     }
 

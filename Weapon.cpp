@@ -21,10 +21,11 @@ Weapon::~Weapon()
     al_destroy_bitmap(weaponImg);
     al_destroy_bitmap(bulletImg);
     al_destroy_bitmap(icon);
-    if (circle != NULL) delete circle;
     al_destroy_sample(sample);
     al_destroy_sample_instance(Sound);
     al_destroy_sample_instance(ReloadSound);
+    delete circle;
+    printf("Weapon deleted.\n");
 }
 
 void
@@ -69,7 +70,7 @@ bool
 Weapon::Fire()
 {
     if (fire_counter < fire_rate)   return false;
-    if (in_magzine == 0) {
+    if (in_magzine <= 0) {
         // DRY MAG SOUND EFFECT
         return false;
     }
@@ -82,6 +83,7 @@ Weapon::Fire()
 void
 Weapon::StartReload()
 {
+    printf("Start to Reload!\n");
     if (reserved_bullets == 0) {
         // RELOAD BUT NO AMMO SOUND EFFECT
         return;
@@ -99,6 +101,8 @@ Weapon::StartReload()
 void
 Weapon::Reload()
 {
+    printf("Reloading!\n");
+    printf("%d / %d\n", reload_counter, reload_time);
     if (reload_counter < reload_time) {
         reload_counter++;
         return;

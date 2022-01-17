@@ -25,7 +25,7 @@ class Character : public Object
 {
 public:
     Character(int, int);
-    virtual ~Character();
+    virtual ~Character() {};
 
     // override virtual function "Object::Draw"
     virtual void Draw();

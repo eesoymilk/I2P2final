@@ -16,6 +16,7 @@
 #include "SubmachineGun.h"
 #include "AssaultRifle.h"
 #include "Wall.h"
+#include "Dummy.h"
 //
 
 #define GAME_EXIT -1
