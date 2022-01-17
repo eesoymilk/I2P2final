@@ -34,7 +34,7 @@ Character::Load_Img()
 {
     char buffer[50];
 
-    for (int i = 0; i < 4; i++) {
+    for (int i = 0; i < 5; i++) {
         for(int j = 0; j < sprites[i]; j++) {
             ALLEGRO_BITMAP *img;
             // sprintf(buffer, "./%s/%s_%d.png", class_name, firearm_names[i], j);
@@ -136,10 +136,18 @@ Character::FireWeapon(int mouse_x, int mouse_y)
 }
 
 void
-Character::takeDamage(int damage)
+Character::TakeDamage(int damage)
 {
     if (damage >= HP)   HP = 0;
     else                HP -= damage;
+}
+
+void
+Character::EraseBullet(int i)
+{
+    Bullet* b = bullets[i];
+    bullets.erase(bullets.begin() + i);
+    delete b;
 }
 
 void Character::setRadianCCW(int mouse_x, int mouse_y){

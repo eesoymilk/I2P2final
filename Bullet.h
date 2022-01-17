@@ -27,8 +27,8 @@ public:
 
 protected:
     ALLEGRO_BITMAP *bulletImg;
-    ALLEGRO_SAMPLE *sample;
-    ALLEGRO_SAMPLE_INSTANCE *arrow = NULL;
+    // ALLEGRO_SAMPLE *sample;
+    // ALLEGRO_SAMPLE_INSTANCE *arrow = NULL;
 
 private:
     int speed = 8;

@@ -16,9 +16,14 @@ Bullet::Bullet(Circle *shooter, double ux, double uy, int damage, int speed, ALL
 
 Bullet::~Bullet()
 {
+    // printf("Deleteing Circle...\n");
     delete circle;
-    al_destroy_sample_instance(arrow);
-    al_destroy_sample(sample);
+//     printf("Destorying image...\n");
+//     al_destroy_bitmap(bulletImg);
+//     printf("Destorying arrpw...\n");
+//     al_destroy_sample_instance(arrow);
+//     printf("Destorying sample...\n");
+//     al_destroy_sample(sample);
 }
 
 void

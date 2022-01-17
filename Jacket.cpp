@@ -11,6 +11,7 @@ Jacket::Jacket(int spwan_x, int spwan_y) : Character(spwan_x, spwan_y)
     sprites[PISTOL] = 8;
     sprites[SMG] = 8;
     sprites[AR] = 8;
+    sprites[DEAD] = 7;
 
     hudFont = al_load_ttf_font("pirulen.ttf", font_size, 0); // load font
     strncpy(class_name, "Jacket", 20);
@@ -19,7 +20,6 @@ Jacket::Jacket(int spwan_x, int spwan_y) : Character(spwan_x, spwan_y)
 
 Jacket::~Jacket()
 {
-    std::vector<ALLEGRO_BITMAP*> moveImg = getImg().first;
     for(unsigned int i = 0; i < moveImg.size(); i++) {
         ALLEGRO_BITMAP *img = moveImg[i];
         moveImg.erase(moveImg.begin() + i);
@@ -27,8 +27,24 @@ Jacket::~Jacket()
         al_destroy_bitmap(img);
     }
     moveImg.clear();
-
+    for(unsigned int i = 0; i < attackImg.size(); i++) {
+        ALLEGRO_BITMAP *img = attackImg[i];
+        attackImg.erase(attackImg.begin() + i);
+        i--;
+        al_destroy_bitmap(img);
+    }
+    attackImg.clear();
+    printf("Images Cleared.\n");
+    al_destroy_font(hudFont);
+    al_destroy_bitmap(icon);
+    printf("HUD Cleared.\n");
+    for (int i = 0; i < bullets.size(); i++)
+        delete bullets[i];
+    // for (auto b : bullets)  delete b;
+    bullets.clear();
+    printf("Bullets Cleared.\n");
     delete circle;
+    printf("Circle Cleared.\n");
 }
 
 void
@@ -60,24 +76,26 @@ Jacket::Move(bool (&hold)[4])
 
 void
 Jacket::Draw()
-{
+{   
+    int w, h, offset = 0;
+    ALLEGRO_BITMAP* curImg;
+
     for (unsigned int i = 0; i < this->bullets.size(); i++)
         this->bullets[i]->Draw();
 
-    int offset = 0;
-    for (int i = 0; i < getFirearm(); i++)       offset += sprites[i];
-    // std::vector<ALLEGRO_BITMAP*> moveImg = getImg().first;
-    if (!moveImg[offset + getSpriteCnt()])  return;
-
-    // get height and width of sprite bitmap
-    ALLEGRO_BITMAP* curImg = moveImg[offset + getSpriteCnt()];
-    int w = al_get_bitmap_width(curImg);
-    int h = al_get_bitmap_height(curImg);
+    if (HP) {
+        for (int i = 0; i < getFirearm(); i++)       offset += sprites[i];
+        if (!moveImg[offset + getSpriteCnt()])  return;
+        curImg = moveImg[offset + getSpriteCnt()];
+    } else {
+        for (int i = 0; i < 4; i++) offset += sprites[i];
+        offset += (int)(getRadianCCW() * 180 / PI) % sprites[4];
+    }
+    w = al_get_bitmap_width(curImg);
+    h = al_get_bitmap_height(curImg);
     double cx = w / 2, cy = h / 2;
     double angle = 2 * PI - getRadianCCW();
     auto [dx, dy] = Transform();
-    //printf("%d %d\n", cam.first, cam.second);
-    // printf("Jacket: %d %d %d %d\n", circle->x, circle->y, dx, dy);
     al_draw_scaled_rotated_bitmap(curImg, cx, cy, dx, dy, CharacterScale, CharacterScale, angle, 0);
 
 
@@ -112,7 +130,8 @@ Jacket::Draw()
     al_draw_filled_rectangle(4 * font_size, window_height - hud_height + font_start, 4 * font_size + (int)length, window_height - hud_height + font_start + font_size, al_map_rgb(255, 0, 0));
     sprintf(buffer, "%d/%d   %d", ammo, mag_size, reserved);
     al_draw_text(hudFont, al_map_rgb(255, 255, 255), font_start, window_height - font_start - 3 * font_size / 2, 0, buffer);
-    w = al_get_bitmap_width(icon); h = al_get_bitmap_height(icon);
+    w = al_get_bitmap_width(icon);
+    h = al_get_bitmap_height(icon);
     al_draw_bitmap(icon, hud_width - w - font_size, window_height - h - font_start, 0);
 }
 

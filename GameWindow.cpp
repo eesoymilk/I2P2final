@@ -15,7 +15,7 @@
 
 // EDITED
 
-#define MaxLevel 4
+#define MaxLevel 3
 #define Acceleration 5
 int background_width;
 int background_height;
@@ -56,8 +56,12 @@ GameWindow::spawnEnemy(int arm, int x, int y)
         w = new AssaultRifle();
         break;
     }
-    if (w)  weapons.push_back(w);
-    e->PickWeapon(w);
+    // printf("Spawning Enemy...\n");
+    if (w) {
+        weapons.push_back(w);
+        e->PickWeapon(w);
+    }
+    // printf("Spawning Enemy...\n");
     return e;
 }
 
@@ -165,7 +169,7 @@ GameWindow::GameWindow()
 
     // printf("Loading Bitmaps...\n");
     icon = al_load_bitmap("./icon.jpg");
-    background = al_load_bitmap("./Map1.png");
+    background = al_load_bitmap("./Map2.png");
     startscene = al_load_bitmap("./Scene.jpg");
     helpscene = al_load_bitmap("./HelpScene.jpg");
     stopscene = al_load_bitmap("./StopScene.png");
@@ -209,6 +213,7 @@ GameWindow::game_menu()
 void
 GameWindow::level_init(int l)
 {
+    printf("Initilizing Level %d...\n", l);
     char buffer[50];
     FILE *file;
     int n, x, y, arm;
@@ -263,10 +268,13 @@ GameWindow::game_begin(int l)
 {
     game_reset();
     printf(">>> In Game <<<\n");
-
-    if (jacket) delete jacket;
+    printf("Clearing Jacket...\n");
+    // if (jacket) delete jacket;
+    printf("Clearing Enemies...\n");
     enemies.clear();
+    printf("Clearing Weapons...\n");
     weapons.clear();
+    printf("All Cleared.\n");
 
     if (l == 0) jacket = spawnJacket(0, 0);
     else        level_init(l);
@@ -282,30 +290,10 @@ GameWindow::game_begin(int l)
 int
 GameWindow::game_run()
 {
-    // printf("Game Running...\n");
     int message = GAME_CONTINUE;
 
     if (!al_is_event_queue_empty(event_queue))
         message = process_event();
-    
-    if (message == GAME_NEXT) {
-        switch (GameState)
-        {
-        case GAMESTATE_MENU:        GameState = GAMESTATE_INGAME;   break;
-        case GAMESTATE_INGAME:      GameState = GAMESTATE_END;      break;
-        case GAMESTATE_TUTORIAL:    GameState = GAMESTATE_MENU;     break;
-        case GAMESTATE_PAUSE:       GameState = GAMESTATE_INGAME;   break;
-        case GAMESTATE_END:         GameState = GAMESTATE_MENU;
-        }
-    } else if (message == GAME_STOP) {
-        switch (GameState)
-        {
-        case GAMESTATE_MENU:        GameState = GAMESTATE_TUTORIAL; break;
-        case GAMESTATE_INGAME:      GameState = GAMESTATE_PAUSE;    break;
-        case GAMESTATE_TUTORIAL:    GameState = GAMESTATE_MENU;     break;
-        case GAMESTATE_PAUSE:       GameState = GAMESTATE_MENU;     break;
-        }
-    }
 
     return message;
 }
@@ -313,47 +301,29 @@ GameWindow::game_run()
 int
 GameWindow::game_update()
 {
-    int message = GAME_CONTINUE;
-    if (func_keys[ENTER_KEY]) {
-        func_keys[ENTER_KEY] = false;
-        if (GameState != GAMESTATE_INGAME)
-            message = GAME_NEXT;
-    } else if (func_keys[H_KEY]) {
-        func_keys[H_KEY] = false;
-        if (GameState == GAMESTATE_TUTORIAL)
-            message = GAME_NEXT;
-        else if (GameState == GAMESTATE_MENU)
-            message = GAME_STOP;
-    } else if (func_keys[ESCAPE_KEY]) {
-        func_keys[ESCAPE_KEY] = false;
-        if (GameState == GAMESTATE_MENU || GameState == GAMESTATE_END)
-            message = GAME_EXIT;
-        else
-            message = GAME_STOP;
-    }
-
-    if (GameState == GAMESTATE_MENU && (preGameState == GAMESTATE_PAUSE || preGameState == GAMESTATE_END)) {
+    if (GameState == GAMESTATE_MENU && preGameState != GAMESTATE_MENU) {
         game_menu();
     }
 
-    if (GameState == GAMESTATE_INGAME) {
-        if (preGameState == GAMESTATE_MENU) {
-            printf("Game Begins!!!\n");
-            level = 1;
+    bool success = false;
+    if (GameState == GAMESTATE_PLAYING) {
+        if (preGameState == GAMESTATE_MENU)
+            game_begin(1);
+        if (preGameState == GAMESTATE_SUCCESS)
+            game_begin(level + 1);
+        if (preGameState == GAMESTATE_FAILURE)
             game_begin(level);
-        }
+
         Weapon* w = jacket->getWeapon();
-        
         if (game_keys[E_KEY]) {
             game_keys[E_KEY] = false;
             std::vector<Weapon*> near_weapons;
             Weapon* pick_target;
             Circle* jacket_cirle = jacket->getCircle();
 
-            for (auto weapon : weapons) {
+            for (auto weapon : weapons) 
                 if (weapon->isDropped() && Circle::isOverlap(jacket_cirle, weapon->getCircle()))
                     near_weapons.push_back(weapon);
-            }
 
             if (!near_weapons.empty()) {
                 printf("Picking Weapon...\n");
@@ -391,27 +361,27 @@ GameWindow::game_update()
         
         jacket->Move(dir_keys);
         std::vector<Bullet*>    bullets = jacket->getBullets();
-        printf("%d Bullets in Air.\n", bullets.size());
-        for (auto it = bullets.begin(); it != bullets.end(); ) {
-            (*it)->Move();
-            int bx = (*it)->getX(), by = (*it)->getY();
-            if (bx < 0 || bx > background_width || by < 0 || by > background_height)
-                it = bullets.erase(it);
-            else
-                it++;
+        std::vector<int>        erase_idices;
+        for (int i = 0; i < bullets.size(); i++) {
+            bullets[i]->Move();
+            int bx = bullets[i]->getX(), by = bullets[i]->getY();
+            if (bx < 0 || bx > background_width || by < 0 || by > background_height) {
+                erase_idices.push_back(i);
+                continue;
+            }
+            for (int j = 0; j < enemies.size(); j++) {
+                if (Circle::isOverlap(enemies[j]->getCircle(), bullets[i]->getCircle())) {
+                    enemies[j]->TakeDamage(bullets[i]->getDamage());
+                    erase_idices.push_back(i);
+                }
+            }
         }
+        erase_idices.clear();
+        for (auto idx : erase_idices)   jacket->EraseBullet(idx);
 
-        // for (int i = 0; i < bullets.size(); i++) {
-        //     bullets[i]->Move();
-        //     int bx = bullets[i]->getX(), by = bullets[i]->getY();
-        //     if (bx < 0 || bx > background_width || by < 0 || by > background_height)
-        //     // for (int j = 0; j < enemies.size(); j++) {
-        //     //     if (Circle::isOverlap(enemies[j]->getCircle(), bullets[i]->getCircle())) {
-        //     //         enemies[j]->takeDamage(bullets[i]->getDamage());
-                    
-        //     //     }
-        //     // }
-        // }
+        success = true;
+        for (auto e : enemies)  if (e->getHP() != 0)    success = false;    
+        
 
         camera_origin_x = jacket->getCircle()->x - window_width / 2;
         camera_origin_y = jacket->getCircle()->y - window_height / 2;
@@ -424,9 +394,56 @@ GameWindow::game_update()
     
     }
 
+    int msg = GAME_CONTINUE, nxtState = GameState;
+    switch (GameState)
+    {
+    case GAMESTATE_MENU:
+        if (func_keys[ENTER_KEY])       nxtState = GAMESTATE_PLAYING;
+        else if (func_keys[H_KEY])      nxtState = GAMESTATE_TUTORIAL;
+        else if (func_keys[ESCAPE_KEY]) msg = GAME_EXIT;
+        break;
+    case GAMESTATE_TUTORIAL:
+        for (int i = 0; i < FuncKeysUsed; i++) {
+            if (func_keys[i]) {
+                nxtState = GAMESTATE_MENU;
+                break;
+            }
+        }
+        break;
+    case GAMESTATE_PLAYING:
+        if (func_keys[P_KEY])           nxtState = GAMESTATE_PAUSE;
+        else if (success)               nxtState = GAMESTATE_SUCCESS;
+        else if (jacket->getHP() == 0)  nxtState = GAMESTATE_FAILURE;
+        break;
+    case GAMESTATE_PAUSE:
+        if (func_keys[P_KEY] || func_keys[ENTER_KEY])
+            nxtState = GAMESTATE_PLAYING;
+        else if (func_keys[ESCAPE_KEY])
+            nxtState = GAMESTATE_MENU;
+        break;
+    case GAMESTATE_SUCCESS:
+        if (func_keys[ENTER_KEY]) {
+            if (level == MaxLevel)  nxtState = GAMESTATE_END;
+            else                    nxtState = GAMESTATE_PLAYING;
+        }
+        break;
+    case GAMESTATE_FAILURE:
+        if (func_keys[ENTER_KEY])       nxtState = GAMESTATE_PLAYING;
+        else if (func_keys[ESCAPE_KEY]) nxtState = GAMESTATE_MENU;
+        break;
+    case GAMESTATE_END:
+        if (func_keys[ENTER_KEY])       nxtState = GAMESTATE_MENU;
+        else if (func_keys[ESCAPE_KEY]) msg = GAME_EXIT;
+        break;
+    }
+    for (int i = 0; i < FuncKeysUsed; i++)
+        if (func_keys[i])   func_keys[i] = false;
+    
+    Draw();
     preGameState = GameState;
+    GameState = nxtState;
 
-    return message;
+    return msg;
 }
 
 void
@@ -568,7 +585,7 @@ GameWindow::process_event()
                 if (mouse_hold)     mouse_hold = false;
             }
         } else if (event.type == ALLEGRO_EVENT_MOUSE_AXES) {
-            if (GameState == GAMESTATE_INGAME) {
+            if (GameState == GAMESTATE_PLAYING) {
                 mouse_x = event.mouse.x;
                 mouse_y = event.mouse.y;
                 // printf("mouse_x = %d, mouse_y = %d\n", mouse_x, mouse_y);
@@ -581,12 +598,8 @@ GameWindow::process_event()
 
     // printf("Event Processed.\n");
 
-    if(update) {
-        // update each object in game
+    if (update) {
         message = game_update();
-
-        // Re-draw map
-        Draw();
         update = false;
     }
 
@@ -596,10 +609,13 @@ GameWindow::process_event()
 void
 GameWindow::Draw()
 {
+    // printf("Drawing...\n");
     if (GameState == GAMESTATE_MENU) {
         // printf("Drawing Menu...\n");
         al_draw_bitmap(startscene, 0, 0, 0);
-    } else if (GameState == GAMESTATE_INGAME) {
+    } else if (GameState == GAMESTATE_TUTORIAL) {
+        al_draw_bitmap(helpscene, 0, 0, 0);
+    } else if (GameState == GAMESTATE_PLAYING) {
         // printf("Drawing Gamescene...\n");
         // printf("Drawing Map...\n");
         al_draw_bitmap(background, -board_x, -board_y, 0);
@@ -609,14 +625,16 @@ GameWindow::Draw()
         for (auto enemy : enemies)  enemy->Draw();
         // printf("Drawing Jacket...\n");
         jacket->Draw();
+        // printf("Done!!!...\n\n");
         // menu->Draw();
-    } else if (GameState == GAMESTATE_TUTORIAL) {
-        al_draw_bitmap(helpscene, 0, 0, 0);
     } else if (GameState == GAMESTATE_PAUSE) {
         al_draw_bitmap(stopscene, 0, 0, 0);
+    } else if (GameState == GAMESTATE_SUCCESS) {
+        al_draw_bitmap(clearscene, 0, 0, 0);
+    } else if (GameState == GAMESTATE_FAILURE) {
+        al_draw_bitmap(failscene, 0, 0, 0);
     } else if (GameState == GAMESTATE_END) {
-        if(jacket->getHP() == 0) al_draw_bitmap(failscene, 0, 0, 0);
-        else al_draw_bitmap(clearscene, 0, 0, 0);
+        
     }
     al_flip_display();
 }

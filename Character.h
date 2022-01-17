@@ -10,7 +10,7 @@
 #include <allegro5/allegro_ttf.h>
 #include <allegro5/allegro_primitives.h>
 #include "Circle.h"
-#include "Object.h"
+#include "Object.h"£zssss£z£z
 #include "Weapon.h"
 #include "Bullet.h"
 #include "global.h"
@@ -18,8 +18,8 @@
 #define MaxSpeed 3
 #define Acceleration 1
 
-enum {UNARMED = 0, PISTOL, SMG, AR};
-const char firearm_names[][10] = {"UNARMED", "PISTOL", "SMG", "AR"};
+enum {UNARMED = 0, PISTOL, SMG, AR, DEAD};
+const char firearm_names[][10] = {"UNARMED", "PISTOL", "SMG", "AR", "DEAD"};
 
 class Character : public Object
 {
@@ -39,11 +39,12 @@ public:
     void DropWeapon();
     void PickWeapon(Weapon*);
     void FireWeapon(int, int);
-    void takeDamage(int);
+    void TakeDamage(int);
+    void EraseBullet(int);
 
     // functions that return informations of monster
     Weapon* getWeapon() { return wielding; }
-    std::vector<Bullet*> getBullets() { return bullets; }
+    std::vector<Bullet*>& getBullets() { return bullets; }
     double getRadianCCW() { return radian_ccw; }
     int getVx() { return vx; }
     int getVy() { return vy; }
@@ -59,7 +60,7 @@ public:
 protected:
     int HP = 20;
     char class_name[20];
-    int sprites[4];
+    int sprites[5];
     std::vector<Bullet*> bullets;
     double radian_ccw;
     // animation counter

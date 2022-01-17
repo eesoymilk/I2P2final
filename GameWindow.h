@@ -20,14 +20,16 @@
 
 #define GAME_EXIT -1
 #define GAME_CONTINUE 0
-#define GAME_NEXT 1
-#define GAME_STOP 2
+// #define GAME_NEXT 1
+// #define GAME_STOP 2
 
 #define GAMESTATE_MENU      0
-#define GAMESTATE_INGAME    1
-#define GAMESTATE_TUTORIAL  2
+#define GAMESTATE_TUTORIAL  1
+#define GAMESTATE_PLAYING   2
 #define GAMESTATE_PAUSE     3
-#define GAMESTATE_END       4
+#define GAMESTATE_SUCCESS   4
+#define GAMESTATE_FAILURE   5
+#define GAMESTATE_END       6
 
 #define MaxSpeed 3
 #define Acceleration 1
