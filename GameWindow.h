@@ -91,11 +91,13 @@ private:
     ALLEGRO_FONT *font = NULL;
     ALLEGRO_FONT *Medium_font = NULL;
     ALLEGRO_FONT *Large_font = NULL;
+    ALLEGRO_FONT *hudFont = NULL;
 
     ALLEGRO_EVENT_QUEUE *event_queue = NULL;
     ALLEGRO_EVENT event;
     ALLEGRO_TIMER *timer = NULL;
     ALLEGRO_TIMER *enemy_pro = NULL;
+    ALLEGRO_TIMER *record_time = NULL;
 
     ALLEGRO_SAMPLE *sample = NULL;
     ALLEGRO_SAMPLE_INSTANCE *clickSound = NULL;
@@ -116,6 +118,7 @@ private:
     int Node_Amount = 0;
     int Wall_Amount = 0;
     int Door_Amount = 0;
+    long long int record[3];
 
     bool update = false;
     bool mute = false;

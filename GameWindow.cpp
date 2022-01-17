@@ -133,6 +133,7 @@ GameWindow::GameWindow()
 
     timer = al_create_timer(1.0 / FPS);
     enemy_pro = al_create_timer(1.0 / FPS);
+    record_time = al_create_timer(1.0 / FPS);
 
     if(timer == NULL || enemy_pro == NULL)
         show_err_msg(-1);
@@ -154,6 +155,7 @@ GameWindow::GameWindow()
     font = al_load_ttf_font("Caviar_Dreams_Bold.ttf", 12,0);        // load small font
     Medium_font = al_load_ttf_font("Caviar_Dreams_Bold.ttf", 24,0); // load medium font
     Large_font = al_load_ttf_font("Caviar_Dreams_Bold.ttf", 36,0);  // load large font
+    hudFont = al_load_ttf_font("pirulen.ttf", font_size, 0);
 
     // printf("Registering Events...\n");
     al_register_event_source(event_queue, al_get_display_event_source(display));
@@ -197,6 +199,10 @@ GameWindow::GameWindow()
     al_set_sample_instance_playmode(gameSound, ALLEGRO_PLAYMODE_LOOP);
     al_attach_sample_instance_to_mixer(gameSound, al_get_default_mixer());
 
+    FILE *file;
+    file = fopen("Record.txt", "r");
+    fscanf(file, "%lld %lld %lld", &record[0], &record[1], &record[2]);
+    fclose(file);
     // printf("Starting Timer...\n");
     al_start_timer(timer);
 }
@@ -222,6 +228,12 @@ GameWindow::level_init(int l)
     file = fopen(buffer, "r");
     level = l;
     // JACKET
+    printf("%s\n", buffer);
+    sprintf(buffer, "./Map%d.png", level);
+    printf("%s\n", buffer);
+    background = al_load_bitmap(buffer);
+    background_width = al_get_bitmap_width(background);
+    background_height = al_get_bitmap_height(background);
     fscanf(file, "%s", buffer);
     x = atoi(buffer);
     fscanf(file, "%s", buffer);
@@ -291,6 +303,7 @@ GameWindow::level_init(int l)
     }*/
 
     fclose(file);
+    al_start_timer(record_time);
 }
 
 void
@@ -392,29 +405,29 @@ GameWindow::game_update()
 
         jacket->Move(move_keys, WallMap);
         std::vector<Bullet*>    bullets = jacket->getBullets();
-        std::vector<int>        erase_idices;
+        std::vector<int>        erase_indices;
         for (int i = 0; i < bullets.size(); i++) {
             bullets[i]->Move();
             int bx = bullets[i]->getX(), by = bullets[i]->getY();
             if (bx < 0 || bx > background_width || by < 0 || by > background_height) {
-                erase_idices.push_back(i);
+                erase_indices.push_back(i);
                 continue;
             }
             for (auto wall : WallMap) if (wall->overlap(bx, by)) {
                 // BULLET HIT WALL SOUND EFFECT
-                erase_idices.push_back(i);
+                erase_indices.push_back(i);
                 continue;
             }
             for (int j = 0; j < enemies.size(); j++) {
                 if (Circle::isOverlap(enemies[j]->getCircle(), bullets[i]->getCircle())) {
                     // BULLET HIT ENEMY SOUND EFFECT
                     enemies[j]->TakeDamage(bullets[i]->getDamage());
-                    erase_idices.push_back(i);
+                    erase_indices.push_back(i);
                 }
             }
         }
-        for (auto idx : erase_idices)   jacket->EraseBullet(idx);
-        erase_idices.clear();
+        for (auto idx : erase_indices)   jacket->EraseBullet(idx);
+        erase_indices.clear();
 
         // UPDATE ENEMIES
         int jx = jacket->getX(), jy = jacket->getY();
@@ -441,24 +454,22 @@ GameWindow::game_update()
                 bullets[i]->Move();
                 int bx = bullets[i]->getX(), by = bullets[i]->getY();
                 if (bx < 0 || bx > background_width || by < 0 || by > background_height) {
-                    erase_idices.push_back(i);
+                    erase_indices.push_back(i);
                     continue;
                 }
                 for (auto wall : WallMap) if (wall->overlap(bx, by)) {
                     // BULLET HIT WALL SOUND EFFECT
-                    erase_idices.push_back(i);
+                    erase_indices.push_back(i);
                     continue;
                 }
-                // for (int j = 0; j < enemies.size(); j++) {
-                //     if (Circle::isOverlap(enemies[j]->getCircle(), bullets[i]->getCircle())) {
-                //         // BULLET HIT ENEMY SOUND EFFECT
-                //         enemies[j]->TakeDamage(bullets[i]->getDamage());
-                //         erase_idices.push_back(i);
-                //     }
-                // }
+                if (Circle::isOverlap(jacket->getCircle(), bullets[i]->getCircle())) {
+                    // BULLET HIT ENEMY SOUND EFFECT
+                    jacket->TakeDamage(bullets[i]->getDamage());
+                    erase_indices.push_back(i);
+                }
             }
-            for (auto idx : erase_idices)   e->EraseBullet(idx);
-            erase_idices.clear();
+            for (auto idx : erase_indices)   e->EraseBullet(idx);
+            erase_indices.clear();
         }
 
         success = true;
@@ -543,11 +554,17 @@ GameWindow::game_reset()
     // stop timer
     // al_stop_timer(timer);
     al_stop_timer(enemy_pro);
+    al_set_timer_count(record_time, 0);
 }
 
 void
 GameWindow::game_destroy()
 {
+    
+    FILE* file;
+    file = fopen("Record.txt", "w");
+    fprintf(file, "%lld %lld %lld", record[0], record[1], record[2]);
+    fclose(file);
     game_reset();
 
     al_destroy_display(display);
@@ -713,13 +730,20 @@ GameWindow::Draw()
         for (auto enemy : enemies)  enemy->Draw();
         // printf("Drawing Jacket...\n");
         jacket->Draw();
-        for(auto wall: WallMap) wall->Draw();
+        //for(auto wall: WallMap) wall->Draw();
         // printf("Done!!!...\n\n");
         // menu->Draw();
     } else if (GameState == GAMESTATE_PAUSE) {
         al_draw_bitmap(stopscene, 0, 0, 0);
     } else if (GameState == GAMESTATE_SUCCESS) {
         al_draw_bitmap(clearscene, 0, 0, 0);
+        long long int recent = al_get_timer_count(record_time);
+        al_stop_timer(record_time);
+        char buffer[50];
+        record[level - 1] = min(recent, record[level - 1]);
+        sprintf(buffer, "Best: %.2lf    Recent: %.2lf", record[level - 1] / 60.0, recent / 60.0);
+        //printf("Time: %d\n", al_get_timer_count(record_time));
+        al_draw_text(hudFont, al_map_rgb(0, 0, 0), 15 * font_size, window_height - 2 * font_size, 0, buffer);
     } else if (GameState == GAMESTATE_FAILURE) {
         al_draw_bitmap(failscene, 0, 0, 0);
     } else if (GameState == GAMESTATE_END) {
