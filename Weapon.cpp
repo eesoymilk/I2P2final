@@ -7,9 +7,6 @@
 #define PI 3.1415926
 #define SCALE 2
 
-// set counter frequency of drawing moving animation
-const int draw_frequency = 10;
-
 Weapon::Weapon()
 {
     circle = new Circle;

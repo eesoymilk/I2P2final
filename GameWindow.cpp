@@ -17,19 +17,11 @@
 
 #define MaxLevel 4
 #define Acceleration 5
-const int draw_frequency = 10;
 int background_width;
 int background_height;
 int Character_Health;
 int camera_origin_x;
 int camera_origin_y;
-
-void
-GameWindow::game_init()
-{
-    level = new LEVEL(1);
-    menu = new Menu();
-}
 
 bool
 GameWindow::mouse_hover(int startx, int starty, int width, int height)
@@ -42,18 +34,31 @@ GameWindow::mouse_hover(int startx, int starty, int width, int height)
 }
 
 Character*
-GameWindow::spawnCharacter(int type, int x, int y)
+GameWindow::spawnJacket(int x, int y)
 {
-    Character* c = NULL;
-    switch (type)
+    return new Jacket(x, y);
+}
+
+Character*
+GameWindow::spawnEnemy(int arm, int x, int y)
+{
+    Character* e = new Enemy(x, y);
+    Weapon* w = NULL;
+    switch (arm)
     {
-    case 1:
-        c = new Jacket(x, y);
+    case PISTOL:
+        w = new Pistol();
         break;
-    default:
+    case SMG:
+        w = new SubmachineGun();
+        break;
+    case AR:
+        w = new AssaultRifle();
         break;
     }
-    return c;
+    if (w)  weapons.push_back(w);
+    e->PickWeapon(w);
+    return e;
 }
 
 Weapon*
@@ -131,7 +136,7 @@ GameWindow::GameWindow()
     if (display == NULL || event_queue == NULL)
         show_err_msg(-1);
 
-    printf("Allegro Init...\n");
+    // printf("Allegro Init...\n");
     al_init_primitives_addon();
     al_init_font_addon(); // initialize the font addon
     al_init_ttf_addon(); // initialize the ttf (True Type Font) addon
@@ -141,12 +146,12 @@ GameWindow::GameWindow()
     al_install_mouse();    // install mouse event
     al_install_audio();    // install audio event
 
-    printf("Loading Founts...\n");
+    // printf("Loading Founts...\n");
     font = al_load_ttf_font("Caviar_Dreams_Bold.ttf", 12,0);        // load small font
     Medium_font = al_load_ttf_font("Caviar_Dreams_Bold.ttf", 24,0); // load medium font
     Large_font = al_load_ttf_font("Caviar_Dreams_Bold.ttf", 36,0);  // load large font
 
-    printf("Registering Events...\n");
+    // printf("Registering Events...\n");
     al_register_event_source(event_queue, al_get_display_event_source(display));
     al_register_event_source(event_queue, al_get_keyboard_event_source());
     al_register_event_source(event_queue, al_get_mouse_event_source());
@@ -158,19 +163,21 @@ GameWindow::GameWindow()
 
     char buffer[50];
 
-    printf("Loading Bitmaps...\n");
+    // printf("Loading Bitmaps...\n");
     icon = al_load_bitmap("./icon.jpg");
     background = al_load_bitmap("./Map1.png");
     startscene = al_load_bitmap("./Scene.jpg");
     helpscene = al_load_bitmap("./HelpScene.jpg");
     stopscene = al_load_bitmap("./StopScene.png");
+    clearscene = al_load_bitmap("./ClearScene.png");
+    failscene = al_load_bitmap("./FailedScene.png");
     background_width = al_get_bitmap_width(background);
     background_height = al_get_bitmap_height(background);
 
     al_set_display_icon(display, icon);
     al_reserve_samples(3);
 
-    printf("Loading Sounds...\n");
+    // printf("Loading Sounds...\n");
     sample = al_load_sample("ClickSound.ogg");
     clickSound = al_create_sample_instance(sample);
     al_set_sample_instance_playmode(clickSound, ALLEGRO_PLAYMODE_ONCE);
@@ -186,7 +193,7 @@ GameWindow::GameWindow()
     al_set_sample_instance_playmode(gameSound, ALLEGRO_PLAYMODE_LOOP);
     al_attach_sample_instance_to_mixer(gameSound, al_get_default_mixer());
 
-    printf("Starting Timer...\n");
+    // printf("Starting Timer...\n");
     al_start_timer(timer);
 }
 
@@ -200,21 +207,69 @@ GameWindow::game_menu()
 }
 
 void
-GameWindow::game_begin()
+GameWindow::level_init(int l)
+{
+    char buffer[50];
+    FILE *file;
+    int n, x, y, arm;
+
+    sprintf(buffer, "LEVEL%d.txt", l);
+    file = fopen(buffer, "r");
+    level = l;
+    // JACKET
+    fscanf(file, "%s", buffer);
+    x = atoi(buffer);
+    fscanf(file, "%s", buffer);
+    y = atoi(buffer);
+    printf("x = %d, y = %d\n", x, y);
+    jacket = spawnJacket(x, y);
+    // ENEMIES
+    fscanf(file, "%s", buffer);
+    n = atoi(buffer);
+    printf("n = %d\n", n);
+    for (int i = 0; i < n; i++) {
+        Character* e = NULL;
+        fscanf(file, "%s", buffer);
+        arm = atoi(buffer);
+        fscanf(file, "%s", buffer);
+        x = atoi(buffer);
+        fscanf(file, "%s", buffer);
+        y = atoi(buffer);
+        printf("arm = %d, x = %d, y = %d\n", arm, x, y);
+        e = spawnEnemy(arm, x, y);
+        enemies.push_back(e);
+    }
+    // WEAPONS
+    fscanf(file, "%s", buffer);
+    n = atoi(buffer);
+    printf("n = %d\n", n);
+    for (int i = 0; i < n; i++) {
+        Weapon* w = NULL;
+        fscanf(file, "%s", buffer);
+        arm = atoi(buffer);
+        fscanf(file, "%s", buffer);
+        x = atoi(buffer);
+        fscanf(file, "%s", buffer);
+        y = atoi(buffer);
+        printf("arm = %d, x = %d, y = %d\n", arm, x, y);
+        w = spawnWeapon(arm, x, y);
+        weapons.push_back(w);
+    }
+    fclose(file);
+}
+
+void
+GameWindow::game_begin(int l)
 {
     game_reset();
     printf(">>> In Game <<<\n");
 
     if (jacket) delete jacket;
+    enemies.clear();
     weapons.clear();
 
-    // tmp init for debugging
-    jacket = spawnCharacter(1, 0, 0);
-    printf("Spawning Weapon...\n");
-    weapons.push_back(spawnWeapon(1, 200, 200));
-    weapons.push_back(spawnWeapon(2, 200, 300));
-    weapons.push_back(spawnWeapon(3, 200, 400));
-    //
+    if (l == 0) jacket = spawnJacket(0, 0);
+    else        level_init(l);
 
     Draw();
 
@@ -284,7 +339,8 @@ GameWindow::game_update()
     if (GameState == GAMESTATE_INGAME) {
         if (preGameState == GAMESTATE_MENU) {
             printf("Game Begins!!!\n");
-            game_begin();
+            level = 1;
+            game_begin(level);
         }
         Weapon* w = jacket->getWeapon();
         
@@ -334,7 +390,28 @@ GameWindow::game_update()
         }
         
         jacket->Move(dir_keys);
-        for (auto bullet : jacket->getBullets())    bullet->Move();
+        std::vector<Bullet*>    bullets = jacket->getBullets();
+        printf("%d Bullets in Air.\n", bullets.size());
+        for (auto it = bullets.begin(); it != bullets.end(); ) {
+            (*it)->Move();
+            int bx = (*it)->getX(), by = (*it)->getY();
+            if (bx < 0 || bx > background_width || by < 0 || by > background_height)
+                it = bullets.erase(it);
+            else
+                it++;
+        }
+
+        // for (int i = 0; i < bullets.size(); i++) {
+        //     bullets[i]->Move();
+        //     int bx = bullets[i]->getX(), by = bullets[i]->getY();
+        //     if (bx < 0 || bx > background_width || by < 0 || by > background_height)
+        //     // for (int j = 0; j < enemies.size(); j++) {
+        //     //     if (Circle::isOverlap(enemies[j]->getCircle(), bullets[i]->getCircle())) {
+        //     //         enemies[j]->takeDamage(bullets[i]->getDamage());
+                    
+        //     //     }
+        //     // }
+        // }
 
         camera_origin_x = jacket->getCircle()->x - window_width / 2;
         camera_origin_y = jacket->getCircle()->y - window_height / 2;
@@ -394,9 +471,6 @@ GameWindow::game_destroy()
     al_destroy_sample_instance(clickSound);
     al_destroy_sample_instance(gameSound);
     al_destroy_sample_instance(backgroundSound);
-
-    delete level;
-    delete menu;
 }
 
 int
@@ -526,12 +600,14 @@ GameWindow::Draw()
         // printf("Drawing Menu...\n");
         al_draw_bitmap(startscene, 0, 0, 0);
     } else if (GameState == GAMESTATE_INGAME) {
-        printf("Drawing Gamescene...\n");
-        printf("Drawing Map...\n");
+        // printf("Drawing Gamescene...\n");
+        // printf("Drawing Map...\n");
         al_draw_bitmap(background, -board_x, -board_y, 0);
-        printf("Drawing Weapon...\n");
+        // printf("Drawing Weapon...\n");
         for (auto weapon : weapons) weapon->Draw();
-        printf("Drawing Jacket...\n");
+        // printf("Drawing Enemies...\n");
+        for (auto enemy : enemies)  enemy->Draw();
+        // printf("Drawing Jacket...\n");
         jacket->Draw();
         // menu->Draw();
     } else if (GameState == GAMESTATE_TUTORIAL) {
@@ -539,7 +615,34 @@ GameWindow::Draw()
     } else if (GameState == GAMESTATE_PAUSE) {
         al_draw_bitmap(stopscene, 0, 0, 0);
     } else if (GameState == GAMESTATE_END) {
-        // TODO
+        if(jacket->getHP() == 0) al_draw_bitmap(failscene, 0, 0, 0);
+        else al_draw_bitmap(clearscene, 0, 0, 0);
     }
     al_flip_display();
+}
+
+bool
+GameWindow::wallBetween(Wall* wall, int x1, int y1, int x2, int y2){
+    int xl = wall->get_xl(); int xr = wall->get_xr(); int yl = wall->get_yl(); int yr = wall->get_yr();
+    if(x1 == x2){
+        if(x1 <= xr && x1 >= xl){
+            if(max(y1, y2) <= yl) return false;
+            else if(min(y1, y2) >= yr) return false;
+            else return true;
+        }
+        else return false;
+    }
+    if(y1 == y2){
+        if(y1 <= yr && y1 >= yl){
+            if(max(x1, x2) <= xl) return false;
+            else if(min(x1, x2) >= xr) return false;
+            else return true;
+        }
+        else return false;
+    }
+    double slope = (y1 - y2) / (x1 - x2); double con = y1 - slope * x1;
+    double intersect_y1 = slope * xl + con; if(intersect_y1 >= min(y1, y2) && intersect_y1 <= max(y1, y2) && intersect_y1 >= yl && intersect_y1 <= yr) return true;
+    double intersect_y2 = slope * xr + con; if(intersect_y2 >= min(y1, y2) && intersect_y1 <= max(y1, y2) && intersect_y2 >= yl && intersect_y2 <= yr) return true;
+    double intersect_x1 = (yl - con) / slope; if(intersect_x1 >= min(x1, x2) && intersect_x1 <= max(x1, x2) && intersect_x1 >= xl && intersect_x1 <= xr) return true;
+    double intersect_x2 = (yr - con) / slope; if(intersect_x2 >= min(x1, x2) && intersect_x2 <= max(x1, x2) && intersect_x2 >= xl && intersect_x2 <= xr) return true;
 }

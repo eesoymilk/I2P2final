@@ -4,8 +4,10 @@
 Character::Character(int spawn_x, int spawn_y)
 {
     circle = new Circle;
-    circle->x = spawn_x * grid_width + grid_width/2;
-    circle->y = spawn_y * grid_height + grid_height/2;
+    // circle->x = spawn_x * grid_width + grid_width/2;
+    // circle->y = spawn_y * grid_height + grid_height/2;
+    circle->x = spawn_x;
+    circle->y = spawn_y;
     circle->r = grid_width / 2;
     sprite_count = 0;
     counter = 0;
@@ -35,8 +37,8 @@ Character::Load_Img()
     for (int i = 0; i < 4; i++) {
         for(int j = 0; j < sprites[i]; j++) {
             ALLEGRO_BITMAP *img;
-            sprintf(buffer, "./%s/%s_%d.png", class_name, firearm_names[i], j);
-            // sprintf(buffer, "./Jacket/%s_%d.png", firearm_names[i], j);
+            // sprintf(buffer, "./%s/%s_%d.png", class_name, firearm_names[i], j);
+            sprintf(buffer, "./Jacket/%s_%d.png", firearm_names[i], j);
             img = al_load_bitmap(buffer);
             if(img) moveImg.push_back(img);
         }
@@ -133,12 +135,11 @@ Character::FireWeapon(int mouse_x, int mouse_y)
     }
 }
 
-bool
-Character::Subtract_HP(int harm_point)
+void
+Character::takeDamage(int damage)
 {
-    HealthPoint -= harm_point;
-
-    return (HealthPoint <= 0);
+    if (damage >= HP)   HP = 0;
+    else                HP -= damage;
 }
 
 void Character::setRadianCCW(int mouse_x, int mouse_y){

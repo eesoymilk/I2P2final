@@ -9,6 +9,7 @@ enum {W_KEY=0, A_KEY, S_KEY, D_KEY};
 enum {E_KEY = 0, R_KEY, G_KEY};
 #define FuncKeysUsed 4
 enum {ENTER_KEY=0, P_KEY, H_KEY, ESCAPE_KEY};
+const int draw_frequency = 10;
 
 #define font_size 50
 #define grid_width 40
@@ -18,12 +19,10 @@ enum {ENTER_KEY=0, P_KEY, H_KEY, ESCAPE_KEY};
 #define window_height 1080
 #define field_width 800
 #define field_height 600
+#define CharacterScale 3
 
-#define Num_TowerType 5
-#define Num_MonsterType 4
 #define NumOfGrid (field_width / grid_width) * (field_height / grid_height)
 
-#define CharacterScale 3
 
 extern int TowerRadius[];
 extern char TowerClass[][20];

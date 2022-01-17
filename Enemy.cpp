@@ -2,7 +2,7 @@
 
 Enemy::Enemy(int spwan_x, int spwan_y) : Character(spwan_x, spwan_y)
 {
-    HealthPoint = 100;
+    HP = 100;
     sprites[UNARMED] = 7;
     sprites[PISTOL] = 8;
     sprites[SMG] = 8;
@@ -34,9 +34,10 @@ Enemy::Draw()
 
     int offset = 0;
     for (int i = 0; i < getFirearm(); i++)       offset += sprites[i];
-    std::vector<ALLEGRO_BITMAP*> moveImg = getImg().first;
+    // std::vector<ALLEGRO_BITMAP*> moveImg = getImg().first;
     if (!moveImg[offset + getSpriteCnt()])  return;
 
+    // printf("Rendering Image determined.\n");
     // get height and width of sprite bitmap
     ALLEGRO_BITMAP* curImg = moveImg[offset + getSpriteCnt()];
     int w = al_get_bitmap_width(curImg);

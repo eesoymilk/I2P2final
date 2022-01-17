@@ -20,7 +20,6 @@
 
 enum {UNARMED = 0, PISTOL, SMG, AR};
 const char firearm_names[][10] = {"UNARMED", "PISTOL", "SMG", "AR"};
-const int draw_frequency = 10;
 
 class Character : public Object
 {
@@ -40,6 +39,7 @@ public:
     void DropWeapon();
     void PickWeapon(Weapon*);
     void FireWeapon(int, int);
+    void takeDamage(int);
 
     // functions that return informations of monster
     Weapon* getWeapon() { return wielding; }
@@ -47,18 +47,17 @@ public:
     double getRadianCCW() { return radian_ccw; }
     int getVx() { return vx; }
     int getVy() { return vy; }
-    int getHealth() { return HealthPoint; }
+    int getHP() { return HP; }
     std::pair<std::vector<ALLEGRO_BITMAP*>, std::vector<ALLEGRO_BITMAP*>> getImg() { return {moveImg, attackImg};}
     int getFirearm() {return firearm; }
     int getSpriteCnt() {return sprite_count; }
 
-    bool Subtract_HP(int);
     virtual void setRadianCCW(int, int);
     void setVx(int);
     void setVy(int);
 
 protected:
-    int HealthPoint = 20;
+    int HP = 20;
     char class_name[20];
     int sprites[4];
     std::vector<Bullet*> bullets;
