@@ -48,19 +48,23 @@ Jacket::~Jacket()
 }
 
 void
-Jacket::Move(bool (&hold)[4], std::vector<Wall*> WallMap)
+Jacket::Move(bool (&move_keys)[5], std::vector<Wall*> WallMap)
 {
-    if (hold[W_KEY])                    setVy(vy - Acceleration);
-    else if (!hold[S_KEY] && vy < 0)    setVy(vy + 1);
 
-    if (hold[A_KEY])                    setVx(vx - Acceleration);
-    else if (!hold[D_KEY] && vx < 0)    setVx(vx + 1);
+    if (move_keys[LSHIFT_KEY])  max_speed = 5;
+    else                        max_speed = 3;
 
-    if (hold[S_KEY])                    setVy(vy + Acceleration);
-    else if (!hold[W_KEY] && vy > 0)    setVy(vy - 1);
+    if (move_keys[W_KEY])                    setVy(vy - Acceleration);
+    else if (!move_keys[S_KEY] && vy < 0)    setVy(vy + 1);
 
-    if (hold[D_KEY])                    setVx(vx + Acceleration);
-    else if (!hold[A_KEY] && vx > 0)    setVx(vx - 1);
+    if (move_keys[A_KEY])                    setVx(vx - Acceleration);
+    else if (!move_keys[D_KEY] && vx < 0)    setVx(vx + 1);
+
+    if (move_keys[S_KEY])                    setVy(vy + Acceleration);
+    else if (!move_keys[W_KEY] && vy > 0)    setVy(vy - 1);
+
+    if (move_keys[D_KEY])                    setVx(vx + Acceleration);
+    else if (!move_keys[A_KEY] && vx > 0)    setVx(vx - 1);
 
     counter = (counter + 1) % draw_frequency;
     if (vx == 0 && vy == 0) {
@@ -70,16 +74,45 @@ Jacket::Move(bool (&hold)[4], std::vector<Wall*> WallMap)
     }
 
     // printf("vx: %d, vy: %d\n", vx, vy);
-    circle->x += vx;
-    circle->y += vy;
-    //circle->x += vx;
-    //circle->y += vy;
+    bool move_x = true;
+    bool move_y = true;
+    bool move_both = true;
     for(auto wall: WallMap){
-        if(wall->overlap(circle->x, circle->y)){
-            circle->x -= vx;
-            circle->y -= vy;
-            break;
+        if (wall->overlap(circle->x + vx, circle->y + vy)){
+            move_both = false;
+        } if (wall->overlap(circle->x + vx, circle->y)) {
+            move_x = false;
+        } if (wall->overlap(circle->x, circle->y + vy)) {
+            move_y = false;
         }
+    }
+    if (move_both){
+        circle->x += vx;
+        circle->y += vy;
+    }
+    else if (move_x) circle->x += vx;
+    else if (move_y) circle->y += vy;
+}
+
+void
+Jacket::FireWeapon(int mouse_x, int mouse_y)
+{
+    Weapon* w = this->getWeapon();
+    if (w != NULL && w->Fire()) {
+        auto [x1, y1] = Transform();
+        // printf("x1 = %d, y1 = %d\n", x1, y1);
+        auto [ux, uy] = UnitVector(mouse_x - x1, mouse_y - y1);
+        // printf("ux = %lf, uy = %lf\n", ux, uy);
+        // Circle* shooter = new Circle(cam.first, cam.second, this->circle->r);
+        printf("Fire!\n");
+        Bullet *b = new Bullet (
+            this->getCircle(),
+            ux, uy,
+            w->getDamage(),
+            w->getSpeed(),
+            w->getBulletImg()
+        );
+        this->bullets.push_back(b);
     }
 }
 

@@ -8,9 +8,15 @@ class Enemy : public Character
 public:
     Enemy(int, int);
     ~Enemy();
-    void Move();
+    void Move(int, int, std::vector<Wall*>);
+    void FireWeapon(double, double);
+    void Assault(int, int, std::vector<Wall*>);
     void setRadianCCW(int, int);
+    void setSpeed(int);
     void Draw();
+protected:
+    int speed = 0;
+    double pos_x, pos_y;
 };
 
 #endif // ENEMY_H_INCLUDED

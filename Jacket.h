@@ -8,8 +8,9 @@ class Jacket : public Character
 public:
     Jacket(int, int);
     ~Jacket();
-    void Move(bool(&hold)[4], std::vector<Wall*>);
+    void Move(bool(&move_keys)[5], std::vector<Wall*>);
     void setRadianCCW(int, int);
+    void FireWeapon(int, int);
     void Draw();
 private:
     ALLEGRO_FONT *hudFont;

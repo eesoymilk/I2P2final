@@ -33,16 +33,16 @@ GameWindow::mouse_hover(int startx, int starty, int width, int height)
     return false;
 }
 
-Character*
+Jacket*
 GameWindow::spawnJacket(int x, int y)
 {
     return new Jacket(x, y);
 }
 
-Character*
+Enemy*
 GameWindow::spawnEnemy(int arm, int x, int y)
 {
-    Character* e = new Enemy(x, y);
+    Enemy* e = new Enemy(x, y);
     Weapon* w = NULL;
     switch (arm)
     {
@@ -233,7 +233,7 @@ GameWindow::level_init(int l)
     n = atoi(buffer);
     printf("n = %d\n", n);
     for (int i = 0; i < n; i++) {
-        Character* e = NULL;
+        Enemy* e = NULL;
         fscanf(file, "%s", buffer);
         arm = atoi(buffer);
         fscanf(file, "%s", buffer);
@@ -344,6 +344,7 @@ GameWindow::game_update()
         if (preGameState == GAMESTATE_FAILURE)
             game_begin(level);
 
+        // UPDATE JACKET
         Weapon* w = jacket->getWeapon();
         if (game_keys[E_KEY]) {
             game_keys[E_KEY] = false;
@@ -389,7 +390,7 @@ GameWindow::game_update()
             }
         }
 
-        jacket->Move(dir_keys, WallMap);
+        jacket->Move(move_keys, WallMap);
         std::vector<Bullet*>    bullets = jacket->getBullets();
         std::vector<int>        erase_idices;
         for (int i = 0; i < bullets.size(); i++) {
@@ -399,19 +400,69 @@ GameWindow::game_update()
                 erase_idices.push_back(i);
                 continue;
             }
+            for (auto wall : WallMap) if (wall->overlap(bx, by)) {
+                // BULLET HIT WALL SOUND EFFECT
+                erase_idices.push_back(i);
+                continue;
+            }
             for (int j = 0; j < enemies.size(); j++) {
                 if (Circle::isOverlap(enemies[j]->getCircle(), bullets[i]->getCircle())) {
+                    // BULLET HIT ENEMY SOUND EFFECT
                     enemies[j]->TakeDamage(bullets[i]->getDamage());
                     erase_idices.push_back(i);
                 }
             }
         }
-        erase_idices.clear();
         for (auto idx : erase_idices)   jacket->EraseBullet(idx);
+        erase_idices.clear();
+
+        // UPDATE ENEMIES
+        int jx = jacket->getX(), jy = jacket->getY();
+        for (auto e : enemies) {
+            if (e->getHP() == 0)    continue;
+
+            int ex = e->getX(), ey = e->getY();
+            Weapon* enemy_w = e->getWeapon();
+            bool visible = true;
+            for (auto w : WallMap) {
+                if (wallBetween(w, ex, ey, jx, jy)) {
+                    visible = false;
+                    break;
+                }
+            }
+            if (visible)    e->Assault(jx, jy, WallMap);
+            if (enemy_w) {
+                if (enemy_w->isReloading()) enemy_w->Reload();
+                else                        enemy_w->CoolDown();
+            }
+
+            bullets = e->getBullets();
+            for (int i = 0; i < bullets.size(); i++) {
+                bullets[i]->Move();
+                int bx = bullets[i]->getX(), by = bullets[i]->getY();
+                if (bx < 0 || bx > background_width || by < 0 || by > background_height) {
+                    erase_idices.push_back(i);
+                    continue;
+                }
+                for (auto wall : WallMap) if (wall->overlap(bx, by)) {
+                    // BULLET HIT WALL SOUND EFFECT
+                    erase_idices.push_back(i);
+                    continue;
+                }
+                // for (int j = 0; j < enemies.size(); j++) {
+                //     if (Circle::isOverlap(enemies[j]->getCircle(), bullets[i]->getCircle())) {
+                //         // BULLET HIT ENEMY SOUND EFFECT
+                //         enemies[j]->TakeDamage(bullets[i]->getDamage());
+                //         erase_idices.push_back(i);
+                //     }
+                // }
+            }
+            for (auto idx : erase_idices)   e->EraseBullet(idx);
+            erase_idices.clear();
+        }
 
         success = true;
         for (auto e : enemies)  if (e->getHP() != 0)    success = false;
-
 
         camera_origin_x = jacket->getCircle()->x - window_width / 2;
         camera_origin_y = jacket->getCircle()->y - window_height / 2;
@@ -421,7 +472,6 @@ GameWindow::game_update()
         if(camera_origin_y < 0) camera_origin_y = 0;
         board_x = camera_origin_x;
         board_y = camera_origin_y;
-
     }
 
     int msg = GAME_CONTINUE, nxtState = GameState;
@@ -546,19 +596,23 @@ GameWindow::process_event()
                 // GAMEPLAY KEYS
                 case ALLEGRO_KEY_W:
                     printf("W is pressed!\n");
-                    if (!dir_keys[W_KEY]) dir_keys[W_KEY] = true;
+                    if (!move_keys[W_KEY]) move_keys[W_KEY] = true;
                     break;
                 case ALLEGRO_KEY_A:
                     printf("A is pressed!\n");
-                    if (!dir_keys[A_KEY]) dir_keys[A_KEY] = true;
+                    if (!move_keys[A_KEY]) move_keys[A_KEY] = true;
                     break;
                 case ALLEGRO_KEY_S:
                     printf("S is pressed!\n");
-                    if (!dir_keys[S_KEY]) dir_keys[S_KEY] = true;
+                    if (!move_keys[S_KEY]) move_keys[S_KEY] = true;
                     break;
                 case ALLEGRO_KEY_D:
                     printf("D is pressed!\n");
-                    if (!dir_keys[D_KEY]) dir_keys[D_KEY] = true;
+                    if (!move_keys[D_KEY]) move_keys[D_KEY] = true;
+                    break;
+                case ALLEGRO_KEY_LSHIFT:
+                    printf("LSHIFT is pressed!\n");
+                    if (!move_keys[LSHIFT_KEY]) move_keys[LSHIFT_KEY] = true;
                     break;
                 case ALLEGRO_KEY_E:
                     printf("E is pressed!\n");
@@ -591,19 +645,23 @@ GameWindow::process_event()
             switch (event.keyboard.keycode) {
                 case ALLEGRO_KEY_W:
                     printf("W is released!\n");
-                    if (dir_keys[W_KEY])    dir_keys[W_KEY] = false;
+                    if (move_keys[W_KEY])    move_keys[W_KEY] = false;
                     break;
                 case ALLEGRO_KEY_A:
                     printf("A is released!\n");
-                    if (dir_keys[A_KEY])    dir_keys[A_KEY] = false;
+                    if (move_keys[A_KEY])    move_keys[A_KEY] = false;
                     break;
                 case ALLEGRO_KEY_S:
                     printf("S is released!\n");
-                    if (dir_keys[S_KEY])    dir_keys[S_KEY] = false;
+                    if (move_keys[S_KEY])    move_keys[S_KEY] = false;
                     break;
                 case ALLEGRO_KEY_D:
                     printf("D is released!\n");
-                    if (dir_keys[D_KEY])    dir_keys[D_KEY] = false;
+                    if (move_keys[D_KEY])    move_keys[D_KEY] = false;
+                    break;
+                case ALLEGRO_KEY_LSHIFT:
+                    printf("LSHIFT is released!\n");
+                    if (move_keys[LSHIFT_KEY])  move_keys[LSHIFT_KEY] = false;
                     break;
             }
         } else if (event.type == ALLEGRO_EVENT_MOUSE_BUTTON_DOWN) {

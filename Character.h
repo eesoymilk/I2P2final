@@ -16,7 +16,6 @@
 #include "global.h"
 #include "Wall.h"
 
-#define MaxSpeed 3
 #define Acceleration 1
 
 enum {UNARMED = 0, PISTOL, SMG, AR, DEAD};
@@ -28,18 +27,15 @@ public:
     Character(int, int);
     virtual ~Character();
 
-    // Draw image per frame
     // override virtual function "Object::Draw"
     virtual void Draw();
     // Load bitmaps of animation image into container "moveImg"
     void Load_Img();
 
-    // Update monster position per frame
-    // And detect if it reaches end point but not destroyed
-    virtual void Move(bool(&hold)[4], std::vector<Wall*>);
+    // virtual void Move(bool(&)[5], std::vector<Wall*>);
     void DropWeapon();
     void PickWeapon(Weapon*);
-    void FireWeapon(int, int);
+    // void FireWeapon(int, int);
     void TakeDamage(int);
     void EraseBullet(int);
 
@@ -69,7 +65,8 @@ protected:
     // animation image of current direction
     int sprite_count;
     // VELOCITY
-    int vx = 0, vy = 0;
+    int vx = 0, vy = 0, max_speed;
+    bool sprint;
     // set of animation images
     std::vector<ALLEGRO_BITMAP*>    moveImg;
     std::vector<ALLEGRO_BITMAP*>    attackImg;

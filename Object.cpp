@@ -38,8 +38,15 @@ Object::UnitVector(double X, double Y)
     return { X / length, Y / length };
 }
 
-double Distance(Object* a, Object* b)
+double
+Object::Distance(int x2, int y2)
 {
-    double dx = b->getX() - a->getX(), dy = b->getY() - a->getY();
+    double dx = x2 - (double)getX(), dy = y2 - (double)getY();
     return sqrt(dx * dx + dy * dy);
 }
+
+// double Distance(Object* a, Object* b)
+// {
+//     double dx = b->getX() - a->getX(), dy = b->getY() - a->getY();
+//     return sqrt(dx * dx + dy * dy);
+// }

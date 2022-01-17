@@ -71,8 +71,8 @@ public:
 
     // Tower* create_tower(int);
     // Monster* create_monster();
-    Character* spawnJacket(int, int);
-    Character* spawnEnemy(int, int, int);
+    Jacket* spawnJacket(int, int);
+    Enemy* spawnEnemy(int, int, int);
     Weapon* spawnWeapon(int, int, int);
 
 public:
@@ -104,9 +104,9 @@ private:
     ALLEGRO_SAMPLE_INSTANCE *backgroundSound = NULL;
     ALLEGRO_SAMPLE_INSTANCE *gameSound = NULL;
 
-    Character* jacket;
+    Jacket* jacket;
     std::vector<std::pair<int, int>> LevelMap;
-    std::vector<Character*> enemies;
+    std::vector<Enemy*> enemies;
     std::vector<Weapon*> weapons;
     std::vector<Wall*> WallMap;
 
@@ -119,7 +119,7 @@ private:
 
     bool update = false;
     bool mute = false;
-    bool dir_keys[DirKeysUsed] = {false};
+    bool move_keys[MoveKeysUsed] = {false};
     bool game_keys[GameKeysUsed] = {false};
     bool func_keys[FuncKeysUsed] = {false};
     bool mouse_hold = false;

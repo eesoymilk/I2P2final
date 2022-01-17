@@ -14,6 +14,7 @@ public:
 
     // pure function for drawing object
     virtual void Draw() = 0;
+    double Distance(int, int);
 
     int getX() { return circle->x; }
     int getY() { return circle->y; }

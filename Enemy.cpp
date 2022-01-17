@@ -1,8 +1,10 @@
 #include "Enemy.h"
 
-Enemy::Enemy(int spwan_x, int spwan_y) : Character(spwan_x, spwan_y)
+Enemy::Enemy(int spawn_x, int spawn_y) : Character(spawn_x, spawn_y)
 {
     HP = 100;
+    pos_x = spawn_x;
+    pos_y = spawn_y;
     sprites[UNARMED] = 7;
     sprites[PISTOL] = 8;
     sprites[SMG] = 8;
@@ -36,13 +38,77 @@ Enemy::~Enemy()
 }
 
 void
+Enemy::Move(int ux, int uy, std::vector<Wall*> WallMap)
+{
+    max_speed = 3;
+    
+    if (ux || uy)   setSpeed(speed + 1);
+    else            setSpeed(speed - 1);
+
+    bool move_x = true, move_y = true, move_both = true;
+    for(auto wall: WallMap){
+        if (wall->overlap((int)(pos_x + ux * speed), (int)(pos_y + uy * speed))){
+            move_both = false;
+        } if (wall->overlap((int)(pos_x + ux * speed), circle->y)) {
+            move_x = false;
+        } if (wall->overlap(circle->x, (int)(pos_y + uy * speed))) {
+            move_y = false;
+        }
+    }
+    if (move_both){
+        pos_x += ux * speed;
+        pos_y += uy * speed;
+    }
+    else if (move_x) pos_x += ux * speed;
+    else if (move_y) pos_y += uy * speed;
+
+    circle->x = (int)pos_x;
+    circle->y = (int)pos_y;
+}
+
+void
+Enemy::FireWeapon(double ux, double uy)
+{
+    Weapon* w = this->getWeapon();
+    if (w->Fire()) {
+        printf("Enemy Fired!\n");
+        Bullet *b = new Bullet (
+            this->getCircle(),
+            ux, uy,
+            w->getDamage(),
+            w->getSpeed(),
+            w->getBulletImg()
+        );
+        this->bullets.push_back(b);
+    }
+}
+
+void
+Enemy::Assault(int jx, int jy, std::vector<Wall*> WallMap)
+{
+    printf("I see you...\n");
+    auto [ux, uy] = UnitVector(jx - getX(), jy - getY());
+    setRadianCCW(jx, jy);
+    if (Distance(jx, jy) > 500) {
+        Move(ux, uy, WallMap);
+    }
+    if (wielding) {
+        printf("Enemy is about to fire.\n");
+        if (wielding->getAmmo() != 0)   FireWeapon(ux, uy);
+        else                            wielding->Reload();
+    }
+}
+
+void
 Enemy::Draw()
 {   
     int w, h, offset = 0;
     ALLEGRO_BITMAP* curImg;
 
-    for (unsigned int i = 0; i < this->bullets.size(); i++)
+    for (unsigned int i = 0; i < this->bullets.size(); i++) {
+        printf("Drawing Enemy's Bullet...\n");
         this->bullets[i]->Draw();
+    }
 
     if (HP) {
         for (int i = 0; i < getFirearm(); i++)       offset += sprites[i];
@@ -61,7 +127,8 @@ Enemy::Draw()
     al_draw_scaled_rotated_bitmap(curImg, cx, cy, dx, dy, CharacterScale, CharacterScale, angle, 0);
 }
 
-void Enemy::setRadianCCW(int t_x, int t_y){
+void Enemy::setRadianCCW(int t_x, int t_y)
+{
     double vector_x = t_x - circle->x;
     double vector_y = -(t_y - circle->y);
     double radian = atan(vector_y / vector_x);
@@ -71,4 +138,8 @@ void Enemy::setRadianCCW(int t_x, int t_y){
     // printf("vector_x = %lf, vector_y = %lf\n", vector_x, vector_y);
     // printf("degree = %lf\n", radian * 180 / PI);
     radian_ccw = radian;
+}
+
+void Enemy::setSpeed(int v) {
+    if (v >= 0 && v <= max_speed)   speed = v;
 }

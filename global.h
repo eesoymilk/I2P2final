@@ -3,8 +3,8 @@
 
 #include <allegro5/allegro_font.h>
 
-#define DirKeysUsed 4
-enum {W_KEY=0, A_KEY, S_KEY, D_KEY};
+#define MoveKeysUsed 5
+enum {W_KEY=0, A_KEY, S_KEY, D_KEY, LSHIFT_KEY};
 #define GameKeysUsed 3
 enum {E_KEY = 0, R_KEY, G_KEY};
 #define FuncKeysUsed 4

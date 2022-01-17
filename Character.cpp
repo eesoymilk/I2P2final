@@ -67,40 +67,43 @@ Character::Draw()
     al_draw_scaled_rotated_bitmap(curImg, cx, cy, dx, dy, CharacterScale, CharacterScale, angle, 0);
 }
 
-void
-Character::Move(bool (&hold)[4], std::vector<Wall*> WallMap)
-{
+// void
+// Character::Move(bool (&move_keys)[5], std::vector<Wall*> WallMap)
+// {
 
-    if (hold[W_KEY])                    setVy(vy - Acceleration);
-    else if (!hold[S_KEY] && vy < 0)    setVy(vy + 1);
+//     if (move_keys[LSHIFT_KEY])  max_speed = 5;
+//     else                        max_speed = 3;
 
-    if (hold[A_KEY])                    setVx(vx - Acceleration);
-    else if (!hold[D_KEY] && vx < 0)    setVx(vx + 1);
+//     if (move_keys[W_KEY])                    setVy(vy - Acceleration);
+//     else if (!move_keys[S_KEY] && vy < 0)    setVy(vy + 1);
 
-    if (hold[S_KEY])                    setVy(vy + Acceleration);
-    else if (!hold[W_KEY] && vy > 0)    setVy(vy - 1);
+//     if (move_keys[A_KEY])                    setVx(vx - Acceleration);
+//     else if (!move_keys[D_KEY] && vx < 0)    setVx(vx + 1);
 
-    if (hold[D_KEY])                    setVx(vx + Acceleration);
-    else if (!hold[A_KEY] && vx > 0)    setVx(vx - 1);
+//     if (move_keys[S_KEY])                    setVy(vy + Acceleration);
+//     else if (!move_keys[W_KEY] && vy > 0)    setVy(vy - 1);
 
-    counter = (counter + 1) % draw_frequency;
-    if (vx == 0 && vy == 0) {
-        sprite_count = 0;
-    } else if (counter == 0) {
-        sprite_count = (sprite_count + 1) % sprites[firearm];
-    }
+//     if (move_keys[D_KEY])                    setVx(vx + Acceleration);
+//     else if (!move_keys[A_KEY] && vx > 0)    setVx(vx - 1);
 
-    // printf("vx: %d, vy: %d\n", vx, vy);
-    circle->x += vx;
-    circle->y += vy;
-    for(auto wall: WallMap){
-        if(wall->overlap(circle->x, circle->y)){
-            circle->x -= vx;
-            circle->y -= vy;
-            break;
-        }
-    }
-}
+//     counter = (counter + 1) % draw_frequency;
+//     if (vx == 0 && vy == 0) {
+//         sprite_count = 0;
+//     } else if (counter == 0) {
+//         sprite_count = (sprite_count + 1) % sprites[firearm];
+//     }
+
+//     // printf("vx: %d, vy: %d\n", vx, vy);
+//     circle->x += vx;
+//     circle->y += vy;
+//     for(auto wall: WallMap){
+//         if(wall->overlap(circle->x, circle->y)){
+//             circle->x -= vx;
+//             circle->y -= vy;
+//             break;
+//         }
+//     }
+// }
 
 void
 Character::DropWeapon()
@@ -120,27 +123,27 @@ Character::PickWeapon(Weapon* w)
     firearm = w->getType();
 }
 
-void
-Character::FireWeapon(int mouse_x, int mouse_y)
-{
-    Weapon* w = this->getWeapon();
-    if (w != NULL && w->Fire()) {
-        auto [x1, y1] = Transform();
-        // printf("x1 = %d, y1 = %d\n", x1, y1);
-        auto [ux, uy] = UnitVector(mouse_x - x1, mouse_y - y1);
-        // printf("ux = %lf, uy = %lf\n", ux, uy);
-        // Circle* shooter = new Circle(cam.first, cam.second, this->circle->r);
-        printf("Fire!\n");
-        Bullet *b = new Bullet (
-            this->getCircle(),
-            ux, uy,
-            w->getDamage(),
-            w->getSpeed(),
-            w->getBulletImg()
-        );
-        this->bullets.push_back(b);
-    }
-}
+// void
+// Character::FireWeapon(int mouse_x, int mouse_y)
+// {
+//     Weapon* w = this->getWeapon();
+//     if (w != NULL && w->Fire()) {
+//         auto [x1, y1] = Transform();
+//         // printf("x1 = %d, y1 = %d\n", x1, y1);
+//         auto [ux, uy] = UnitVector(mouse_x - x1, mouse_y - y1);
+//         // printf("ux = %lf, uy = %lf\n", ux, uy);
+//         // Circle* shooter = new Circle(cam.first, cam.second, this->circle->r);
+//         printf("Fire!\n");
+//         Bullet *b = new Bullet (
+//             this->getCircle(),
+//             ux, uy,
+//             w->getDamage(),
+//             w->getSpeed(),
+//             w->getBulletImg()
+//         );
+//         this->bullets.push_back(b);
+//     }
+// }
 
 void
 Character::TakeDamage(int damage)
@@ -171,13 +174,13 @@ void Character::setRadianCCW(int mouse_x, int mouse_y){
 }
 
 void Character::setVx(int v){
-    if (v > MaxSpeed)       vx = MaxSpeed;
-    else if (v < -MaxSpeed) vx = -MaxSpeed;
+    if (v > max_speed)       vx = max_speed;
+    else if (v < -max_speed) vx = -max_speed;
     else                    vx = v;
 }
 
 void Character::setVy(int v){
-    if (v > MaxSpeed)       vy = MaxSpeed;
-    else if (v < -MaxSpeed) vy = -MaxSpeed;
+    if (v > max_speed)       vy = max_speed;
+    else if (v < -max_speed) vy = -max_speed;
     else                    vy = v;
 }
