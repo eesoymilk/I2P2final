@@ -8,7 +8,7 @@ class Jacket : public Character
 public:
     Jacket(int, int);
     ~Jacket();
-    void Move(bool(&hold)[4]);
+    void Move(bool(&hold)[4], std::vector<Wall*>);
     void setRadianCCW(int, int);
     void Draw();
 private:

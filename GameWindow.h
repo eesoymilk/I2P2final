@@ -105,12 +105,17 @@ private:
     ALLEGRO_SAMPLE_INSTANCE *gameSound = NULL;
 
     Character* jacket;
+    std::vector<std::pair<int, int>> LevelMap;
     std::vector<Character*> enemies;
     std::vector<Weapon*> weapons;
+    std::vector<Wall*> WallMap;
 
     int mouse_x, mouse_y;
     int board_x = 0, board_y = 0;
     int preGameState = 0, GameState = 0, level = 0;
+    int Node_Amount = 0;
+    int Wall_Amount = 0;
+    int Door_Amount = 0;
 
     bool update = false;
     bool mute = false;

@@ -48,7 +48,7 @@ Jacket::~Jacket()
 }
 
 void
-Jacket::Move(bool (&hold)[4])
+Jacket::Move(bool (&hold)[4], std::vector<Wall*> WallMap)
 {
     if (hold[W_KEY])                    setVy(vy - Acceleration);
     else if (!hold[S_KEY] && vy < 0)    setVy(vy + 1);
@@ -72,11 +72,20 @@ Jacket::Move(bool (&hold)[4])
     // printf("vx: %d, vy: %d\n", vx, vy);
     circle->x += vx;
     circle->y += vy;
+    //circle->x += vx;
+    //circle->y += vy;
+    for(auto wall: WallMap){
+        if(wall->overlap(circle->x, circle->y)){
+            circle->x -= vx;
+            circle->y -= vy;
+            break;
+        }
+    }
 }
 
 void
 Jacket::Draw()
-{   
+{
     int w, h, offset = 0;
     ALLEGRO_BITMAP* curImg;
 

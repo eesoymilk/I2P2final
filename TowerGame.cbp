@@ -58,6 +58,14 @@
 		<Unit filename="GameWindow.h" />
 		<Unit filename="Jacket.cpp" />
 		<Unit filename="Jacket.h" />
+<<<<<<< HEAD
+=======
+		<Unit filename="LEVEL1.txt" />
+		<Unit filename="LEVEL2.txt" />
+		<Unit filename="LEVEL3.txt" />
+		<Unit filename="Level.cpp" />
+		<Unit filename="Level.h" />
+>>>>>>> a5ec4fcdc8c64130c4beba5b5350f51425838aac
 		<Unit filename="Main.cpp" />
 		<Unit filename="Menu.cpp" />
 		<Unit filename="Menu.h" />
@@ -72,6 +80,8 @@
 		<Unit filename="Storm.h" />
 		<Unit filename="SubmachineGun.h" />
 		<Unit filename="Tower.h" />
+		<Unit filename="Wall.cpp" />
+		<Unit filename="Wall.h" />
 		<Unit filename="Weapon.cpp" />
 		<Unit filename="Weapon.h" />
 		<Unit filename="Wolf.h" />
