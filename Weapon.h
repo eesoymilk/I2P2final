@@ -57,6 +57,7 @@ protected:
     ALLEGRO_BITMAP* bulletImg;
     ALLEGRO_SAMPLE* sample = NULL;
     ALLEGRO_SAMPLE_INSTANCE* Sound = NULL;
+    ALLEGRO_SAMPLE_INSTANCE* LoadSound = NULL;
     ALLEGRO_SAMPLE_INSTANCE* ReloadSound = NULL;
 
 private:
