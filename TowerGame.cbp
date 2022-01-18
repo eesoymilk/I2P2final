@@ -52,6 +52,7 @@
 		<Unit filename="Circle.cpp" />
 		<Unit filename="Circle.h" />
 		<Unit filename="DemonNijia.h" />
+		<Unit filename="Dummy.h" />
 		<Unit filename="Enemy.cpp" />
 		<Unit filename="Enemy.h" />
 		<Unit filename="GameWindow.cpp" />
@@ -61,8 +62,6 @@
 		<Unit filename="LEVEL1.txt" />
 		<Unit filename="LEVEL2.txt" />
 		<Unit filename="LEVEL3.txt" />
-		<Unit filename="Level.cpp" />
-		<Unit filename="Level.h" />
 		<Unit filename="Main.cpp" />
 		<Unit filename="Menu.cpp" />
 		<Unit filename="Menu.h" />

@@ -18,10 +18,9 @@ public:
         reload_time = 80;
         strncpy(class_name, "PISTOL", 20);
         sprintf(buffer, "./Weapon/%s.png", class_name);
-        // printf("Loading Image...\n");
+        printf("Loading Pistol Image...\n");
         weaponImg = al_load_bitmap(buffer);
         bulletImg = al_load_bitmap("./Weapon/BULLET.png");
-        icon = al_load_bitmap("pistol.png");
         // load Sound
         sample = al_load_sample("pistol.ogg");
         Sound = al_create_sample_instance(sample);

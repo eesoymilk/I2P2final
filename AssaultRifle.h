@@ -18,7 +18,7 @@ public:
         reload_time = 80;
         strncpy(class_name, "AR", 20);
         sprintf(buffer, "./Weapon/%s.png", class_name);
-        printf("Loading Image...\n");
+        printf("Loading AR Image...\n");
         weaponImg = al_load_bitmap(buffer);
         bulletImg = al_load_bitmap("./Weapon/BULLET.png");
         // load Sound
@@ -32,5 +32,6 @@ public:
         al_set_sample_instance_playmode(ReloadSound, ALLEGRO_PLAYMODE_ONCE);
         al_attach_sample_instance_to_mixer(ReloadSound, al_get_default_mixer());
     }
+    ~AssaultRifle() { printf("Deleting AR...\n"); }
 };
 #endif // ASSAULT_RIFLE_H_INCLUDED

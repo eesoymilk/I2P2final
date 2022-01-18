@@ -58,7 +58,7 @@ GameWindow::spawnEnemy(int arm, int x, int y)
     }
     // printf("Spawning Enemy...\n");
     if (w) {
-        weapons.push_back(w);
+        // weapons.push_back(w);
         e->PickWeapon(w);
     }
     // printf("Spawning Enemy...\n");
@@ -166,14 +166,12 @@ GameWindow::GameWindow()
 
     // printf("Loading Bitmaps...\n");
     icon = al_load_bitmap("./icon.jpg");
-    background = al_load_bitmap("./Map1.png");
-    startscene = al_load_bitmap("./Scene.jpg");
+    startscene = al_load_bitmap("./StartScene.jpg");
     helpscene = al_load_bitmap("./HelpScene.jpg");
     stopscene = al_load_bitmap("./StopScene.png");
     clearscene = al_load_bitmap("./ClearScene.png");
     failscene = al_load_bitmap("./FailedScene.png");
-    background_width = al_get_bitmap_width(background);
-    background_height = al_get_bitmap_height(background);
+    completescene = al_load_bitmap("./CompleteScene.jpg");
 
     al_set_display_icon(display, icon);
     al_reserve_samples(3);
@@ -362,30 +360,36 @@ GameWindow::game_update()
         if (preGameState == GAMESTATE_FAILURE)
             game_begin(level);
 
+        // printf("weapons.size() = %d\n", weapons.size());
+
         // UPDATE JACKET
         Weapon* w = jacket->getWeapon();
         if (game_keys[E_KEY]) {
             game_keys[E_KEY] = false;
             std::vector<Weapon*> near_weapons;
+            std::vector<int> near_weapons_idx;
             Weapon* pick_target;
             Circle* jacket_cirle = jacket->getCircle();
 
-            for (auto weapon : weapons)
-                if (weapon->isDropped() && Circle::isOverlap(jacket_cirle, weapon->getCircle()))
-                    near_weapons.push_back(weapon);
+            for (int i = 0; i < weapons.size(); i++)
+                if (weapons[i]->isDropped() && Circle::isOverlap(jacket_cirle, weapons[i]->getCircle()))
+                    near_weapons_idx.push_back(i);
 
-            if (!near_weapons.empty()) {
+            if (!near_weapons_idx.empty()) {
                 printf("Picking Weapon...\n");
-                pick_target = *near_weapons.begin();
-                double min_distance = Circle::Distance(jacket_cirle, pick_target->getCircle());
-                for (int i = 1; i < near_weapons.size(); i++) {
-                    double distance = Circle::Distance(jacket_cirle, pick_target->getCircle());
+                int pick_idx = near_weapons_idx[0];
+                double min_distance = Circle::Distance(jacket_cirle, weapons[pick_idx]->getCircle());
+                for (int i = 1; i < near_weapons_idx.size(); i++) {
+                    double distance = Circle::Distance(jacket_cirle, weapons[pick_idx]->getCircle());
                     if (distance < min_distance) {
                         min_distance = distance;
-                        pick_target = near_weapons[i];
+                        pick_idx = near_weapons_idx[i];
                     }
                 }
-                jacket->PickWeapon(pick_target);
+                if (w)  weapons.push_back(jacket->DropWeapon());
+                jacket->PickWeapon(weapons[pick_idx]);
+                weapons.erase(weapons.begin() + pick_idx);
+                weapons.shrink_to_fit();
             }
         }
 
@@ -396,7 +400,7 @@ GameWindow::game_update()
 
         if (game_keys[G_KEY]) {
             game_keys[G_KEY] = false;
-            if (w)  w->Drop(jacket->getX(), jacket->getY());
+            if (w)  weapons.push_back(jacket->DropWeapon());
         }
 
         if (w) {
@@ -413,46 +417,59 @@ GameWindow::game_update()
         std::vector<int>        erase_indices;
         for (int i = 0; i < bullets.size(); i++) {
             bullets[i]->Move();
+            bool in_air = true;
             int bx = bullets[i]->getX(), by = bullets[i]->getY();
             if (bx < 0 || bx > background_width || by < 0 || by > background_height) {
                 erase_indices.push_back(i);
+                in_air = false;
                 continue;
             }
-            for (auto wall : WallMap) if (wall->overlap(bx, by)) {
+            for (auto wall : WallMap) if (in_air && wall->overlap(bx, by)) {
                 // BULLET HIT WALL SOUND EFFECT
                 erase_indices.push_back(i);
                 continue;
             }
-            for (int j = 0; j < enemies.size(); j++) {
+            for (int j = 0; j < enemies.size() && in_air; j++) {
+                if (enemies[j]->getHP() == 0)   continue;
                 if (Circle::isOverlap(enemies[j]->getCircle(), bullets[i]->getCircle())) {
                     // BULLET HIT ENEMY SOUND EFFECT
-                    enemies[j]->TakeDamage(bullets[i]->getDamage());
+                    printf("Hit!\n");
+                    if (enemies[j]->TakeDamage(bullets[i]->getDamage())) {
+                        printf("Enemy Dead!\n");
+                        if (enemies[j]->getWeapon())
+                            weapons.push_back(enemies[j]->DropWeapon());
+                        printf("Enemy Weapon Dropped!\n");
+                    }
                     erase_indices.push_back(i);
+                    in_air = false;
+                    continue;
                 }
             }
         }
+        // printf("Test\n");
+        if (!bullets.empty())   printf("%d bullets in air.\n", bullets.size());
         for (auto idx : erase_indices)   jacket->EraseBullet(idx);
         erase_indices.clear();
 
         // UPDATE ENEMIES
         int jx = jacket->getX(), jy = jacket->getY();
         for (auto e : enemies) {
-            if (e->getHP() == 0)    continue;
-
-            int ex = e->getX(), ey = e->getY();
-            Weapon* enemy_w = e->getWeapon();
-            if (enemy_w) {
-                if (enemy_w->isReloading()) enemy_w->Reload();
-                else                        enemy_w->CoolDown();
-            }
-            bool visible = true;
-            for (auto w : WallMap) {
-                if (wallBetween(w, ex, ey, jx, jy)) {
-                    visible = false;
-                    break;
+            if (e->getHP()) {
+                int ex = e->getX(), ey = e->getY();
+                Weapon* enemy_w = e->getWeapon();
+                if (enemy_w) {
+                    if (enemy_w->isReloading()) enemy_w->Reload();
+                    else                        enemy_w->CoolDown();
                 }
+                bool visible = true;
+                for (auto w : WallMap) {
+                    if (wallBetween(w, ex, ey, jx, jy)) {
+                        visible = false;
+                        break;
+                    }
+                }
+                if (visible)    e->Assault(jx, jy, WallMap);
             }
-            if (visible)    e->Assault(jx, jy, WallMap);
 
             bullets = e->getBullets();
             for (int i = 0; i < bullets.size(); i++) {
@@ -750,7 +767,7 @@ GameWindow::Draw()
     } else if (GameState == GAMESTATE_FAILURE) {
         al_draw_bitmap(failscene, 0, 0, 0);
     } else if (GameState == GAMESTATE_END) {
-
+        al_draw_bitmap(completescene, 0, 0, 0);
     }
     al_flip_display();
 }

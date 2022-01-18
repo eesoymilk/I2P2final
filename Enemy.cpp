@@ -33,13 +33,13 @@ Enemy::~Enemy()
     attackImg.clear();
     for (auto b : bullets)  delete b;
     bullets.clear();
-
+    if (wielding)   delete wielding;
     delete circle;
     printf("Enemy Deleted!\n");
 }
 
 void
-Enemy::Move(int ux, int uy, std::vector<Wall*> WallMap)
+Enemy::Move(double ux, double uy, std::vector<Wall*> WallMap)
 {
     max_speed = 3;
     
@@ -94,9 +94,11 @@ Enemy::Assault(int jx, int jy, std::vector<Wall*> WallMap)
         Move(ux, uy, WallMap);
     }
     if (wielding) {
-        // printf("Enemy is about to fire.\n");
-        if (wielding->getAmmo() > 0)        FireWeapon(ux, uy);
-        else if (!wielding->isReloading())  wielding->StartReload();
+        if (wielding->getReserved()) {
+            printf("Enemy is about to fire.\n");
+            if (wielding->getAmmo() > 0)        FireWeapon(ux, uy);
+            else if (!wielding->isReloading())  wielding->StartReload();
+        }
     }
 }
 

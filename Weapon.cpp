@@ -20,12 +20,10 @@ Weapon::~Weapon()
 {
     al_destroy_bitmap(weaponImg);
     al_destroy_bitmap(bulletImg);
-    al_destroy_bitmap(icon);
     al_destroy_sample(sample);
     al_destroy_sample_instance(Sound);
     al_destroy_sample_instance(ReloadSound);
     delete circle;
-    printf("Weapon deleted.\n");
 }
 
 void
@@ -60,6 +58,8 @@ void
 Weapon::Drop(int drop_x, int drop_y)
 {
     // DROPPING WEAPON SOUND EFFECT
+    printf("circle->x = %d, circle->y = %d\n", circle->x, circle->y);
+    printf("drop_x = %d, drop_y = %d\n", drop_x, drop_y);
     circle->x = drop_x;
     circle->y = drop_y;
     dropped = true;

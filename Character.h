@@ -33,10 +33,10 @@ public:
     void Load_Img();
 
     // virtual void Move(bool(&)[5], std::vector<Wall*>);
-    void DropWeapon();
+    Weapon* DropWeapon();
     void PickWeapon(Weapon*);
     // void FireWeapon(int, int);
-    void TakeDamage(int);
+    bool TakeDamage(int);
     void EraseBullet(int);
 
     // functions that return informations of monster

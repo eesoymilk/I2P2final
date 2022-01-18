@@ -8,7 +8,7 @@ class Enemy : public Character
 public:
     Enemy(int, int);
     ~Enemy();
-    void Move(int, int, std::vector<Wall*>);
+    void Move(double, double, std::vector<Wall*>);
     void FireWeapon(double, double);
     void Assault(int, int, std::vector<Wall*>);
     void setRadianCCW(int, int);

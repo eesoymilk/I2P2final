@@ -43,6 +43,7 @@ Jacket::~Jacket()
     // for (auto b : bullets)  delete b;
     bullets.clear();
     printf("Bullets Cleared.\n");
+    if (wielding)   delete wielding;
     delete circle;
     printf("Circle Cleared.\n");
 }

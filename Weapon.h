@@ -55,7 +55,6 @@ protected:
     bool dropped, reloading;
     ALLEGRO_BITMAP* weaponImg;
     ALLEGRO_BITMAP* bulletImg;
-    ALLEGRO_BITMAP* icon;
     ALLEGRO_SAMPLE* sample = NULL;
     ALLEGRO_SAMPLE_INSTANCE* Sound = NULL;
     ALLEGRO_SAMPLE_INSTANCE* ReloadSound = NULL;

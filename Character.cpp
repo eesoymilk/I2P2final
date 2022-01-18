@@ -105,19 +105,23 @@ Character::Draw()
 //     }
 // }
 
-void
+Weapon*
 Character::DropWeapon()
 {
+    printf("Start Dropping...\n");
     firearm = 0;
-    if (wielding == NULL) return;
-    wielding->Drop(circle->x, circle->y);
+    Weapon* dropped = wielding;
     wielding = NULL;
+    printf("Before Dropping...\n");
+    if (dropped)    dropped->Drop(circle->x, circle->y);
+    printf("Dropped\n");
+    return dropped;
 }
 
 void
 Character::PickWeapon(Weapon* w)
 {
-    if (wielding != NULL)   DropWeapon();
+    // if (wielding != NULL)   DropWeapon();
     w->Pick();
     wielding = w;
     firearm = w->getType();
@@ -145,11 +149,18 @@ Character::PickWeapon(Weapon* w)
 //     }
 // }
 
-void
+bool
 Character::TakeDamage(int damage)
 {
-    if (damage >= HP)   HP = 0;
-    else                HP -= damage;
+    if (HP == 0)    return false;
+    if (damage >= HP) {
+        HP = 0;
+        return true;
+    }
+    else {
+        HP -= damage;
+        return false;
+    }
 }
 
 void
