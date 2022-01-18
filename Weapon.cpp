@@ -21,10 +21,47 @@ Weapon::~Weapon()
     al_destroy_bitmap(weaponImg);
     al_destroy_bitmap(bulletImg);
     al_destroy_sample(sample);
-    al_destroy_sample_instance(Sound);
+    for(unsigned int i = 0; i < FiringSound.size(); i++) {
+        ALLEGRO_SAMPLE_INSTANCE *instance = FiringSound[i];
+        FiringSound.erase(FiringSound.begin() + i);
+        i--;
+        al_destroy_sample_instance(instance);
+    }
     al_destroy_sample_instance(LoadSound);
     al_destroy_sample_instance(ReloadSound);
     delete circle;
+}
+
+void
+Weapon::LoadData()
+{
+    char buffer[50];
+    
+    // load images
+    sprintf(buffer, "./Weapon/%s.png", class_name);
+    weaponImg = al_load_bitmap(buffer);
+    bulletImg = al_load_bitmap("./Weapon/BULLET.png");
+
+    // load Sound
+    sprintf(buffer, "./SoundEffect/%s_FIRING.wav", class_name);
+    sample = al_load_sample(buffer);
+    for (int i = 0; i < 30; i++) {
+        FiringSound.push_back(al_create_sample_instance(sample));
+        al_set_sample_instance_playmode(FiringSound[i], ALLEGRO_PLAYMODE_ONCE);
+        al_attach_sample_instance_to_mixer(FiringSound[i], al_get_default_mixer());
+    }
+
+    sprintf(buffer, "./SoundEffect/%s_LOADED.wav", class_name);
+    sample = al_load_sample(buffer);
+    LoadSound = al_create_sample_instance(sample);
+    al_set_sample_instance_playmode(LoadSound, ALLEGRO_PLAYMODE_ONCE);
+    al_attach_sample_instance_to_mixer(LoadSound, al_get_default_mixer());
+
+    sprintf(buffer, "./SoundEffect/%s_RELOADING.wav", class_name);
+    sample = al_load_sample(buffer);
+    ReloadSound = al_create_sample_instance(sample);
+    al_set_sample_instance_playmode(ReloadSound, ALLEGRO_PLAYMODE_ONCE);
+    al_attach_sample_instance_to_mixer(ReloadSound, al_get_default_mixer());
 }
 
 void
@@ -70,6 +107,7 @@ Weapon::Drop(int drop_x, int drop_y)
 bool
 Weapon::Fire()
 {
+    static int cnt = 0;
     if (fire_counter < fire_rate)   return false;
     if (in_magzine <= 0) {
         // DRY MAG SOUND EFFECT
@@ -77,7 +115,8 @@ Weapon::Fire()
     }
     in_magzine--;
     fire_counter = 0;
-    al_play_sample_instance(Sound); // FIRING SOUND EFFECT
+    if (cnt++ == 29)  cnt = 0;
+    al_play_sample_instance(FiringSound[cnt]); // FIRING SOUND EFFECT
     return true;
 }
 

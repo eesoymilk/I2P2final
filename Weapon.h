@@ -21,6 +21,7 @@ class Weapon : public Object
 public:
     Weapon();
     ~Weapon();
+    void LoadData();
 
     // Draw image per frame
     // override virtual function "Object::Draw"
@@ -56,7 +57,7 @@ protected:
     ALLEGRO_BITMAP* weaponImg;
     ALLEGRO_BITMAP* bulletImg;
     ALLEGRO_SAMPLE* sample = NULL;
-    ALLEGRO_SAMPLE_INSTANCE* Sound = NULL;
+    std::vector<ALLEGRO_SAMPLE_INSTANCE*> FiringSound;
     ALLEGRO_SAMPLE_INSTANCE* LoadSound = NULL;
     ALLEGRO_SAMPLE_INSTANCE* ReloadSound = NULL;
 

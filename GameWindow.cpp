@@ -168,7 +168,7 @@ GameWindow::GameWindow()
     icon = al_load_bitmap("./icon.jpg");
     startscene = al_load_bitmap("./StartScene.jpg");
     helpscene = al_load_bitmap("./HelpScene.jpg");
-    stopscene = al_load_bitmap("./StopScene.png");
+    stopscene = al_load_bitmap("./StopScene.jpg");
     clearscene = al_load_bitmap("./ClearScene.png");
     failscene = al_load_bitmap("./FailedScene.png");
     completescene = al_load_bitmap("./CompleteScene.jpg");
@@ -191,6 +191,34 @@ GameWindow::GameWindow()
     gameSound = al_create_sample_instance(sample);
     al_set_sample_instance_playmode(gameSound, ALLEGRO_PLAYMODE_LOOP);
     al_attach_sample_instance_to_mixer(gameSound, al_get_default_mixer());
+
+    sample = al_load_sample("./SoundEffect/damage1.wav");
+    for (int i = 0; i < 30; i++) {
+        damageSound1.push_back(al_create_sample_instance(sample));
+        al_set_sample_instance_playmode(damageSound1[i], ALLEGRO_PLAYMODE_ONCE);
+        al_attach_sample_instance_to_mixer(damageSound1[i], al_get_default_mixer());
+    }
+
+    sample = al_load_sample("./SoundEffect/damage2.wav");
+    for (int i = 0; i < 30; i++) {
+        damageSound2.push_back(al_create_sample_instance(sample));
+        al_set_sample_instance_playmode(damageSound2[i], ALLEGRO_PLAYMODE_ONCE);
+        al_attach_sample_instance_to_mixer(damageSound2[i], al_get_default_mixer());
+    }
+
+    sample = al_load_sample("./SoundEffect/damage3.wav");
+    for (int i = 0; i < 30; i++) {
+        damageSound3.push_back(al_create_sample_instance(sample));
+        al_set_sample_instance_playmode(damageSound3[i], ALLEGRO_PLAYMODE_ONCE);
+        al_attach_sample_instance_to_mixer(damageSound3[i], al_get_default_mixer());
+    }
+
+    sample = al_load_sample("./SoundEffect/headshot2.wav");
+    for (int i = 0; i < 30; i++) {
+        deadSound.push_back(al_create_sample_instance(sample));
+        al_set_sample_instance_playmode(deadSound[i], ALLEGRO_PLAYMODE_ONCE);
+        al_attach_sample_instance_to_mixer(deadSound[i], al_get_default_mixer());
+    }
 
     FILE *file;
     file = fopen("Record.txt", "r");
@@ -237,6 +265,7 @@ GameWindow::level_init(int l)
     fscanf(file, "%s", buffer);
     n = atoi(buffer);
     printf("n = %d\n", n);
+    enemy_count = n;
     for (int i = 0; i < n; i++) {
         Enemy* e = NULL;
         fscanf(file, "%s", buffer);
@@ -408,7 +437,9 @@ GameWindow::game_update()
                 w->Reload();
             } else {
                 w->CoolDown();
-                if (mouse_hold) jacket->FireWeapon(mouse_x, mouse_y);
+                if (mouse_hold)
+                    if (w->getAmmo() == 0)  w->StartReload();
+                    else                    jacket->FireWeapon(mouse_x, mouse_y);
             }
         }
 
@@ -425,7 +456,6 @@ GameWindow::game_update()
                 continue;
             }
             for (auto wall : WallMap) if (in_air && wall->overlap(bx, by)) {
-                // BULLET HIT WALL SOUND EFFECT
                 erase_indices.push_back(i);
                 continue;
             }
@@ -433,9 +463,13 @@ GameWindow::game_update()
                 if (enemies[j]->getHP() == 0)   continue;
                 if (Circle::isOverlap(enemies[j]->getCircle(), bullets[i]->getCircle())) {
                     // BULLET HIT ENEMY SOUND EFFECT
+                    play_damage_sound();
                     printf("Hit!\n");
                     if (enemies[j]->TakeDamage(bullets[i]->getDamage())) {
+                        // ENEMY DEAD EFFECT
+                        play_dead_sound();
                         printf("Enemy Dead!\n");
+                        enemy_count--;
                         if (enemies[j]->getWeapon())
                             weapons.push_back(enemies[j]->DropWeapon());
                         printf("Enemy Weapon Dropped!\n");
@@ -481,13 +515,13 @@ GameWindow::game_update()
                     continue;
                 }
                 for (auto wall : WallMap) if (in_air && wall->overlap(bx, by)) {
-                    // BULLET HIT WALL SOUND EFFECT
                     erase_indices.push_back(i);
                     in_air = false;
                     continue;
                 }
                 if (in_air && Circle::isOverlap(jacket->getCircle(), bullets[i]->getCircle())) {
-                    // BULLET HIT ENEMY SOUND EFFECT
+                    // BULLET HIT JACKET SOUND EFFECT
+                    play_damage_sound();
                     jacket->TakeDamage(bullets[i]->getDamage());
                     erase_indices.push_back(i);
                 }
@@ -583,7 +617,7 @@ GameWindow::game_reset()
 void
 GameWindow::game_destroy()
 {
-    
+
     FILE* file;
     file = fopen("Record.txt", "w");
     fprintf(file, "%lld %lld %lld", record[0], record[1], record[2]);
@@ -751,6 +785,12 @@ GameWindow::Draw()
         // printf("Drawing Enemies...\n");
         for (auto enemy : enemies)  enemy->Draw();
         // printf("Drawing Jacket...\n");
+        char buffer[50];
+        sprintf(buffer, "Enemies left: %d", enemy_count);
+        al_draw_filled_rectangle(0, 0, hud_width, hud_height, al_map_rgba(0,0,0,100));
+        al_draw_text(hudFont, al_map_rgb(255, 255, 255), font_start, font_start, 0, buffer);
+        sprintf(buffer, "Time: %.2lf", al_get_timer_count(record_time) / 60.0);
+        al_draw_text(hudFont, al_map_rgb(255, 255, 255), font_start, 2 * font_start + font_size, 0, buffer);
         jacket->Draw();
         //for(auto wall: WallMap) wall->Draw();
         // printf("Done!!!...\n\n");
@@ -800,4 +840,20 @@ GameWindow::wallBetween(Wall* wall, int x1, int y1, int x2, int y2){
     double intersect_x1 = (yl - con) / slope; if(intersect_x1 >= min(x1, x2) && intersect_x1 <= max(x1, x2) && intersect_x1 >= xl && intersect_x1 <= xr) return true;
     double intersect_x2 = (yr - con) / slope; if(intersect_x2 >= min(x1, x2) && intersect_x2 <= max(x1, x2) && intersect_x2 >= xl && intersect_x2 <= xr) return true;
     return false;
+}
+
+void
+GameWindow::play_damage_sound()
+{
+    static int cnt = 0;
+    if (cnt++ == 29) cnt = 0;
+    al_play_sample_instance(damageSound1[cnt]);
+}
+
+void
+GameWindow::play_dead_sound()
+{
+    static int cnt = 0;
+    if (cnt++ == 29) cnt = 0;
+    al_play_sample_instance(deadSound[cnt]);
 }

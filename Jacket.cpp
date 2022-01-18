@@ -1,9 +1,5 @@
 #include "Jacket.h"
 
-const int hud_width = 600;
-const int hud_height = 200;
-const int font_start = 20;
-
 Jacket::Jacket(int spwan_x, int spwan_y) : Character(spwan_x, spwan_y)
 {
     HP = 1000;
@@ -167,8 +163,8 @@ Jacket::Draw()
 
     char buffer[50];
     sprintf(buffer, "%d", HP);
-    al_draw_filled_rectangle(0, window_height - hud_height, hud_width, window_height, al_map_rgb(0, 0, 0));
-    al_draw_text(hudFont, al_map_rgb(255, 255, 255), font_size, window_height - hud_height + font_start, 0, buffer);
+    al_draw_filled_rectangle(0, window_height - hud_height, hud_width, window_height, al_map_rgba(0,0,0,100));
+    al_draw_text(hudFont, al_map_rgb(255, 255, 255), font_start, window_height - hud_height + font_start, 0, buffer);
     double length = (hud_width - font_start - 4 * font_size) * HP / 1000.0;
     al_draw_filled_rectangle(4 * font_size, window_height - hud_height + font_start, 4 * font_size + (int)length, window_height - hud_height + font_start + font_size, al_map_rgb(255, 0, 0));
     sprintf(buffer, "%d/%d   %d", ammo, mag_size, reserved);

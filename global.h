@@ -36,6 +36,10 @@ extern int Character_Health;
 extern int camera_origin_x;
 extern int camera_origin_y;
 
+const int hud_width = 600;
+const int hud_height = 200;
+const int font_start = 20;
+
 enum {ARCANE = 0, ARCHER, CANON, POISON, STORM};
 enum {WOLF = 0, WOLFKNIGHT, DEMONNIJIA, CAVEMAN};
 

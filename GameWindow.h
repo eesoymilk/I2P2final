@@ -66,6 +66,8 @@ public:
 
     // process of updated event
     int process_event();
+    void play_damage_sound();
+    void play_dead_sound();
     // detect if mouse hovers over a rectangle
     bool mouse_hover(int, int, int, int);
     bool wallBetween(Wall* wall, int x1, int y1, int x2, int y2);
@@ -113,10 +115,14 @@ private:
     std::vector<Enemy*> enemies;
     std::vector<Weapon*> weapons;
     std::vector<Wall*> WallMap;
+    std::vector<ALLEGRO_SAMPLE_INSTANCE*> damageSound1;
+    std::vector<ALLEGRO_SAMPLE_INSTANCE*> damageSound2;
+    std::vector<ALLEGRO_SAMPLE_INSTANCE*> damageSound3;
+    std::vector<ALLEGRO_SAMPLE_INSTANCE*> deadSound;
 
     int mouse_x, mouse_y;
     int board_x = 0, board_y = 0;
-    int preGameState = 0, GameState = 0, level = 0;
+    int preGameState = 0, GameState = 0, level = 0, enemy_count;
     int Node_Amount = 0;
     int Wall_Amount = 0;
     int Door_Amount = 0;
