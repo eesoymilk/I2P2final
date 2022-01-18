@@ -5,11 +5,11 @@ Enemy::Enemy(int spawn_x, int spawn_y) : Character(spawn_x, spawn_y)
     HP = 100;
     pos_x = spawn_x;
     pos_y = spawn_y;
-    sprites[UNARMED] = 7;
+    sprites[UNARMED] = 5;
     sprites[PISTOL] = 8;
     sprites[SMG] = 8;
-    sprites[AR] = 8;
-    sprites[DEAD] = 7;
+    sprites[AR] = 6;
+    sprites[DEAD] = 6;
 
     strncpy(class_name, "Enemy", 20);
     Load_Img();
@@ -41,10 +41,16 @@ Enemy::~Enemy()
 void
 Enemy::Move(double ux, double uy, std::vector<Wall*> WallMap)
 {
-    max_speed = 3;
-    
+    max_speed = 4;
     if (ux || uy)   setSpeed(speed + 1);
     else            setSpeed(speed - 1);
+
+    counter = (counter + 1) % draw_frequency;
+    if (speed == 0) {
+        sprite_count = 0;
+    } else if (counter == 0) {
+        sprite_count = (sprite_count + 1) % sprites[firearm];
+    }
 
     bool move_x = true, move_y = true, move_both = true;
     for(auto wall: WallMap){
@@ -113,14 +119,15 @@ Enemy::Draw()
         this->bullets[i]->Draw();
     }
 
-    if (HP) {
-        for (int i = 0; i < getFirearm(); i++)       offset += sprites[i];
-        if (!moveImg[offset + getSpriteCnt()])  return;
-        curImg = moveImg[offset + getSpriteCnt()];
+    if (HP != 0) {
+        for (int i = 0; i < firearm; i++)       offset += sprites[i];
+        if (!moveImg[offset + sprite_count])  return;
+        curImg = moveImg[offset + sprite_count];
     } else {
         for (int i = 0; i < 4; i++) offset += sprites[i];
         offset += (int)(getRadianCCW() * 180 / PI) % sprites[4];
-        curImg = moveImg[offset + getSpriteCnt()];
+        // curImg = moveImg[32];
+        curImg = moveImg[offset];
     }
     w = al_get_bitmap_width(curImg);
     h = al_get_bitmap_height(curImg);

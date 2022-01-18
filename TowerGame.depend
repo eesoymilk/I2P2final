@@ -314,7 +314,7 @@
 	"Circle.h"
 	<cmath>
 
-1642478150 source:e:\github\i2p2final\gamewindow.cpp
+1642488181 source:e:\github\i2p2final\gamewindow.cpp
 	"GameWindow.h"
 	"global.h"
 	<iostream>
@@ -322,21 +322,20 @@
 
 1642352956 D
 
-1642477714 e:\github\i2p2final\gamewindow.h
+1642483305 e:\github\i2p2final\gamewindow.h
 	<allegro5/allegro_audio.h>
 	<allegro5/allegro_acodec.h>
 	<vector>
+	<set>
 	<list>
 	<time.h>
 	"Bullet.h"
-	"Slider.h"
 	"Jacket.h"
 	"Enemy.h"
 	"Pistol.h"
 	"SubmachineGun.h"
 	"AssaultRifle.h"
 	"Wall.h"
-	"Dummy.h"
 
 1642352956 
 	<allegro5/allegro_audio.h>
@@ -393,7 +392,7 @@
 	"allegro5/allegro.h"
 	"allegro5/allegro_font.h"
 
-1642478061 e:\github\i2p2final\global.h
+1642481054 e:\github\i2p2final\global.h
 	<allegro5/allegro_font.h>
 
 1642397102 e:\github\i2p2final\level.h
@@ -929,7 +928,7 @@
 1642225244 source:c:\users\user\i2p2final\tower.cpp
 	"Tower.h"
 
-1642471352 e:\github\i2p2final\character.h
+1642487300 e:\github\i2p2final\character.h
 	<stdio.h>
 	<string.h>
 	<vector>
@@ -945,7 +944,7 @@
 	"global.h"
 	"Wall.h"
 
-1642471949 source:e:\github\i2p2final\character.cpp
+1642487669 source:e:\github\i2p2final\character.cpp
 	"Character.h"
 	<cmath>
 
@@ -994,10 +993,10 @@
 	"Weapon.h"
 	"global.h"
 
-1642472909 e:\github\i2p2final\pistol.h
+1642480669 e:\github\i2p2final\pistol.h
 	"Weapon.h"
 
-1642476959 source:e:\github\i2p2final\weapon.cpp
+1642482094 source:e:\github\i2p2final\weapon.cpp
 	"Weapon.h"
 
 1642470835 c:\users\user\i2p2final\weapon.h
@@ -1028,7 +1027,7 @@
 1642470835 source:c:\users\user\i2p2final\jacket.cpp
 	"Jacket.h"
 
-1642478169 source:e:\github\i2p2final\jacket.cpp
+1642488363 source:e:\github\i2p2final\jacket.cpp
 	"Jacket.h"
 
 1642416396 e:\github\i2p2final\bullet.h
@@ -1047,10 +1046,10 @@
 1642462985 source:e:\github\i2p2final\object.cpp
 	"Object.h"
 
-1642472912 e:\github\i2p2final\submachinegun.h
+1642480667 e:\github\i2p2final\submachinegun.h
 	"Weapon.h"
 
-1642472914 e:\github\i2p2final\assaultrifle.h
+1642480668 e:\github\i2p2final\assaultrifle.h
 	"Weapon.h"
 
 1642457513 c:\users\user\i2p2final\bullet.h
@@ -1078,7 +1077,7 @@
 1642469908 e:\github\i2p2final\enemy.h
 	"Character.h"
 
-1642470404 source:e:\github\i2p2final\enemy.cpp
+1642488069 source:e:\github\i2p2final\enemy.cpp
 	"Enemy.h"
 
 1642455276 e:\github\i2p2final\wall.h

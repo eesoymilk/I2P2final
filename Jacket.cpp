@@ -48,8 +48,8 @@ void
 Jacket::Move(bool (&move_keys)[5], std::vector<Wall*> WallMap)
 {
 
-    if (move_keys[LSHIFT_KEY])  max_speed = 5;
-    else                        max_speed = 3;
+    if (move_keys[LSHIFT_KEY])  max_speed = 6;
+    else                        max_speed = 4;
 
     if (move_keys[W_KEY])                    setVy(vy - Acceleration);
     else if (!move_keys[S_KEY] && vy < 0)    setVy(vy + 1);
@@ -101,7 +101,7 @@ Jacket::FireWeapon(int mouse_x, int mouse_y)
         auto [ux, uy] = UnitVector(mouse_x - x1, mouse_y - y1);
         // printf("ux = %lf, uy = %lf\n", ux, uy);
         // Circle* shooter = new Circle(cam.first, cam.second, this->circle->r);
-        printf("Fire!\n");
+        // printf("Fire!\n");
         Bullet *b = new Bullet (
             this->getCircle(),
             ux, uy,
@@ -124,12 +124,13 @@ Jacket::Draw()
 
     if (HP) {
         for (int i = 0; i < getFirearm(); i++)       offset += sprites[i];
+        offset += getSpriteCnt();
         if (!moveImg[offset + getSpriteCnt()])  return;
-        curImg = moveImg[offset + getSpriteCnt()];
     } else {
         for (int i = 0; i < 4; i++) offset += sprites[i];
         offset += (int)(getRadianCCW() * 180 / PI) % sprites[4];
     }
+    curImg = moveImg[offset];
     w = al_get_bitmap_width(curImg);
     h = al_get_bitmap_height(curImg);
     double cx = w / 2, cy = h / 2;

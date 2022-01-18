@@ -4,11 +4,10 @@
 #include <allegro5/allegro_audio.h>
 #include <allegro5/allegro_acodec.h>
 #include <vector>
+#include <set>
 #include <list>
 #include <time.h>
 #include "Bullet.h"
-#include "Slider.h"
-
 // EDITED
 #include "Jacket.h"
 #include "Enemy.h"
@@ -16,7 +15,6 @@
 #include "SubmachineGun.h"
 #include "AssaultRifle.h"
 #include "Wall.h"
-#include "Dummy.h"
 //
 
 #define GAME_EXIT -1
@@ -129,6 +127,7 @@ private:
     long long int record[3];
 
     bool update = false;
+    bool botmode = false;
     bool mute = false;
     bool move_keys[MoveKeysUsed] = {false};
     bool game_keys[GameKeysUsed] = {false};

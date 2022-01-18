@@ -8,7 +8,7 @@ Character::Character(int spawn_x, int spawn_y)
     // circle->y = spawn_y * grid_heiwwwwwwght + grid_height/2;
     circle->x = spawn_x;
     circle->y = spawn_y;
-    circle->r = grid_width / 2;
+    circle->r = CharacterWidth;
     sprite_count = 0;
     counter = 0;
     strncpy(class_name, "Jacket", 20);
@@ -37,8 +37,7 @@ Character::Load_Img()
     for (int i = 0; i < 5; i++) {
         for(int j = 0; j < sprites[i]; j++) {
             ALLEGRO_BITMAP *img;
-            // sprintf(buffer, "./%s/%s_%d.png", class_name, firearm_names[i], j);
-            sprintf(buffer, "./Jacket/%s_%d.png", firearm_names[i], j);
+            sprintf(buffer, "./%s/%s_%d.png", class_name, firearm_names[i], j);
             img = al_load_bitmap(buffer);
             if(img) moveImg.push_back(img);
         }

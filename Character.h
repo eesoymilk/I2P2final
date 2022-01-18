@@ -61,7 +61,7 @@ protected:
     std::vector<Bullet*> bullets;
     double radian_ccw;
     // animation counter
-    int firearm = 0, counter;
+    int firearm = 0, counter = 0;
     // animation image of current direction
     int sprite_count;
     // VELOCITY

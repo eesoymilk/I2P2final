@@ -10,7 +10,7 @@
 Weapon::Weapon()
 {
     circle = new Circle;
-    circle->r = 2 * grid_width;
+    circle->r = 40;
     dropped = false;
     strncpy(class_name, "Weapon", 20);
 }
@@ -72,15 +72,10 @@ Weapon::Draw()
         // get height and width of sprite bitmap
         int w = al_get_bitmap_width(weaponImg);
         int h = al_get_bitmap_height(weaponImg);
-        // printf("Image's data gotten.\n");
-
-        // draw bitmap align grid edge
-        // double dx = circle->x - w / 2, dy = circle->y - h / 2;
-        // printf("Transforming...\n");
         auto [dx, dy] = Transform();
-        // printf("cam_x = %d, cam_y = %d\n", cam.first, cam.second);
-        al_draw_bitmap(weaponImg, dx, dy, 0);
-        // printf("Drawn weapon.\n");
+        dx -= circle->r * WeaponScale / 2;
+        dx -= circle->r * WeaponScale / 2;
+        al_draw_scaled_bitmap(weaponImg, 0, 0, w, h, dx, dy, w * WeaponScale, h * WeaponScale, 0);
     }
 }
 

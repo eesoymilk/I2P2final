@@ -12,7 +12,6 @@
 #define min(a, b) ((a) < (b)? (a) : (b))
 #define max(a, b) ((a) > (b)? (a) : (b))
 
-
 // EDITED
 
 #define MaxLevel 3
@@ -376,6 +375,7 @@ GameWindow::game_run()
 int
 GameWindow::game_update()
 {
+    // printf("In game_update\n");
     if (GameState == GAMESTATE_MENU && preGameState != GAMESTATE_MENU) {
         game_menu();
     }
@@ -392,6 +392,7 @@ GameWindow::game_update()
         // printf("weapons.size() = %d\n", weapons.size());
 
         // UPDATE JACKET
+        // printf("Update Jacket\n");
         Weapon* w = jacket->getWeapon();
         if (game_keys[E_KEY]) {
             game_keys[E_KEY] = false;
@@ -427,6 +428,12 @@ GameWindow::game_update()
             if (w)  w->StartReload();
         }
 
+        if (func_keys[H_KEY]) {
+            func_keys[H_KEY] = false;
+            if (botmode)    botmode = false;
+            else            botmode = true;
+        }
+
         if (game_keys[G_KEY]) {
             game_keys[G_KEY] = false;
             if (w)  weapons.push_back(jacket->DropWeapon());
@@ -445,18 +452,19 @@ GameWindow::game_update()
 
         jacket->Move(move_keys, WallMap);
         std::vector<Bullet*>    bullets = jacket->getBullets();
-        std::vector<int>        erase_indices;
+        std::set<int>           erase_indices;
+        erase_indices.clear();
         for (int i = 0; i < bullets.size(); i++) {
             bullets[i]->Move();
             bool in_air = true;
             int bx = bullets[i]->getX(), by = bullets[i]->getY();
             if (bx < 0 || bx > background_width || by < 0 || by > background_height) {
-                erase_indices.push_back(i);
+                erase_indices.insert(i);
                 in_air = false;
                 continue;
             }
             for (auto wall : WallMap) if (in_air && wall->overlap(bx, by)) {
-                erase_indices.push_back(i);
+                erase_indices.insert(i);
                 continue;
             }
             for (int j = 0; j < enemies.size() && in_air; j++) {
@@ -474,7 +482,7 @@ GameWindow::game_update()
                             weapons.push_back(enemies[j]->DropWeapon());
                         printf("Enemy Weapon Dropped!\n");
                     }
-                    erase_indices.push_back(i);
+                    erase_indices.insert(i);
                     in_air = false;
                     continue;
                 }
@@ -486,53 +494,56 @@ GameWindow::game_update()
         erase_indices.clear();
 
         // UPDATE ENEMIES
-        int jx = jacket->getX(), jy = jacket->getY();
-        for (auto e : enemies) {
-            if (e->getHP()) {
-                int ex = e->getX(), ey = e->getY();
-                Weapon* enemy_w = e->getWeapon();
-                if (enemy_w) {
-                    if (enemy_w->isReloading()) enemy_w->Reload();
-                    else                        enemy_w->CoolDown();
+        if (!botmode) {
+            // printf("Update Enemis\n");
+            int jx = jacket->getX(), jy = jacket->getY();
+            for (auto e : enemies) {
+                if (e->getHP()) {
+                    int ex = e->getX(), ey = e->getY();
+                    Weapon* enemy_w = e->getWeapon();
+                    if (enemy_w) {
+                        if (enemy_w->isReloading()) enemy_w->Reload();
+                        else                        enemy_w->CoolDown();
+                    }
+                    bool visible = true;
+                    for (auto w : WallMap) {
+                        if (wallBetween(w, ex, ey, jx, jy)) {
+                            visible = false;
+                            break;
+                        }
+                    }
+                    if (visible)    e->Assault(jx, jy, WallMap);
                 }
-                bool visible = true;
-                for (auto w : WallMap) {
-                    if (wallBetween(w, ex, ey, jx, jy)) {
-                        visible = false;
-                        break;
+
+                bullets = e->getBullets();
+                for (int i = 0; i < bullets.size(); i++) {
+                    bullets[i]->Move();
+                    int bx = bullets[i]->getX(), by = bullets[i]->getY();
+                    bool in_air = true;
+                    if (bx < 0 || bx > background_width || by < 0 || by > background_height) {
+                        erase_indices.insert(i);
+                        continue;
+                    }
+                    for (auto wall : WallMap) if (in_air && wall->overlap(bx, by)) {
+                        erase_indices.insert(i);
+                        in_air = false;
+                        continue;
+                    }
+                    if (in_air && Circle::isOverlap(jacket->getCircle(), bullets[i]->getCircle())) {
+                        // BULLET HIT JACKET SOUND EFFECT
+                        play_damage_sound();
+                        jacket->TakeDamage(bullets[i]->getDamage());
+                        erase_indices.insert(i);
                     }
                 }
-                if (visible)    e->Assault(jx, jy, WallMap);
+                for (auto idx : erase_indices)   e->EraseBullet(idx);
+                erase_indices.clear();
             }
-
-            bullets = e->getBullets();
-            for (int i = 0; i < bullets.size(); i++) {
-                bullets[i]->Move();
-                int bx = bullets[i]->getX(), by = bullets[i]->getY();
-                bool in_air = true;
-                if (bx < 0 || bx > background_width || by < 0 || by > background_height) {
-                    erase_indices.push_back(i);
-                    continue;
-                }
-                for (auto wall : WallMap) if (in_air && wall->overlap(bx, by)) {
-                    erase_indices.push_back(i);
-                    in_air = false;
-                    continue;
-                }
-                if (in_air && Circle::isOverlap(jacket->getCircle(), bullets[i]->getCircle())) {
-                    // BULLET HIT JACKET SOUND EFFECT
-                    play_damage_sound();
-                    jacket->TakeDamage(bullets[i]->getDamage());
-                    erase_indices.push_back(i);
-                }
-            }
-            for (auto idx : erase_indices)   e->EraseBullet(idx);
-            erase_indices.clear();
         }
 
         success = true;
         for (auto e : enemies)  if (e->getHP() != 0)    success = false;
-
+        // printf("Update cam origin\n");
         camera_origin_x = jacket->getCircle()->x - window_width / 2;
         camera_origin_y = jacket->getCircle()->y - window_height / 2;
         if(camera_origin_x < 0) camera_origin_x = 0;
@@ -543,6 +554,7 @@ GameWindow::game_update()
         board_y = camera_origin_y;
     }
 
+    // printf("Update GameState\n");
     int msg = GAME_CONTINUE, nxtState = GameState;
     switch (GameState)
     {
@@ -646,6 +658,7 @@ GameWindow::game_destroy()
 int
 GameWindow::process_event()
 {
+    // printf("In process_event\n");
     int message = GAME_CONTINUE;
 
     al_wait_for_event(event_queue, &event);
@@ -668,35 +681,35 @@ GameWindow::process_event()
             switch (event.keyboard.keycode) {
                 // GAMEPLAY KEYS
                 case ALLEGRO_KEY_W:
-                    printf("W is pressed!\n");
+                    // printf("W is pressed!\n");
                     if (!move_keys[W_KEY]) move_keys[W_KEY] = true;
                     break;
                 case ALLEGRO_KEY_A:
-                    printf("A is pressed!\n");
+                    // printf("A is pressed!\n");
                     if (!move_keys[A_KEY]) move_keys[A_KEY] = true;
                     break;
                 case ALLEGRO_KEY_S:
-                    printf("S is pressed!\n");
+                    // printf("S is pressed!\n");
                     if (!move_keys[S_KEY]) move_keys[S_KEY] = true;
                     break;
                 case ALLEGRO_KEY_D:
-                    printf("D is pressed!\n");
+                    // printf("D is pressed!\n");
                     if (!move_keys[D_KEY]) move_keys[D_KEY] = true;
                     break;
                 case ALLEGRO_KEY_LSHIFT:
-                    printf("LSHIFT is pressed!\n");
+                    // printf("LSHIFT is pressed!\n");
                     if (!move_keys[LSHIFT_KEY]) move_keys[LSHIFT_KEY] = true;
                     break;
                 case ALLEGRO_KEY_E:
-                    printf("E is pressed!\n");
+                    // printf("E is pressed!\n");
                     game_keys[E_KEY] = true;
                     break;
                 case ALLEGRO_KEY_R:
-                    printf("R is pressed!\n");
+                    // printf("R is pressed!\n");
                     game_keys[R_KEY] = true;
                     break;
                 case ALLEGRO_KEY_G:
-                    printf("E is pressed!\n");
+                    // printf("E is pressed!\n");
                     game_keys[G_KEY] = true;
                     break;
 
@@ -717,23 +730,23 @@ GameWindow::process_event()
         } else if (event.type == ALLEGRO_EVENT_KEY_UP) {
             switch (event.keyboard.keycode) {
                 case ALLEGRO_KEY_W:
-                    printf("W is released!\n");
+                    // printf("W is released!\n");
                     if (move_keys[W_KEY])    move_keys[W_KEY] = false;
                     break;
                 case ALLEGRO_KEY_A:
-                    printf("A is released!\n");
+                    // printf("A is released!\n");
                     if (move_keys[A_KEY])    move_keys[A_KEY] = false;
                     break;
                 case ALLEGRO_KEY_S:
-                    printf("S is released!\n");
+                    // printf("S is released!\n");
                     if (move_keys[S_KEY])    move_keys[S_KEY] = false;
                     break;
                 case ALLEGRO_KEY_D:
-                    printf("D is released!\n");
+                    // printf("D is released!\n");
                     if (move_keys[D_KEY])    move_keys[D_KEY] = false;
                     break;
                 case ALLEGRO_KEY_LSHIFT:
-                    printf("LSHIFT is released!\n");
+                    // printf("LSHIFT is released!\n");
                     if (move_keys[LSHIFT_KEY])  move_keys[LSHIFT_KEY] = false;
                     break;
             }
@@ -770,7 +783,7 @@ GameWindow::process_event()
 void
 GameWindow::Draw()
 {
-    // printf("Drawing...\n");
+    // printf("In Draw\n");
     if (GameState == GAMESTATE_MENU) {
         // printf("Drawing Menu...\n");
         al_draw_bitmap(startscene, 0, 0, 0);
