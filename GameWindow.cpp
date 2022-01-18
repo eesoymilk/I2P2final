@@ -447,7 +447,7 @@ GameWindow::game_update()
             }
         }
         // printf("Test\n");
-        if (!bullets.empty())   printf("%d bullets in air.\n", bullets.size());
+        // if (!bullets.empty())   printf("%d bullets in air.\n", bullets.size());
         for (auto idx : erase_indices)   jacket->EraseBullet(idx);
         erase_indices.clear();
 
@@ -775,6 +775,7 @@ GameWindow::Draw()
 bool
 GameWindow::wallBetween(Wall* wall, int x1, int y1, int x2, int y2){
     int xl = wall->get_xl(); int xr = wall->get_xr(); int yl = wall->get_yl(); int yr = wall->get_yr();
+    //printf("two point: %d %d %d %d\n", x1, y1, x2, y2);
     if(x1 == x2){
         if(x1 <= xr && x1 >= xl){
             if(max(y1, y2) <= yl) return false;
@@ -791,20 +792,10 @@ GameWindow::wallBetween(Wall* wall, int x1, int y1, int x2, int y2){
         }
         else return false;
     }
-    double slope = (y1 - y2) / (x1 - x2); double con = y1 - slope * x1; int thick = 30;
-    if(wall->get_type() == 0){
-        int intersect_y = slope * (xl + thick) + con;
-        if(intersect_y >= yl && intersect_y <= yr && intersect_y <= max(y1, y2) && intersect_y >= min(y1, y2))
-            return true;
-        else 
-            return false; 
-    }
-    else{
-        double tmp = (yl + thick - con) / slope;
-        int intersect_x = (int)tmp;
-        if(intersect_x >= xl && intersect_x <= xr && intersect_x <= max(x1, x2) && intersect_x >= min(x1, x2))
-            return true;
-        else 
-            return false;
-    }
+    double slope = (y1 - y2) * 1.0 / ((x1 - x2) * 1.0); double con = y1 - slope * x1; int thick = 30;
+    double intersect_y1 = slope * xl + con; if(intersect_y1 >= min(y1, y2) && intersect_y1 <= max(y1, y2) && intersect_y1 >= yl && intersect_y1 <= yr) return true;
+    double intersect_y2 = slope * xr + con; if(intersect_y2 >= min(y1, y2) && intersect_y1 <= max(y1, y2) && intersect_y2 >= yl && intersect_y2 <= yr) return true;
+    double intersect_x1 = (yl - con) / slope; if(intersect_x1 >= min(x1, x2) && intersect_x1 <= max(x1, x2) && intersect_x1 >= xl && intersect_x1 <= xr) return true;
+    double intersect_x2 = (yr - con) / slope; if(intersect_x2 >= min(x1, x2) && intersect_x2 <= max(x1, x2) && intersect_x2 >= xl && intersect_x2 <= xr) return true;
+    return false;
 }

@@ -72,7 +72,7 @@ Enemy::FireWeapon(double ux, double uy)
 {
     Weapon* w = this->getWeapon();
     if (w->Fire()) {
-        printf("Enemy Fired!\n");
+        // printf("Enemy Fired!\n");
         Bullet *b = new Bullet (
             this->getCircle(),
             ux, uy,
@@ -95,7 +95,7 @@ Enemy::Assault(int jx, int jy, std::vector<Wall*> WallMap)
     }
     if (wielding) {
         if (wielding->getReserved()) {
-            printf("Enemy is about to fire.\n");
+            // printf("Enemy is about to fire.\n");
             if (wielding->getAmmo() > 0)        FireWeapon(ux, uy);
             else if (!wielding->isReloading())  wielding->StartReload();
         }

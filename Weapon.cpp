@@ -58,12 +58,12 @@ void
 Weapon::Drop(int drop_x, int drop_y)
 {
     // DROPPING WEAPON SOUND EFFECT
-    printf("circle->x = %d, circle->y = %d\n", circle->x, circle->y);
-    printf("drop_x = %d, drop_y = %d\n", drop_x, drop_y);
+    // printf("circle->x = %d, circle->y = %d\n", circle->x, circle->y);
+    // printf("drop_x = %d, drop_y = %d\n", drop_x, drop_y);
     circle->x = drop_x;
     circle->y = drop_y;
     dropped = true;
-    printf("Dropped\n");
+    // printf("Dropped\n");
 }
 
 bool
@@ -83,7 +83,7 @@ Weapon::Fire()
 void
 Weapon::StartReload()
 {
-    printf("Start to Reload!\n");
+    // printf("Start to Reload!\n");
     if (reserved_bullets == 0) {
         // RELOAD BUT NO AMMO SOUND EFFECT
         return;
@@ -101,8 +101,8 @@ Weapon::StartReload()
 void
 Weapon::Reload()
 {
-    printf("Reloading!\n");
-    printf("%d / %d\n", reload_counter, reload_time);
+    // printf("Reloading!\n");
+    // printf("%d / %d\n", reload_counter, reload_time);
     if (reload_counter < reload_time) {
         reload_counter++;
         return;
