@@ -22,6 +22,7 @@ Weapon::~Weapon()
     al_destroy_bitmap(bulletImg);
     al_destroy_sample(sample);
     al_destroy_sample_instance(Sound);
+    al_destroy_sample_instance(LoadSound);
     al_destroy_sample_instance(ReloadSound);
     delete circle;
 }
@@ -92,7 +93,7 @@ Weapon::StartReload()
         // RELOAD BUT FULL MAG EFFECT
         return;
     }
-    // RELOADING SOUND EFFECT
+    al_play_sample_instance(ReloadSound);// RELOADING SOUND EFFECT
     reloading = true;
     reload_counter = 0;
     return;
@@ -107,7 +108,7 @@ Weapon::Reload()
         reload_counter++;
         return;
     }
-    al_play_sample_instance(ReloadSound);   // LOADED SOUND EFFECT
+    al_play_sample_instance(LoadSound);   // LOADED SOUND EFFECT
     int to_reload = magzine_size - in_magzine;
     if (reserved_bullets >= to_reload) {
         reserved_bullets -= to_reload;

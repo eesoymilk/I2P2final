@@ -5,7 +5,7 @@ Character::Character(int spawn_x, int spawn_y)
 {
     circle = new Circle;
     // circle->x = spawn_x * grid_width + grid_width/2;
-    // circle->y = spawn_y * grid_height + grid_height/2;
+    // circle->y = spawn_y * grid_heiwwwwwwght + grid_height/2;
     circle->x = spawn_x;
     circle->y = spawn_y;
     circle->r = grid_width / 2;
