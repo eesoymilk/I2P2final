@@ -475,16 +475,18 @@ GameWindow::game_update()
             for (int i = 0; i < bullets.size(); i++) {
                 bullets[i]->Move();
                 int bx = bullets[i]->getX(), by = bullets[i]->getY();
+                bool in_air = true;
                 if (bx < 0 || bx > background_width || by < 0 || by > background_height) {
                     erase_indices.push_back(i);
                     continue;
                 }
-                for (auto wall : WallMap) if (wall->overlap(bx, by)) {
+                for (auto wall : WallMap) if (in_air && wall->overlap(bx, by)) {
                     // BULLET HIT WALL SOUND EFFECT
                     erase_indices.push_back(i);
+                    in_air = false;
                     continue;
                 }
-                if (Circle::isOverlap(jacket->getCircle(), bullets[i]->getCircle())) {
+                if (in_air && Circle::isOverlap(jacket->getCircle(), bullets[i]->getCircle())) {
                     // BULLET HIT ENEMY SOUND EFFECT
                     jacket->TakeDamage(bullets[i]->getDamage());
                     erase_indices.push_back(i);

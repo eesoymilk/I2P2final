@@ -10,7 +10,7 @@
 #include <allegro5/allegro_ttf.h>
 #include <allegro5/allegro_primitives.h>
 #include "Circle.h"
-#include "Object.h"£zssss£z£z
+#include "Object.h"
 #include "Weapon.h"
 #include "Bullet.h"
 #include "global.h"
